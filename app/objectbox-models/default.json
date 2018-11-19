@@ -1,0 +1,120 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:7210328506108271244",
+      "lastPropertyId": "3:8801038954079358096",
+      "name": "Phonome",
+      "properties": [
+        {
+          "id": "1:529448939810419535",
+          "name": "id"
+        },
+        {
+          "id": "2:8807547986596715117",
+          "name": "origin"
+        },
+        {
+          "id": "3:8801038954079358096",
+          "name": "phoneme"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:9214317906050171745",
+      "lastPropertyId": "6:1381534227836198036",
+      "name": "PresetItem",
+      "properties": [
+        {
+          "id": "1:1215195023110163933",
+          "name": "id"
+        },
+        {
+          "id": "2:7261171882615422633",
+          "name": "engine"
+        },
+        {
+          "id": "3:8017841719173698065",
+          "name": "rate"
+        },
+        {
+          "id": "4:569908982762980849",
+          "name": "pitch"
+        },
+        {
+          "id": "5:1479479254956027842",
+          "name": "range"
+        },
+        {
+          "id": "6:1381534227836198036",
+          "name": "volume"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:2297095848537127194",
+      "lastPropertyId": "2:959764331664660401",
+      "name": "SSMLItem",
+      "properties": [
+        {
+          "id": "1:2437250350384644579",
+          "name": "id"
+        },
+        {
+          "id": "2:959764331664660401",
+          "name": "version"
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:7535944017951270383",
+          "name": "voices"
+        }
+      ]
+    },
+    {
+      "id": "4:4604394046440767304",
+      "lastPropertyId": "4:1791952821500578366",
+      "name": "VoiceItem",
+      "properties": [
+        {
+          "id": "1:3309327754327965530",
+          "name": "id"
+        },
+        {
+          "id": "2:8760856160574014892",
+          "name": "engine"
+        },
+        {
+          "id": "3:1629908439478837238",
+          "name": "preset"
+        },
+        {
+          "id": "4:1791952821500578366",
+          "name": "contentOrigin"
+        }
+      ],
+      "relations": [
+        {
+          "id": "2:7519391685098574218",
+          "name": "contentPhonemes"
+        }
+      ]
+    }
+  ],
+  "lastEntityId": "4:4604394046440767304",
+  "lastIndexId": "0:0",
+  "lastRelationId": "2:7519391685098574218",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}
