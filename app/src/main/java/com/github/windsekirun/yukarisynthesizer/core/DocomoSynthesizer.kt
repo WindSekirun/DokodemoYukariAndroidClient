@@ -5,12 +5,14 @@ import android.util.Log
 import com.github.windsekirun.yukarisynthesizer.core.item.SSMLItem
 import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler
 import nl.bravobit.ffmpeg.FFmpeg
-import okhttp3.*
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import okio.Okio
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.io.File
-import java.io.IOException
 
 
 /**
@@ -45,32 +47,21 @@ object DocomoSynthesizer {
 
             val request = Request.Builder().url(url)
                 .addHeader("Content-Type", "application/ssml+xml")
-                .addHeader("Accept", "audio/L16") // binary file
+                .addHeader("Accept", "audio/L16")
                 .post(body)
                 .build()
 
             val okHttpClient = OkHttpClient()
 
-            okHttpClient.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-
-                    runOnUiThread { callback(-1, pcmFile) }
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    val sink = Okio.buffer(Okio.sink(pcmFile))
-                    if (response.body() == null) {
-                        runOnUiThread { callback(-1, pcmFile) }
-                        return
-                    }
-
-                    sink.writeAll(response.body()!!.source())
-                    sink.close()
-
-                    encodePcmToMp3(context, pcmFile, mp3File, callback)
-                }
-            })
+            val response = okHttpClient.newCall(request).execute()
+            if (response.isSuccessful && response.body() != null) {
+                val sink = Okio.buffer(Okio.sink(pcmFile))
+                sink.writeAll(response.body()!!.source())
+                sink.close()
+                encodePcmToMp3(context, pcmFile, mp3File, callback)
+            } else {
+                runOnUiThread { callback(-1, pcmFile) }
+            }
         }
     }
 
