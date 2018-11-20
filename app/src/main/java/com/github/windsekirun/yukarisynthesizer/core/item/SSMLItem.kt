@@ -14,7 +14,8 @@ class SSMLItem {
     var localPath: String = ""
     var voices: List<VoiceItem> = mutableListOf()
 
-    constructor(voices: List<VoiceItem>) {
+    constructor(title: String, voices: List<VoiceItem>) {
+        this.title = title
         this.voices = voices
     }
 }

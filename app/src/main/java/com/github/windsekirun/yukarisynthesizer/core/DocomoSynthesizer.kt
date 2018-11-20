@@ -1,16 +1,16 @@
 package com.github.windsekirun.yukarisynthesizer.core
 
 import android.content.Context
+import android.util.Log
 import com.github.windsekirun.yukarisynthesizer.core.item.SSMLItem
+import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler
+import nl.bravobit.ffmpeg.FFmpeg
 import okhttp3.*
 import okio.Okio
-import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runAsync
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.io.File
 import java.io.IOException
-import java.io.OutputStream
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 
 /**
@@ -22,12 +22,22 @@ import java.nio.ByteOrder
  */
 object DocomoSynthesizer {
 
-    fun process(context: Context, item: SSMLItem, apiKey: String) {
+    private val TAG = DocomoSynthesizer::class.java.simpleName
+
+    fun process(context: Context, item: SSMLItem, apiKey: String, callback: (Int, File) -> Unit) {
         runAsync {
             val pcmFile = File(
-                context.externalCacheDir,
-                "/pcm/%s.pcm".format(System.currentTimeMillis().asDateString())
+                context.getExternalFilesDir(null),
+                "/pcm/%s.pcm".format(item.title)
             )
+
+            val mp3File = File(
+                context.getExternalFilesDir(null),
+                "/mp3/%s.mp3".format(item.title)
+            )
+
+            pcmFile.parentFile.mkdirs()
+            mp3File.parentFile.mkdirs()
 
             val url = "https://api.apigw.smt.docomo.ne.jp/aiTalk/v1/textToSpeech?APIKEY=$apiKey"
             val ssml = SSMLBuilder.process(item, true)
@@ -44,52 +54,66 @@ object DocomoSynthesizer {
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     e.printStackTrace()
+
+                    runOnUiThread { callback(-1, pcmFile) }
                 }
 
                 override fun onResponse(call: Call, response: Response) {
                     val sink = Okio.buffer(Okio.sink(pcmFile))
-                    sink.writeAll(response.body()?.source())
+                    if (response.body() == null) {
+                        runOnUiThread { callback(-1, pcmFile) }
+                        return
+                    }
+
+                    sink.writeAll(response.body()!!.source())
                     sink.close()
 
-                    encodeWav(context, item)
+                    encodePcmToMp3(context, pcmFile, mp3File, callback)
                 }
             })
         }
     }
 
-    private fun encodeWav(context: Context, item: SSMLItem) {
-
+    fun checkLibrarySupported(context: Context): Boolean {
+        return FFmpeg.getInstance(context).isSupported
     }
 
-    private fun writeWavHeader(
-        outputStream: OutputStream, channels: Short,
-        sampleRate: Int, bitDepth: Short
+    private fun encodePcmToMp3(
+        context: Context, pcmFile: File, mp3File: File, callback: (Int, File) -> Unit
     ) {
-        val littleBytes = ByteBuffer
-            .allocate(14)
-            .order(ByteOrder.LITTLE_ENDIAN)
-            .putShort(channels)
-            .putInt(sampleRate)
-            .putInt(sampleRate * channels * (bitDepth / 8))
-            .putShort((channels * (bitDepth / 8)).toShort())
-            .putShort(bitDepth)
-            .array()
+        // ffmpeg -y -ac 1 -ar 16000 -f s16be -i ${pcmFile.absolutePath} -c:a libmp3lame -q:a 2 ${mp3File.absolutePath}
+        val cmd = arrayOf(
+            "-y", "-ac", "1", "-ar", "16000", "-f", "s16be", "-i", pcmFile.absolutePath,
+            "-c:a", "libmp3lame", "-q:a", "2", mp3File.absolutePath
+        )
 
+        val ffmpeg = FFmpeg.getInstance(context)
+        ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
+            override fun onFinish() {
+                super.onFinish()
+                Log.d(TAG, "onFinish")
+            }
 
-        outputStream.write(byteArrayOf(
-            'R'.toByte(), 'I'.toByte(), 'F'.toByte(), 'F'.toByte(), // Chunk ID
-            0, 0, 0, 0, // Chunk Size
-            'W'.toByte(), 'A'.toByte(), 'V'.toByte(), 'E'.toByte(), // Format
-            'f'.toByte(), 'm'.toByte(), 't'.toByte(), ' '.toByte(), //Chunk ID
-            16, 0, 0, 0, // Chunk Size
-            1, 0, // AudioFormat
-            littleBytes[0], littleBytes[1], // Num of Channels
-            littleBytes[2], littleBytes[3], littleBytes[4], littleBytes[5], // SampleRate
-            littleBytes[6], littleBytes[7], littleBytes[8], littleBytes[9], // Byte Rate
-            littleBytes[10], littleBytes[11], // Block Align
-            littleBytes[12], littleBytes[13], // Bits Per Sample
-            'd'.toByte(), 'a'.toByte(), 't'.toByte(), 'a'.toByte(), // Chunk ID
-            0, 0, 0, 0 //Chunk Size
-        ))
+            override fun onSuccess(message: String?) {
+                super.onSuccess(message)
+                Log.d(TAG, "onSuccess: $message")
+                callback(0, mp3File)
+            }
+
+            override fun onFailure(message: String?) {
+                super.onFailure(message)
+                Log.d(TAG, "onFailure: $message")
+                callback.invoke(-1, mp3File)
+            }
+
+            override fun onProgress(message: String?) {
+                super.onProgress(message)
+            }
+
+            override fun onStart() {
+                super.onStart()
+                Log.d(TAG, "onStart")
+            }
+        })
     }
 }

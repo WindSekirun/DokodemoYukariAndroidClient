@@ -7,7 +7,7 @@ apply plugin: 'io.objectbox'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.appg.baseappset"
+        applicationId "com.github.windsekirun.yukarisynthesizer"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
@@ -51,6 +51,10 @@ android {
 
     packagingOptions {
         exclude 'META-INF/library_release.kotlin_module'
+    }
+
+    aaptOptions {
+        ignoreAssetsPattern "!*ffprobe"
     }
 }
 
@@ -147,5 +151,8 @@ dependencies {
     // xml builder
     implementation 'org.redundent:kotlin-xml-builder:1.4.3'
     implementation 'org.apache.commons:commons-text:1.6'
+
+    // ffmpeg
+    implementation 'nl.bravobit:android-ffmpeg:1.1.5'
 }
 

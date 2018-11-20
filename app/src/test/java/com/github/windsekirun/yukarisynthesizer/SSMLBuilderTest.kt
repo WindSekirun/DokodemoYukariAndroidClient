@@ -92,7 +92,7 @@ class SSMLBuilderTest {
             this.add(ai3)
         }
 
-        val ssmlItem = SSMLItem(voices)
+        val ssmlItem = SSMLItem("sm30193805", voices)
         val result = SSMLBuilder.process(ssmlItem)
 
         Assert.assertNotNull(result)

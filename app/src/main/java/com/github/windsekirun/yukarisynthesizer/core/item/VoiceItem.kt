@@ -21,6 +21,7 @@ class VoiceItem: Serializable {
 
     var contentOrigin: String = ""
     var contentPhonemes: List<Phonome> = mutableListOf()
+    var breakTime: Long = 0
 
     constructor(engine: VoiceEngine, preset: PresetItem, contentPhonemes: List<Phonome>) {
             this.engine = engine
@@ -29,9 +30,15 @@ class VoiceItem: Serializable {
         this.contentOrigin = contentPhonemes.asSequence().map { it.origin }.joinToString(separator = "") { it }
     }
 
+    constructor(breakTime: Long) {
+        this.breakTime = breakTime
+    }
+
     override fun toString(): String {
         return "VoiceItem(engine=$engine, contentPhonemes=$contentPhonemes)"
     }
 
-
+    companion object {
+        fun addBreak(timeMs: Long) = VoiceItem(timeMs)
+    }
 }

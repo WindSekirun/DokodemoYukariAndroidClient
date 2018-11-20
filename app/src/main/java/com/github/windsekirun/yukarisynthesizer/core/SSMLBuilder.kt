@@ -12,6 +12,14 @@ object SSMLBuilder {
             attribute("version", item.version)
 
             for (voice in item.voices) {
+                if (voice.breakTime != 0L) {
+                    "break" {
+                        attribute("time", "${voice.breakTime}ms")
+                    }
+
+                    continue
+                }
+
                 "voice" {
                     attribute("name", voice.engine.originName)
 
