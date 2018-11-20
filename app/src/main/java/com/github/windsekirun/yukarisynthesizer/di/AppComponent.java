@@ -23,7 +23,7 @@ import javax.inject.Singleton;
                 AppBindsModule.class,
                 BaseBindsModule.class,
                 BaseInterceptorModule.class,
-                AppInterceptorModule.class,
+//                AppInterceptorModule.class,
                 ActivityModule.class,
                 FragmentModule.class,
                 ViewModelModule.class,
