@@ -117,7 +117,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         }
 
         val ssmlItem = SSMLItem("sm30193805", voices)
-        ssmlText.set(SSMLBuilder.process(ssmlItem))
+        ssmlText.set(SSMLBuilder.process(ssmlItem, true))
 
         DocomoSynthesizer.process(getApplication(), ssmlItem, apiKey) { result, file ->
             wavFile = file

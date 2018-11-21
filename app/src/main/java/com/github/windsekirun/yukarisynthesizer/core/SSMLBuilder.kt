@@ -39,7 +39,10 @@ object SSMLBuilder {
         }
 
         var result = ssml.toString()
-        if (minify) result = result.lines().joinToString(separator = "\n") { it }
+        if (minify) {
+            result = result.replace("\n", "")
+            result = result.replace("\t", "")
+        }
         result = StringEscapeUtils.unescapeHtml4(result)
         return result
     }
