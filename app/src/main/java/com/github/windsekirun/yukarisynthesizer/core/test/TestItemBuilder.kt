@@ -1,4 +1,4 @@
-package com.github.windsekirun.yukarisynthesizer.core
+package com.github.windsekirun.yukarisynthesizer.core.test
 
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.Phonome

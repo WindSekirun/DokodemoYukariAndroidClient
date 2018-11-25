@@ -1,7 +1,7 @@
 package com.github.windsekirun.yukarisynthesizer
 
 import com.github.windsekirun.yukarisynthesizer.core.SSMLBuilder
-import com.github.windsekirun.yukarisynthesizer.core.buildVoiceItem
+import com.github.windsekirun.yukarisynthesizer.core.test.buildVoiceItem
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.SSMLItem

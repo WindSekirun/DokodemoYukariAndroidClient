@@ -1,6 +1,7 @@
 package com.github.windsekirun.yukarisynthesizer.di
 
 import com.github.windsekirun.yukarisynthesizer.MainApplication
+import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.net.JSONService
 import com.github.windsekirun.yukarisynthesizer.repository.MainRepository
 import com.github.windsekirun.yukarisynthesizer.repository.PreferenceRepository
@@ -43,5 +44,14 @@ class AppProvidesModule {
     @Singleton
     fun provideMainRepository(service: JSONService): MainRepository {
         return MainRepository(service)
+    }
+
+    @Provides
+    @Singleton
+    fun provideYukariOperator(
+            application: MainApplication,
+            preferenceRepository: PreferenceRepository
+    ): YukariOperator {
+        return YukariOperator(application, preferenceRepository)
     }
 }

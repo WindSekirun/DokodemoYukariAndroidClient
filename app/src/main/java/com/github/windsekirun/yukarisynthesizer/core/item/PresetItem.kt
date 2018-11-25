@@ -6,11 +6,14 @@ import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import java.io.Serializable
+import java.util.*
 
 @Entity
 class PresetItem : Serializable {
     @Id
     var id: Long = 0
+    var title: String = ""
+    var regDate: Date = Date()
 
     @Convert(converter = VoiceEngine.VoiceEngineConverter::class, dbType = String::class)
     var engine: VoiceEngine = VoiceEngine.Yukari

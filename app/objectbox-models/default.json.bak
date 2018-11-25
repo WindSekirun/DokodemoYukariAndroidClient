@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:7210328506108271244",
-      "lastPropertyId": "4:241455676718658080",
+      "lastPropertyId": "3:8801038954079358096",
       "name": "Phonome",
       "properties": [
         {
@@ -19,17 +19,13 @@
         {
           "id": "3:8801038954079358096",
           "name": "phoneme"
-        },
-        {
-          "id": "4:241455676718658080",
-          "name": "regDate"
         }
       ],
       "relations": []
     },
     {
       "id": "2:9214317906050171745",
-      "lastPropertyId": "8:4926830514580590199",
+      "lastPropertyId": "6:1381534227836198036",
       "name": "PresetItem",
       "properties": [
         {
@@ -55,14 +51,6 @@
         {
           "id": "6:1381534227836198036",
           "name": "volume"
-        },
-        {
-          "id": "7:3776107486487197440",
-          "name": "title"
-        },
-        {
-          "id": "8:4926830514580590199",
-          "name": "regDate"
         }
       ],
       "relations": []

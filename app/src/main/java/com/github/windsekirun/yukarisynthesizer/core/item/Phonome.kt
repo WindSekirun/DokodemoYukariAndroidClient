@@ -4,6 +4,7 @@ import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import org.redundent.kotlin.xml.xml
 import java.io.Serializable
+import java.util.*
 
 @Entity
 class Phonome: Serializable {
@@ -12,6 +13,7 @@ class Phonome: Serializable {
     var id: Long = 0
     var origin: String = ""
     var phoneme: String = ""
+    var regDate: Date = Date()
 
     constructor(origin: String) {
         this.origin = origin
