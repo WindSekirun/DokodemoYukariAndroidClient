@@ -7,7 +7,7 @@ import android.location.Location
 import android.os.IBinder
 import com.github.windsekirun.baseapp.module.location.RxLocationTracker
 import com.github.windsekirun.daggerautoinject.InjectService
-import com.github.windsekirun.yukarisynthesizer.repository.PreferenceRepository
+import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepository
 import com.github.windsekirun.yukarisynthesizer.utils.CommonUtils
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable

@@ -5,7 +5,7 @@ import io.objectbox.annotation.Id
 import java.util.*
 
 @Entity
-class SSMLItem {
+class StoryItem {
     @Id
     var id: Long = 0
     var version: String = "1.1"

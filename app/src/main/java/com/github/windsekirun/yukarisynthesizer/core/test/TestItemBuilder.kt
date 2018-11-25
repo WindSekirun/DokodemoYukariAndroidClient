@@ -1,15 +1,17 @@
 package com.github.windsekirun.yukarisynthesizer.core.test
 
+import androidx.annotation.VisibleForTesting
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
-import com.github.windsekirun.yukarisynthesizer.core.item.Phonome
+import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 class TestItemBuilder {
-    private val phonomes = mutableListOf<Phonome>()
+    private val phonomes = mutableListOf<PhonomeItem>()
 
     fun voice(origin: String, phonome: String = "") {
-        phonomes.add(Phonome(origin, phonome))
+        phonomes.add(PhonomeItem(origin, phonome))
     }
 
     fun build() = phonomes

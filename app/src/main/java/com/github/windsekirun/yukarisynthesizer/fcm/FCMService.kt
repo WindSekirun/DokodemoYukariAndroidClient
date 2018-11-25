@@ -6,7 +6,7 @@ import android.content.Intent
 import com.github.windsekirun.daggerautoinject.InjectService
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.FirebaseInstanceIdService
-import com.github.windsekirun.yukarisynthesizer.repository.PreferenceRepository
+import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepository
 import dagger.android.AndroidInjection
 import pyxis.uzuki.live.nyancat.NyanCat
 

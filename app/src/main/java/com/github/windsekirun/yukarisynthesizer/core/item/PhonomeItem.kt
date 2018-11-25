@@ -7,7 +7,7 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
-class Phonome: Serializable {
+class PhonomeItem: Serializable {
 
     @Id
     var id: Long = 0
@@ -30,7 +30,7 @@ class Phonome: Serializable {
 
     companion object {
         @JvmStatic
-        fun Phonome.build(): String {
+        fun PhonomeItem.build(): String {
             if (this.phoneme.isEmpty()) return this.origin
             return xml("phoneme") {
                 attribute("ph", this@build.phoneme)

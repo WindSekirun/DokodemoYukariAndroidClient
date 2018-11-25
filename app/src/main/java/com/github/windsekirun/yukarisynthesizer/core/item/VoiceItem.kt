@@ -1,8 +1,6 @@
 package com.github.windsekirun.yukarisynthesizer.core.item
 
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
-import com.github.windsekirun.yukarisynthesizer.core.item.Phonome
-import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
@@ -20,10 +18,10 @@ class VoiceItem: Serializable {
     var preset: PresetItem = PresetItem(VoiceEngine.NONE, 1.0)
 
     var contentOrigin: String = ""
-    var contentPhonemes: List<Phonome> = mutableListOf()
+    var contentPhonemes: List<PhonomeItem> = mutableListOf()
     var breakTime: Long = 0
 
-    constructor(engine: VoiceEngine, preset: PresetItem, contentPhonemes: List<Phonome>) {
+    constructor(engine: VoiceEngine, preset: PresetItem, contentPhonemes: List<PhonomeItem>) {
             this.engine = engine
         this.preset = preset
         this.contentPhonemes = contentPhonemes

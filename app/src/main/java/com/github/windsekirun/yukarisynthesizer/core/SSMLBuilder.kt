@@ -1,13 +1,13 @@
 package com.github.windsekirun.yukarisynthesizer.core
 
-import com.github.windsekirun.yukarisynthesizer.core.item.Phonome
-import com.github.windsekirun.yukarisynthesizer.core.item.SSMLItem
+import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
+import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import org.apache.commons.text.StringEscapeUtils
 import org.redundent.kotlin.xml.xml
 
 object SSMLBuilder {
 
-    fun process(item: SSMLItem, minify: Boolean = false): String {
+    fun process(item: StoryItem, minify: Boolean = false): String {
         val ssml = xml("speak") {
             attribute("version", item.version)
 
@@ -47,7 +47,7 @@ object SSMLBuilder {
         return result
     }
 
-    private fun List<Phonome>.build(): String {
+    private fun List<PhonomeItem>.build(): String {
         return this.asSequence().map { it.toString() }.joinToString(separator = "") { it }
     }
 }

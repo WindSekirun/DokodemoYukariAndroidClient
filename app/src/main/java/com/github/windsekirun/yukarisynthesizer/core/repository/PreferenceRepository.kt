@@ -1,4 +1,4 @@
-package com.github.windsekirun.yukarisynthesizer.repository
+package com.github.windsekirun.yukarisynthesizer.core.repository
 
 import com.github.windsekirun.baseapp.repository.impl.BasePreferenceRepository
 
@@ -11,4 +11,7 @@ import com.github.windsekirun.baseapp.repository.impl.BasePreferenceRepository
  * Description:
  */
 
-interface PreferenceRepository : BasePreferenceRepository
+interface PreferenceRepository : BasePreferenceRepository {
+
+    var apiKey: String
+}

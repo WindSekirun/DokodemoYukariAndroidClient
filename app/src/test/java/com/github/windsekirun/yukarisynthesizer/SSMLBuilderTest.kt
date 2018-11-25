@@ -4,7 +4,7 @@ import com.github.windsekirun.yukarisynthesizer.core.SSMLBuilder
 import com.github.windsekirun.yukarisynthesizer.core.test.buildVoiceItem
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
-import com.github.windsekirun.yukarisynthesizer.core.item.SSMLItem
+import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import org.junit.After
 import org.junit.Assert
@@ -92,7 +92,7 @@ class SSMLBuilderTest {
             this.add(ai3)
         }
 
-        val ssmlItem = SSMLItem("sm30193805", voices)
+        val ssmlItem = StoryItem("sm30193805", voices)
         val result = SSMLBuilder.process(ssmlItem)
 
         Assert.assertNotNull(result)
