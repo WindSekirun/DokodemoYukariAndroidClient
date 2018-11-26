@@ -13,6 +13,7 @@ class StoryItem {
     var regDate: Date = Date()
     var localPath: String = ""
     var voices: List<VoiceItem> = mutableListOf()
+    var favoriteFlag: Boolean = false
 
     constructor(title: String, voices: List<VoiceItem>) {
         this.title = title
