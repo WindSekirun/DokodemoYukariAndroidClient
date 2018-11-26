@@ -11,6 +11,8 @@ import io.objectbox.Property
 import io.objectbox.kotlin.query
 import io.reactivex.Observable
 import io.reactivex.Single
+import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler
+import nl.bravobit.ffmpeg.FFmpeg
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -62,8 +64,10 @@ class YukariOperator @Inject constructor(val context: Context) {
             val limit = if (recent) 10L else -1L
             val orderType = if (recent) OrderType.OrderFlags.DESCENDING else OrderType.OrderFlags.ASCENDING
 
-            val list = nativeQuerySearch(phonomeBox, page, limit, searchTitle to PhonomeItem_.origin,
-                    orderType to PhonomeItem_.regDate)
+            val list = nativeQuerySearch(
+                    phonomeBox, page, limit, searchTitle to PhonomeItem_.origin,
+                    orderType to PhonomeItem_.regDate
+            )
             it.onNext(list)
         }
     }
@@ -82,7 +86,6 @@ class YukariOperator @Inject constructor(val context: Context) {
      * @param limit return list by pagination. Default value is 20.
      * @return searched list by given options.
      */
-    @JvmOverloads
     fun getPresetList(page: Int = -1,
                       limit: Long = 20L,
                       searchTitle: String = "",
@@ -109,7 +112,6 @@ class YukariOperator @Inject constructor(val context: Context) {
      * @param limit return list by pagination. Default value is 20.
      * @return searched list by given options.
      */
-    @JvmOverloads
     fun getStoryList(page: Int = -1,
                      limit: Long = 20L,
                      searchTitle: String = "",
@@ -117,8 +119,10 @@ class YukariOperator @Inject constructor(val context: Context) {
                              OrderType.OrderFlags.ASCENDING to StoryItem_.regDate
     ): Observable<List<StoryItem>> {
         return Observable.create {
-            val list = nativeQuerySearch(storyBox, page, limit, searchTitle to StoryItem_.title,
-                    orderBy)
+            val list = nativeQuerySearch(
+                    storyBox, page, limit, searchTitle to StoryItem_.title,
+                    orderBy
+            )
             it.onNext(list)
         }
     }
@@ -149,7 +153,6 @@ class YukariOperator @Inject constructor(val context: Context) {
                 .addHeader("Accept", MIME_TYPE_L16)
                 .post(body)
                 .build()
-
         if (!ffmpeg.isSupported) {
             return Single.error(UnsupportedOperationException("Doesn't not support FFmpeg"))
         }

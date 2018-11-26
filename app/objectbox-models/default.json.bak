@@ -4,30 +4,6 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:7210328506108271244",
-      "lastPropertyId": "4:241455676718658080",
-      "name": "Phonome",
-      "properties": [
-        {
-          "id": "1:529448939810419535",
-          "name": "id"
-        },
-        {
-          "id": "2:8807547986596715117",
-          "name": "origin"
-        },
-        {
-          "id": "3:8801038954079358096",
-          "name": "phoneme"
-        },
-        {
-          "id": "4:241455676718658080",
-          "name": "regDate"
-        }
-      ],
-      "relations": []
-    },
-    {
       "id": "2:9214317906050171745",
       "lastPropertyId": "8:4926830514580590199",
       "name": "PresetItem",
@@ -68,39 +44,6 @@
       "relations": []
     },
     {
-      "id": "3:2297095848537127194",
-      "lastPropertyId": "5:3895908989720341639",
-      "name": "SSMLItem",
-      "properties": [
-        {
-          "id": "1:2437250350384644579",
-          "name": "id"
-        },
-        {
-          "id": "2:959764331664660401",
-          "name": "version"
-        },
-        {
-          "id": "3:5971538607342326668",
-          "name": "title"
-        },
-        {
-          "id": "4:1346204217281069889",
-          "name": "regDate"
-        },
-        {
-          "id": "5:3895908989720341639",
-          "name": "localPath"
-        }
-      ],
-      "relations": [
-        {
-          "id": "1:7535944017951270383",
-          "name": "voices"
-        }
-      ]
-    },
-    {
       "id": "4:4604394046440767304",
       "lastPropertyId": "5:6714567535894929895",
       "name": "VoiceItem",
@@ -132,17 +75,89 @@
           "name": "contentPhonemes"
         }
       ]
+    },
+    {
+      "id": "5:4822898047726260073",
+      "lastPropertyId": "4:6276457743455556077",
+      "name": "PhonomeItem",
+      "properties": [
+        {
+          "id": "1:3703979515281188348",
+          "name": "id"
+        },
+        {
+          "id": "2:8391082331908679693",
+          "name": "origin"
+        },
+        {
+          "id": "3:2078660319413006195",
+          "name": "phoneme"
+        },
+        {
+          "id": "4:6276457743455556077",
+          "name": "regDate"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:6108425011797126720",
+      "lastPropertyId": "5:882897186322787520",
+      "name": "StoryItem",
+      "properties": [
+        {
+          "id": "1:3651303019027030481",
+          "name": "id"
+        },
+        {
+          "id": "2:2993799984690114206",
+          "name": "version"
+        },
+        {
+          "id": "3:251999826240249458",
+          "name": "title"
+        },
+        {
+          "id": "4:5480104335309505512",
+          "name": "regDate"
+        },
+        {
+          "id": "5:882897186322787520",
+          "name": "localPath"
+        }
+      ],
+      "relations": [
+        {
+          "id": "3:6553918333837165815",
+          "name": "voices"
+        }
+      ]
     }
   ],
-  "lastEntityId": "4:4604394046440767304",
+  "lastEntityId": "6:6108425011797126720",
   "lastIndexId": "0:0",
-  "lastRelationId": "2:7519391685098574218",
+  "lastRelationId": "3:6553918333837165815",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    7210328506108271244,
+    2297095848537127194
+  ],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
-  "retiredRelationUids": [],
+  "retiredPropertyUids": [
+    529448939810419535,
+    8807547986596715117,
+    8801038954079358096,
+    241455676718658080,
+    2437250350384644579,
+    959764331664660401,
+    5971538607342326668,
+    1346204217281069889,
+    3895908989720341639
+  ],
+  "retiredRelationUids": [
+    7535944017951270383
+  ],
   "version": 1
 }
