@@ -1,9 +1,7 @@
 package com.github.windsekirun.yukarisynthesizer.core.repository
 
 import android.content.Context
-import com.github.windsekirun.yukarisynthesizer.MainApplication
-import com.github.windsekirun.yukarisynthesizer.core.delegate.PreferenceTypeHolder
-import pyxis.uzuki.live.richutilskt.utils.RPreference
+import com.github.windsekirun.yukarisynthesizer.core.util.delegate.PreferenceTypeHolder
 
 import javax.inject.Inject
 import javax.inject.Singleton

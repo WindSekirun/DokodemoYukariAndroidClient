@@ -1,4 +1,4 @@
-package com.github.windsekirun.yukarisynthesizer.core.delegate
+package com.github.windsekirun.yukarisynthesizer.core.util.delegate
 
 import android.content.Context
 import pyxis.uzuki.live.richutilskt.utils.RPreference
