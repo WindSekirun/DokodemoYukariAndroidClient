@@ -5,4 +5,5 @@
     <string name="preset_title">Preset</string>
     <string name="play_title">Play</string>
     <string name="import_title">Import</string>
+    <string name="preset_format">Rate: %s, Pitch: %s, Range: %s, Volume: %s</string>
 </resources>

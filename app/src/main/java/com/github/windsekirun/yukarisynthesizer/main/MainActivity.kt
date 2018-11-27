@@ -12,6 +12,7 @@ import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainActivityBinding
 import com.github.windsekirun.yukarisynthesizer.main.drawer.MainDrawerFragment
+import com.github.windsekirun.yukarisynthesizer.main.preset.MainPresetFragment
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryFragment
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -73,7 +74,7 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         drawerFragment.onMenuClickListener = {
             when (it) {
                 R.id.menu_drawer_story -> replaceFragment(MainStoryFragment::class, 0)
-                R.id.menu_drawer_preset -> replaceFragment(MainStoryFragment::class, 1)
+                R.id.menu_drawer_preset -> replaceFragment(MainPresetFragment::class, 1)
                 R.id.menu_drawer_play -> replaceFragment(MainStoryFragment::class, 2)
                 R.id.menu_drawer_import -> replaceFragment(MainStoryFragment::class, 3)
             }
@@ -83,6 +84,7 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     }
 
     private fun <T : Fragment> replaceFragment(cls: KClass<T>, pagePosition: Int = 0) {
+        if (viewModel.pagePosition == pagePosition) return // if pagePosition is same, block that.
         viewModel.pagePosition = pagePosition
 
         val fragment = cls.createInstance()

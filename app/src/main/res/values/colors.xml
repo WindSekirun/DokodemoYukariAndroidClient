@@ -15,4 +15,5 @@
     <color name="text_disable">#737373</color>
 
     <color name="transparent">#00ffffff</color>
+    <color name="divider">#e5e5e5</color>
 </resources>

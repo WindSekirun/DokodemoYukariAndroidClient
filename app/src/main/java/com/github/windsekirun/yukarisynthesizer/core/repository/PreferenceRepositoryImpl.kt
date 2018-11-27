@@ -1,8 +1,7 @@
 package com.github.windsekirun.yukarisynthesizer.core.repository
 
 import android.content.Context
-import com.github.windsekirun.yukarisynthesizer.core.util.delegate.PreferenceTypeHolder
-
+import com.github.windsekirun.baseapp.module.delegate.PreferenceTypeHolder
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -9,6 +9,5 @@ enum class VoiceEngine(val id: String, val originName: String) {
     NONE("NONE", "none");
 
     class VoiceEngineConverter : PropertyEnumConverter<VoiceEngine, String>(
-        VoiceEngine.values(),
-            NONE, { this.id == it }, { it.id })
+        VoiceEngine.values(), NONE, { this.id == it }, { it.id })
 }

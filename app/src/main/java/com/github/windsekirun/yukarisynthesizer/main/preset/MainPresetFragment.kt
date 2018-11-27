@@ -1,4 +1,4 @@
-package com.github.windsekirun.yukarisynthesizer.main.story
+package com.github.windsekirun.yukarisynthesizer.main.preset
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.windsekirun.baseapp.base.BaseFragment
 import com.github.windsekirun.daggerautoinject.InjectFragment
 import com.github.windsekirun.yukarisynthesizer.R
-import com.github.windsekirun.yukarisynthesizer.databinding.MainStoryFragmentBinding
-import com.github.windsekirun.yukarisynthesizer.main.adapter.StoryItemAdapter
+import com.github.windsekirun.yukarisynthesizer.databinding.MainPresetFragmentBinding
+import com.github.windsekirun.yukarisynthesizer.main.adapter.PresetItemAdapter
 import javax.inject.Inject
 
 /**
@@ -22,20 +22,20 @@ import javax.inject.Inject
  */
 
 @InjectFragment
-class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
+class MainPresetFragment() : BaseFragment<MainPresetFragmentBinding>() {
     @Inject lateinit var mViewModelFactory: ViewModelProvider.Factory
-    private var mViewModel: MainStoryViewModel? = null
-    private lateinit var mStoryItemAdapter: StoryItemAdapter
+    private var mViewModel: MainPresetViewModel? = null
+    private lateinit var presetItemAdapter: PresetItemAdapter
 
-    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainStoryFragmentBinding {
+    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainPresetFragmentBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_story_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewModel = getViewModel(MainStoryViewModel::class.java, mViewModelFactory)
+        mViewModel = getViewModel(MainPresetViewModel::class.java, mViewModelFactory)
         mBinding.viewModel = mViewModel
 
-        mStoryItemAdapter = initRecyclerView(mBinding.recyclerView, StoryItemAdapter::class.java)
+        presetItemAdapter = initRecyclerView(mBinding.recyclerView, PresetItemAdapter::class.java)
     }
 }
