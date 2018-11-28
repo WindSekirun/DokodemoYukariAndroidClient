@@ -6,7 +6,7 @@ import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+//@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 class TestItemBuilder {
     private val phonomes = mutableListOf<PhonomeItem>()
 
