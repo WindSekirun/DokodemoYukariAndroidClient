@@ -17,7 +17,7 @@ import javax.inject.Inject
 @InjectViewModel
 class MainViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
-    var pagePosition: Int = 0
+    var pagePosition: Int = -1
 
     fun moveSettingActivity() {
 

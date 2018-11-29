@@ -1,8 +1,12 @@
+@file:JvmName("RxExtensions")
+
 package com.github.windsekirun.yukarisynthesizer.utils
 
+import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.annotations.CheckReturnValue
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
 
 /**
  * DokodemoYukariAndroidClient
@@ -20,3 +24,6 @@ fun <T> Observable<T>.subscribe(callback: (T?, Throwable?) -> Unit): Disposable 
         callback.invoke(null, it)
     })
 }
+
+@JvmField
+val ignoreError = Consumer<Throwable> { t -> Log.e("ignore", t.message, t) }

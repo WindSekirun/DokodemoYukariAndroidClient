@@ -2,6 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+
+dependencies {
+    debugCompile "io.objectbox:objectbox-android-objectbrowser:$objectboxVersion"
+    releaseCompile "io.objectbox:objectbox-android:$objectboxVersion"
+}
+
 apply plugin: 'io.objectbox'
 
 android {
@@ -77,7 +83,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
 
     // base
-    implementation("com.github.WindSekirun:PyxisBaseApp:1.2.3") {
+    implementation("com.github.WindSekirun:PyxisBaseApp:1.2.4") {
         exclude group: 'androidx.databinding'
     }
 
