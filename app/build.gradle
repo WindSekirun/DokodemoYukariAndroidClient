@@ -84,7 +84,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
 
     // base
-    implementation("com.github.WindSekirun:PyxisBaseApp:1.2.5-alpha02") {
+    implementation("com.github.WindSekirun:PyxisBaseApp:1.2.5") {
         exclude group: 'androidx.databinding'
     }
 

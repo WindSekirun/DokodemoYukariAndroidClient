@@ -7,6 +7,7 @@ import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.relation.ToMany
 import java.io.Serializable
+import java.util.*
 
 @Entity
 class VoiceItem() : Serializable {
@@ -19,8 +20,9 @@ class VoiceItem() : Serializable {
     @Convert(converter = PresetItem.PresetItemConverter::class, dbType = String::class)
     var preset: PresetItem = PresetItem(VoiceEngine.NONE, 1.0)
 
-    var contentOrigin: String = ""
     var breakTime: Long = 0
+    var regDate: Date = Date()
+    var contentOrigin: String = ""
 
     lateinit var stories: ToMany<StoryItem>
 
@@ -36,12 +38,15 @@ class VoiceItem() : Serializable {
         this.breakTime = breakTime
     }
 
-    constructor(id: Long, engine: VoiceEngine, preset: PresetItem, contentOrigin: String, breakTime: Long) : this() {
+    constructor(id: Long, engine: VoiceEngine, preset: PresetItem, breakTime: Long) : this() {
         this.id = id
         this.engine = engine
         this.preset = preset
-        this.contentOrigin = contentOrigin
         this.breakTime = breakTime
+    }
+
+    fun bindContentOrigin() {
+        contentOrigin = phonomes.asSequence().map { it.origin }.joinToString(separator = "") { it }
     }
 
     override fun toString(): String {

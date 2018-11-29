@@ -44,8 +44,6 @@ class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
         mBinding.viewModel = viewModel
 
         storyItemAdapter = initRecyclerView(mBinding.recyclerView, StoryItemAdapter::class.java)
-
-        viewModel.loadData()
     }
 
     @Subscribe

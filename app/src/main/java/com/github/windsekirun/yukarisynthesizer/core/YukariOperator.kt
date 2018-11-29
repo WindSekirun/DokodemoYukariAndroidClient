@@ -1,6 +1,5 @@
 package com.github.windsekirun.yukarisynthesizer.core
 
-import android.content.Context
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.core.annotation.OrderType
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
@@ -9,7 +8,6 @@ import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceReposi
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepositoryImpl
 import com.github.windsekirun.yukarisynthesizer.core.test.sm30193805Test
 import io.objectbox.Box
-import io.objectbox.BoxStore
 import io.objectbox.Property
 import io.objectbox.kotlin.query
 import io.reactivex.Observable
@@ -95,8 +93,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         page: Int = -1,
         limit: Long = 20L,
         searchTitle: String = "",
-        orderBy: Pair<@OrderType Int, Property<PresetItem>> =
-            OrderType.OrderFlags.ASCENDING to PresetItem_.regDate
+        orderBy: Pair<@OrderType Int, Property<PresetItem>> = OrderType.OrderFlags.ASCENDING to PresetItem_.regDate
     ): Observable<List<PresetItem>> {
         return Observable.create {
             val list = nativeQuerySearch(presetBox, page, limit, searchTitle to PresetItem_.title, orderBy)
@@ -123,8 +120,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         page: Int = -1,
         limit: Long = 20L,
         searchTitle: String = "",
-        orderBy: Pair<@OrderType Int, Property<StoryItem>> =
-            OrderType.OrderFlags.ASCENDING to StoryItem_.regDate,
+        orderBy: Pair<@OrderType Int, Property<StoryItem>> = OrderType.OrderFlags.ASCENDING to StoryItem_.regDate,
         localPlayable: Boolean = false
     ): Observable<List<StoryItem>> {
         return updateStoryItemPath()
@@ -137,6 +133,29 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
 
                 Observable.just(list)
             }
+    }
+
+    /**
+     * get List of [VoiceItem] by given options
+     *
+     * all parameter in [getVoiceList] are optional parameter.
+     *
+     * @param searchTitle return list by contains given value in [VoiceItem_.contentOrigin]. Default value is ""
+     * @param orderBy return list by given order. Int will indicate one value of [OrderType.OrderFlags],
+     * [Property] will indicate what order can applied.
+     * Default value is [OrderType.OrderFlags.ASCENDING] to [VoiceItem_.regDate]
+     * @return searched list by given options
+     */
+    fun getVoiceList(
+        searchTitle: String = "",
+        orderBy: Pair<@OrderType Int, Property<VoiceItem>> = OrderType.OrderFlags.ASCENDING to VoiceItem_.regDate
+    ): Observable<List<VoiceItem>> {
+        return Observable.create { emitter ->
+            val list = nativeQuerySearch(voiceBox, -1, -1, searchTitle to VoiceItem_.contentOrigin,
+                orderBy)
+
+            emitter.onNext(list)
+        }
     }
 
     /**

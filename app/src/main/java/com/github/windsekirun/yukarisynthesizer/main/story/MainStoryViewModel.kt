@@ -1,6 +1,8 @@
 package com.github.windsekirun.yukarisynthesizer.main.story
 
 import androidx.databinding.ObservableField
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
 import com.github.windsekirun.daggerautoinject.InjectViewModel
@@ -27,8 +29,9 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     @Inject lateinit var yukariOperator: YukariOperator
 
-    fun loadData() {
-//        yukariOperator.generateTestData()
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+        yukariOperator.generateTestData()
 
         yukariOperator.getStoryList()
             .compose(EnsureMainThreadComposer())

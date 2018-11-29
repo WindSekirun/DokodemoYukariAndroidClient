@@ -9,6 +9,12 @@ import com.github.windsekirun.baseapp.base.BaseFragment
 import com.github.windsekirun.daggerautoinject.InjectFragment
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
+import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
+import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
+import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackButtonClickListener
+import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
 
@@ -22,17 +28,31 @@ import javax.inject.Inject
  */
 
 @InjectFragment
-class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>() {
-    @Inject lateinit var mViewModelFactory: ViewModelProvider.Factory
-    private lateinit var mViewModel: MainDetailsViewModel
+class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackButtonClickListener {
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    private lateinit var viewModel: MainDetailsViewModel
+    private lateinit var voiceItemAdapter: VoiceItemAdapter
     override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainDetailsFragmentBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_details_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewModel = getViewModel(MainDetailsViewModel::class.java, mViewModelFactory)
-        mBinding.viewModel = mViewModel
+        viewModel = getViewModel(MainDetailsViewModel::class.java, viewModelFactory)
+        mBinding.viewModel = viewModel
+
+        voiceItemAdapter = initRecyclerView(mBinding.recyclerView, VoiceItemAdapter::class.java)
+    }
+
+    override fun onClickBack() {
+        viewModel.onBackPressed()
+    }
+
+    @Subscribe
+    fun onCloseFragmentEvent(event: CloseFragmentEvent) {
+        EventBus.getDefault().post(RefreshBarEvent(false))
+        activity!!.supportFragmentManager.popBackStackImmediate()
     }
 }
