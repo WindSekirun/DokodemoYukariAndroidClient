@@ -1,12 +1,12 @@
 package com.github.windsekirun.yukarisynthesizer.core
 
-import com.github.windsekirun.yukarisynthesizer.MainApplication
+import android.content.Context
 import com.github.windsekirun.yukarisynthesizer.core.annotation.OrderType
-import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.*
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepository
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepositoryImpl
 import io.objectbox.Box
+import io.objectbox.BoxStore
 import io.objectbox.Property
 import io.objectbox.kotlin.query
 import io.reactivex.Observable
@@ -18,20 +18,19 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okio.Okio
-import pyxis.uzuki.live.richutilskt.utils.asDateString
-import pyxis.uzuki.live.richutilskt.utils.toFile
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class YukariOperator @Inject constructor(val application: MainApplication) {
-    private val phonomeBox: Box<PhonomeItem> by lazy { application.getBox(PhonomeItem::class.java) }
-    private val presetBox: Box<PresetItem> by lazy { application.getBox(PresetItem::class.java) }
-    private val storyBox: Box<StoryItem> by lazy { application.getBox(StoryItem::class.java) }
-    private val voiceBox: Box<VoiceItem> by lazy { application.getBox(VoiceItem::class.java) }
-    private val preferenceRepository: PreferenceRepository by lazy { PreferenceRepositoryImpl(application) }
+class YukariOperator @Inject constructor(val context: Context) {
+    private val myObjectBox: BoxStore by lazy { MyObjectBox.builder().androidContext(context).build() }
+    private val phonomeBox: Box<PhonomeItem> by lazy { myObjectBox.boxFor(PhonomeItem::class.java) }
+    private val presetBox: Box<PresetItem> by lazy { myObjectBox.boxFor(PresetItem::class.java) }
+    private val storyBox: Box<StoryItem> by lazy { myObjectBox.boxFor(StoryItem::class.java) }
+    private val voiceBox: Box<VoiceItem> by lazy { myObjectBox.boxFor(VoiceItem::class.java) }
+    private val preferenceRepository: PreferenceRepository by lazy { PreferenceRepositoryImpl(context) }
 
     /**
      * add [StoryItem] to box with update asscioated [StoryItem.voices]
@@ -41,6 +40,10 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      */
     fun addStoryItem(storyItem: StoryItem): Observable<Long> {
         return Observable.create {
+            // update voice
+            val voices = storyItem.voices
+            voiceBox.put(voices)
+
             val id = storyBox.put(storyItem)
             it.onNext(id)
         }
@@ -62,8 +65,8 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             val orderType = if (recent) OrderType.OrderFlags.DESCENDING else OrderType.OrderFlags.ASCENDING
 
             val list = nativeQuerySearch(
-                phonomeBox, page, limit, searchTitle to PhonomeItem_.origin,
-                orderType to PhonomeItem_.regDate
+                    phonomeBox, page, limit, searchTitle to PhonomeItem_.origin,
+                    orderType to PhonomeItem_.regDate
             )
             it.onNext(list)
         }
@@ -83,17 +86,14 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      * @param limit return list by pagination. Default value is 20.
      * @return searched list by given options.
      */
-    fun getPresetList(
-        page: Int = -1,
-        limit: Long = 20L,
-        searchTitle: String = "",
-        orderBy: Pair<@OrderType Int, Property<PresetItem>> =
-            OrderType.OrderFlags.ASCENDING to PresetItem_.regDate
+    fun getPresetList(page: Int = -1,
+                      limit: Long = 20L,
+                      searchTitle: String = "",
+                      orderBy: Pair<@OrderType Int, Property<PresetItem>> =
+                              OrderType.OrderFlags.ASCENDING to PresetItem_.regDate
     ): Observable<List<PresetItem>> {
         return Observable.create {
-            val list = nativeQuerySearch(
-                presetBox, page, limit, searchTitle to PresetItem_.title, orderBy
-            )
+            val list = nativeQuerySearch(presetBox, page, limit, searchTitle to PresetItem_.title, orderBy)
             it.onNext(list)
         }
     }
@@ -112,24 +112,19 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      * @param limit return list by pagination. Default value is 20.
      * @return searched list by given options.
      */
-    fun getStoryList(
-        page: Int = -1,
-        limit: Long = 20L,
-        searchTitle: String = "",
-        orderBy: Pair<@OrderType Int, Property<StoryItem>> =
-            OrderType.OrderFlags.ASCENDING to StoryItem_.regDate,
-        localPlayable: Boolean = false
+    fun getStoryList(page: Int = -1,
+                     limit: Long = 20L,
+                     searchTitle: String = "",
+                     orderBy: Pair<@OrderType Int, Property<StoryItem>> =
+                             OrderType.OrderFlags.ASCENDING to StoryItem_.regDate
     ): Observable<List<StoryItem>> {
-        return updateStoryItemPath()
-            .flatMap {
-                val notEqual = if (localPlayable) "" to StoryItem_.localPath else null
-
-                val list = nativeQuerySearch(
-                    storyBox, page, limit, searchTitle to StoryItem_.title, orderBy, notEqual
-                ).map { item -> item.findMetadata() }
-
-                Observable.just(list)
-            }
+        return Observable.create {
+            val list = nativeQuerySearch(
+                    storyBox, page, limit, searchTitle to StoryItem_.title,
+                    orderBy
+            )
+            it.onNext(list)
+        }
     }
 
     /**
@@ -140,7 +135,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     fun requestSynthesis(storyItem: StoryItem): Single<File> {
         val target = storyItem.addStoryLocalPath()
         val client = OkHttpClient()
-        val ffmpeg = FFmpeg.getInstance(application)
+        val ffmpeg = FFmpeg.getInstance(context)
         val url = DOCOMO_URL.format(preferenceRepository.apiKey)
 
         val pcmFile = File(target.localPath.replace("mp3", "pcm"))
@@ -149,47 +144,47 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         val body = RequestBody.create(MediaType.parse(CONTENT_TYPE_SSML), ssml)
 
         val ffmpegCommend = arrayOf(
-            "-y", "-ac", "1", "-ar", "16000", "-f", "s16be", "-i", pcmFile.absolutePath,
-            "-c:a", "libmp3lame", "-q:a", "2", mp3File.absolutePath
+                "-y", "-ac", "1", "-ar", "16000", "-f", "s16be", "-i", pcmFile.absolutePath,
+                "-c:a", "libmp3lame", "-q:a", "2", mp3File.absolutePath
         )
 
         val request = Request.Builder().url(url)
-            .addHeader("Content-Type", CONTENT_TYPE_SSML)
-            .addHeader("Accept", MIME_TYPE_L16)
-            .post(body)
-            .build()
+                .addHeader("Content-Type", CONTENT_TYPE_SSML)
+                .addHeader("Accept", MIME_TYPE_L16)
+                .post(body)
+                .build()
         if (!ffmpeg.isSupported) {
             return Single.error(UnsupportedOperationException("Doesn't not support FFmpeg"))
         }
 
         return Single.fromCallable { client.newCall(request).execute() }
-            .flatMap {
-                if (it.isSuccessful && it.body() != null) {
-                    Single.just(it)
-                } else {
-                    Single.error(IOException("Cannot fetch from Docomo API"))
-                }
-            }.flatMap {
-                Single.just(Okio.buffer(Okio.sink(pcmFile)).use { sink ->
-                    sink.writeAll(it.body()!!.source())
-                    return@use pcmFile
-                })
-            }.flatMap {
-                Single.create<File> { emitter ->
-                    ffmpeg.execute(ffmpegCommend, object : ExecuteBinaryResponseHandler() {
-                        override fun onSuccess(message: String?) {
-                            super.onSuccess(message)
-                            emitter.onSuccess(mp3File)
-
-                        }
-
-                        override fun onFailure(message: String?) {
-                            super.onFailure(message)
-                            emitter.onError(IOException("Cannot convert by FFmpeg"))
-                        }
+                .flatMap {
+                    if (it.isSuccessful && it.body() != null) {
+                        Single.just(it)
+                    } else {
+                        Single.error(IOException("Cannot fetch from Docomo API"))
+                    }
+                }.flatMap {
+                    Single.just(Okio.buffer(Okio.sink(pcmFile)).use { sink ->
+                        sink.writeAll(it.body()!!.source())
+                        return@use pcmFile
                     })
+                }.flatMap {
+                    Single.create<File> { emitter ->
+                        ffmpeg.execute(ffmpegCommend, object : ExecuteBinaryResponseHandler() {
+                            override fun onSuccess(message: String?) {
+                                super.onSuccess(message)
+                                emitter.onSuccess(mp3File)
+
+                            }
+
+                            override fun onFailure(message: String?) {
+                                super.onFailure(message)
+                                emitter.onError(IOException("Cannot convert by FFmpeg"))
+                            }
+                        })
+                    }
                 }
-            }
     }
 
     /**
@@ -198,7 +193,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     private fun StoryItem.addStoryLocalPath(): StoryItem {
         if (localPath.isNotEmpty()) return this
 
-        val file = File(application.filesDir, "/local/$title.mp3")
+        val file = File(context.filesDir, "/local/$title.mp3")
         file.parentFile.mkdirs()
 
         this.localPath = file.absolutePath
@@ -208,40 +203,17 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     }
 
     /**
-     * find and apply 'transient metadata' with given [StoryItem]
-     */
-    private fun StoryItem.findMetadata() = this.apply {
-        val voices = voiceBox.query {
-            this.`in`(VoiceItem_.id, this@apply.voicesId.toLongArray())
-        }.find()
-
-        val majorEngine: VoiceEngine = voices.map { it.engine }
-            .groupBy { it }
-            .mapValues { it.value.size }
-            .toList()
-            .maxBy { it.second }
-            ?.first ?: VoiceEngine.NONE
-
-        this.voices = voices
-        this.regDateFormat = this.regDate.asDateString("yyyy. MM. dd.")
-        this.majorEngine = majorEngine
-    }
-
-    /**
      * Run native query search by given options.
      */
-    private fun <ENTITY> nativeQuerySearch(
-        box: Box<ENTITY>,
-        page: Int,
-        limit: Long,
-        searchTitle: Pair<String, Property<ENTITY>>,
-        orderBy: Pair<@OrderType Int, Property<ENTITY>>,
-        notEqual: Pair<String, Property<ENTITY>>? = null
+    private fun <ENTITY> nativeQuerySearch(box: Box<ENTITY>,
+                                           page: Int,
+                                           limit: Long,
+                                           searchTitle: Pair<String, Property<ENTITY>>,
+                                           orderBy: Pair<@OrderType Int, Property<ENTITY>>
     ): MutableList<ENTITY> {
         val query = box.query {
             if (searchTitle.first.isNotEmpty()) this.contains(searchTitle.second, searchTitle.first)
             this.order(orderBy.second, orderBy.first)
-            if (notEqual != null) this.notEqual(notEqual.second, notEqual.first)
         }
 
         return if (page != -1 && limit != -1L) {
@@ -249,32 +221,6 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             query.find(offset, limit)
         } else {
             query.find()
-        }
-    }
-
-    /**
-     * update unreadable [StoryItem_.localPath] to empty in all value of [storyBox]
-     */
-    private fun updateStoryItemPath(): Observable<Int> {
-        return Observable.create { emitter ->
-            val notEqual = "" to StoryItem_.localPath
-            val orderBy = OrderType.OrderFlags.ASCENDING to StoryItem_.regDate
-
-            // find local playable list
-            val list = nativeQuerySearch(
-                storyBox, -1, -1, "" to StoryItem_.title, orderBy, notEqual
-            )
-
-            val target = list.filter { it.localPath.isNotEmpty() }
-                .filter {
-                    val file = it.localPath.toFile()
-                    !(file.exists() && file.canRead())
-                }
-                .map { it.apply { it.localPath = "" } }
-                .toList()
-
-            storyBox.put(target)
-            emitter.onNext(target.size)
         }
     }
 

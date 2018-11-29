@@ -7,7 +7,7 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
-class PhonomeItem(): Serializable {
+class PhonomeItem: Serializable {
 
     @Id
     var id: Long = 0
@@ -15,11 +15,11 @@ class PhonomeItem(): Serializable {
     var phoneme: String = ""
     var regDate: Date = Date()
 
-    constructor(origin: String): this() {
+    constructor(origin: String) {
         this.origin = origin
     }
 
-    constructor(origin: String, phoneme: String): this() {
+    constructor(origin: String, phoneme: String) {
         this.origin = origin
         this.phoneme = phoneme
     }

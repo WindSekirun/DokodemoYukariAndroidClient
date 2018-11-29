@@ -15,7 +15,6 @@ import dagger.android.HasActivityInjector
 import dagger.android.HasServiceInjector
 import io.objectbox.Box
 import io.objectbox.BoxStore
-import io.objectbox.android.AndroidObjectBrowser
 import pyxis.uzuki.live.attribute.parser.annotation.AttributeParser
 import javax.inject.Inject
 
@@ -47,10 +46,6 @@ class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInject
         DaggerAutoInject.init(this, appComponent!!)
 
         mBoxStore = MyObjectBox.builder().androidContext(this).build();
-
-        if (BuildConfig.DEBUG) {
-            AndroidObjectBrowser(mBoxStore).start(this)
-        }
     }
 
     fun <T> getBox(cls: Class<T>): Box<T> {

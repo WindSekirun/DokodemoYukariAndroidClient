@@ -9,7 +9,7 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
-class PresetItem constructor() : Serializable {
+class PresetItem : Serializable {
     @Id
     var id: Long = 0
     var title: String = ""
@@ -23,12 +23,12 @@ class PresetItem constructor() : Serializable {
     var range: Double = 1.0
     var volume: Double = 1.0
 
-    constructor(engine: VoiceEngine, rate: Double): this() {
+    constructor(engine: VoiceEngine, rate: Double) {
         this.engine = engine
         this.rate = rate
     }
 
-    constructor(engine: VoiceEngine, rate: Double, pitch: Double): this() {
+    constructor(engine: VoiceEngine, rate: Double, pitch: Double) {
         this.engine = engine
         this.rate = rate
         this.pitch = pitch

@@ -4,7 +4,6 @@ import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
-import io.objectbox.Box
 
 /**
  * DokodemoYukariAndroidClient
@@ -15,12 +14,13 @@ import io.objectbox.Box
  */
 
 //@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun sm30193805Test(storyBox: Box<StoryItem>, voiceBox: Box<VoiceItem>): StoryItem {
+fun test1(): StoryItem {
     // normal preset
     val yukari = PresetItem(VoiceEngine.Yukari, 1.4, 1.2)
     val maki = PresetItem(VoiceEngine.Maki, 1.4)
     val ai = PresetItem(VoiceEngine.Ai, 1.4)
 
+    // content from https://www.nicovideo.jp/watch/sm30193805
     val yukari1 = buildVoiceItem(VoiceEngine.Yukari, yukari) {
         voice("皆さんこんにちは、結月ゆかりです")
     }
@@ -80,14 +80,5 @@ fun sm30193805Test(storyBox: Box<StoryItem>, voiceBox: Box<VoiceItem>): StoryIte
         this.add(ai3)
     }
 
-    voiceBox.put(voices)
-
-    val list = voices.map { it.id }
-
-    return StoryItem().apply {
-        title = "sm30193805"
-        voicesId = list
-    }
-
-//    return StoryItem("sm30193805", voices);
+    return StoryItem("sm30193805", voices);
 }

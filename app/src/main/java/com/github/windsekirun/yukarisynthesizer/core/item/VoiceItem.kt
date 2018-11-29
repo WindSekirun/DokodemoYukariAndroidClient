@@ -7,7 +7,7 @@ import io.objectbox.annotation.Id
 import java.io.Serializable
 
 @Entity
-class VoiceItem constructor(): Serializable {
+class VoiceItem: Serializable {
     @Id
     var id: Long = 0
 
@@ -21,14 +21,14 @@ class VoiceItem constructor(): Serializable {
     var contentPhonemes: List<PhonomeItem> = mutableListOf()
     var breakTime: Long = 0
 
-    constructor(engine: VoiceEngine, preset: PresetItem, contentPhonemes: List<PhonomeItem>): this() {
+    constructor(engine: VoiceEngine, preset: PresetItem, contentPhonemes: List<PhonomeItem>) {
             this.engine = engine
         this.preset = preset
         this.contentPhonemes = contentPhonemes
         this.contentOrigin = contentPhonemes.asSequence().map { it.origin }.joinToString(separator = "") { it }
     }
 
-    constructor(breakTime: Long): this() {
+    constructor(breakTime: Long) {
         this.breakTime = breakTime
     }
 

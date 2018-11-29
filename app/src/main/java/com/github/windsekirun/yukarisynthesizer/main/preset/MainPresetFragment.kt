@@ -28,7 +28,7 @@ class MainPresetFragment() : BaseFragment<MainPresetFragmentBinding>() {
     private lateinit var presetItemAdapter: PresetItemAdapter
 
     override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainPresetFragmentBinding {
-        return DataBindingUtil.inflate(inflater, R.layout.main_preset_fragment, container, false)
+        return DataBindingUtil.inflate(inflater, R.layout.main_story_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
