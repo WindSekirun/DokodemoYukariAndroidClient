@@ -11,7 +11,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:id="@+id/container"
         android:layout_height="match_parent"
+        android:transitionName="@string/transition_name"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
@@ -20,6 +22,6 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_left_grey600_24dp" />
-        ㅑ
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -15,6 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
+        android:transitionName="@string/transition_name"
         android:orientation="vertical">
 
         <ImageView

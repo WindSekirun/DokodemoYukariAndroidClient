@@ -1,17 +1,12 @@
 package com.github.windsekirun.yukarisynthesizer.main.story
 
 import androidx.databinding.ObservableField
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
-import com.github.windsekirun.baseapp.module.composer.ProgressComposer
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
-import com.github.windsekirun.yukarisynthesizer.core.test.sm30193805Test
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
@@ -32,8 +27,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     @Inject lateinit var yukariOperator: YukariOperator
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+    fun loadData() {
         yukariOperator.getStoryList()
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
@@ -41,6 +35,5 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 itemData.set(data)
             }.addTo(compositeDisposable)
     }
-
 
 }

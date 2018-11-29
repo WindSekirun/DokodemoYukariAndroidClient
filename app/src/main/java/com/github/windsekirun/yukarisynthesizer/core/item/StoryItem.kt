@@ -5,10 +5,11 @@ import io.objectbox.annotation.Backlink
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.relation.ToMany
+import java.io.Serializable
 import java.util.*
 
 @Entity
-class StoryItem() {
+class StoryItem(): Serializable {
     @Id
     var id: Long = 0
     var version: String = "1.1"

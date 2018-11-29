@@ -1,5 +1,6 @@
 package com.github.windsekirun.yukarisynthesizer.main.story.event
 
+import android.graphics.Rect
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 
 /**
@@ -9,4 +10,4 @@ import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
  *
  * Description:
  */
-class ClickStoryItem(val item: StoryItem)
+class ClickStoryItem(val item: StoryItem, val position: Int)
