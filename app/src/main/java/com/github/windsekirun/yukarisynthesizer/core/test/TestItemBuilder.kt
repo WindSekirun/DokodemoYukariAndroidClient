@@ -21,5 +21,13 @@ fun buildVoiceItem(engine: VoiceEngine, presetItem: PresetItem,
                    setup: TestItemBuilder.() -> Unit): VoiceItem {
     val builder = TestItemBuilder()
     builder.setup()
-    return VoiceItem(engine, presetItem, builder.build())
+
+    val voiceItem = VoiceItem().apply {
+        this.engine = engine
+        this.preset = presetItem
+    }
+
+    voiceItem.phonomes.addAll(builder.build())
+
+    return voiceItem
 }

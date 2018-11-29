@@ -4,6 +4,7 @@ import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
+import io.objectbox.kotlin.applyChangesToDb
 
 /**
  * DokodemoYukariAndroidClient
@@ -14,7 +15,7 @@ import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
  */
 
 //@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun test1(): StoryItem {
+fun sm30193805Test(): StoryItem {
     // normal preset
     val yukari = PresetItem(VoiceEngine.Yukari, 1.4, 1.2)
     val maki = PresetItem(VoiceEngine.Maki, 1.4)
@@ -80,5 +81,8 @@ fun test1(): StoryItem {
         this.add(ai3)
     }
 
-    return StoryItem("sm30193805", voices);
+    val storyItem = StoryItem().apply { title = "sm30193805" }
+
+    storyItem.voices.addAll(voices)
+    return storyItem
 }

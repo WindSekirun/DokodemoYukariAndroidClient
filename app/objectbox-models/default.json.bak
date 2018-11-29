@@ -71,8 +71,8 @@
       ],
       "relations": [
         {
-          "id": "2:7519391685098574218",
-          "name": "contentPhonemes"
+          "id": "4:8378190415968324772",
+          "name": "storys"
         }
       ]
     },
@@ -98,11 +98,16 @@
           "name": "regDate"
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "5:4076817336892554929",
+          "name": "voices"
+        }
+      ]
     },
     {
       "id": "6:6108425011797126720",
-      "lastPropertyId": "5:882897186322787520",
+      "lastPropertyId": "6:4672655677976345877",
       "name": "StoryItem",
       "properties": [
         {
@@ -124,19 +129,18 @@
         {
           "id": "5:882897186322787520",
           "name": "localPath"
+        },
+        {
+          "id": "6:4672655677976345877",
+          "name": "favoriteFlag"
         }
       ],
-      "relations": [
-        {
-          "id": "3:6553918333837165815",
-          "name": "voices"
-        }
-      ]
+      "relations": []
     }
   ],
   "lastEntityId": "6:6108425011797126720",
   "lastIndexId": "0:0",
-  "lastRelationId": "3:6553918333837165815",
+  "lastRelationId": "5:4076817336892554929",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
@@ -157,7 +161,9 @@
     3895908989720341639
   ],
   "retiredRelationUids": [
-    7535944017951270383
+    7535944017951270383,
+    6553918333837165815,
+    7519391685098574218
   ],
   "version": 1
 }
