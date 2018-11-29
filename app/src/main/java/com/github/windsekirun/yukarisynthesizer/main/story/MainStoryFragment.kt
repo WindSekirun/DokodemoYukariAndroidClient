@@ -13,6 +13,8 @@ import com.github.windsekirun.yukarisynthesizer.main.adapter.StoryItemAdapter
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsViewModel
 import com.github.windsekirun.yukarisynthesizer.main.story.event.ClickStoryItem
+import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
@@ -27,7 +29,8 @@ import javax.inject.Inject
 
 @InjectFragment
 class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: MainStoryViewModel
     private lateinit var storyItemAdapter: StoryItemAdapter
 
@@ -54,6 +57,8 @@ class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
         val fragment = MainDetailsFragment().apply {
             arguments = bundle
         }
+
+        EventBus.getDefault().post(RefreshBarEvent(true))
 
         activity!!.supportFragmentManager
             .beginTransaction()

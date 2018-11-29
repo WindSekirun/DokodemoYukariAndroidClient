@@ -28,6 +28,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     @Inject lateinit var yukariOperator: YukariOperator
 
     fun loadData() {
+//        yukariOperator.generateTestData()
+
         yukariOperator.getStoryList()
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->

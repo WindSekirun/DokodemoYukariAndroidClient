@@ -7,4 +7,8 @@
     <string name="import_title">Import</string>
     <string name="preset_format">Rate: %s, Pitch: %s, Range: %s, Volume: %s</string>
     <string name="transition_name">transition_name</string>
+    <string name="menu_details_play">Play</string>
+    <string name="menu_details_star">Star</string>
+    <string name="menu_details_share">Share</string>
+    <string name="main_double_back_invoker">Please click BACK again to exit</string>
 </resources>
