@@ -45,8 +45,6 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
-    private var currentFabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
-
     private val addVisibilityChanged: FloatingActionButton.OnVisibilityChangedListener =
         object : FloatingActionButton.OnVisibilityChangedListener() {
             override fun onShown(fab: FloatingActionButton?) {
@@ -57,7 +55,7 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
 
             override fun onHidden(fab: FloatingActionButton?) {
                 super.onHidden(fab)
-                mBinding.bottomAppBar.fabAlignmentMode = currentFabAlignmentMode
+                mBinding.bottomAppBar.fabAlignmentMode = viewModel.currentFabAlignmentMode
                 mBinding.bottomAppBar.replaceMenu(
                     if (isInDetails()) {
                         R.menu.menu_details
@@ -85,22 +83,10 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
 
         mBinding.fab.setOnClickListener {
             if (isInDetails()) {
-                return@setOnClickListener
+                addNewVoices()
+            } else {
+                addNewStory()
             }
-
-            RevealSettingHolder.revealSetting = CircularRevealUtils.RevealSetting.with(mBinding.fab, mBinding.container)
-            toggleBottomBar(true)
-
-            val fragment = MainDetailsFragment().apply {
-                this.revealSetting = RevealSettingHolder.revealSetting
-            }
-
-            supportFragmentManager
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .add(R.id.container, fragment)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
         }
 
         replaceFragment(MainStoryFragment::class, 0)
@@ -153,7 +139,7 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     }
 
     private fun <T : Fragment> replaceFragment(cls: KClass<T>, pagePosition: Int = 0) {
-        if (viewModel.pagePosition == pagePosition) return // if pagePosition is same, block that.
+        if (viewModel.pagePosition == pagePosition) return
         viewModel.pagePosition = pagePosition
 
         val fragment = cls.createInstance()
@@ -164,7 +150,7 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     }
 
     private fun toggleBottomBar(attached: Boolean) {
-        currentFabAlignmentMode = if (attached) {
+        viewModel.currentFabAlignmentMode = if (attached) {
             BottomAppBar.FAB_ALIGNMENT_MODE_END
         } else {
             BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
@@ -179,5 +165,25 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         }
     }
 
-    private fun isInDetails() = currentFabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_END
+    private fun addNewStory() {
+        RevealSettingHolder.revealSetting = CircularRevealUtils.RevealSetting.with(mBinding.fab, mBinding.container)
+        toggleBottomBar(true)
+
+        val fragment = MainDetailsFragment().apply {
+            this.revealSetting = RevealSettingHolder.revealSetting
+        }
+
+        supportFragmentManager
+            .beginTransaction()
+            .setReorderingAllowed(true)
+            .add(R.id.container, fragment)
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
+    }
+
+    private fun addNewVoices() {
+
+    }
+
+    private fun isInDetails() = viewModel.currentFabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_END
 }
