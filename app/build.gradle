@@ -91,7 +91,7 @@ dependencies {
     // Maintained by WindSekirun
     implementation 'com.github.WindSekirun:NyanCat:1.2.0'
     implementation 'com.github.WindSekirun:MockupModule:1.0.6'
-    implementation 'com.github.WindSekirun:RichUtilsKt:2.3.1'
+    implementation 'com.github.WindSekirun:RichUtilsKt:2.3.2'
     implementation 'com.github.WindSekirun:RxSocialLogin:1.2.0'
     implementation 'com.github.WindSekirun:RollingBanner:1.0.7'
     implementation('com.github.WindSekirun:BindAdapters:0.1.6.1-androidx') {

@@ -18,6 +18,8 @@ import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
 import com.github.windsekirun.yukarisynthesizer.main.preset.MainPresetFragment
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryFragment
 import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
+import com.github.windsekirun.yukarisynthesizer.utils.reveal.CircularRevealUtils
+import com.github.windsekirun.yukarisynthesizer.utils.reveal.RevealSettingHolder
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.AndroidInjector
@@ -47,17 +49,23 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
 
     private val addVisibilityChanged: FloatingActionButton.OnVisibilityChangedListener =
         object : FloatingActionButton.OnVisibilityChangedListener() {
+            override fun onShown(fab: FloatingActionButton?) {
+                super.onShown(fab)
+                RevealSettingHolder.revealSetting =
+                        CircularRevealUtils.RevealSetting.with(mBinding.fab, mBinding.container)
+            }
+
             override fun onHidden(fab: FloatingActionButton?) {
                 super.onHidden(fab)
                 mBinding.bottomAppBar.fabAlignmentMode = currentFabAlignmentMode
                 mBinding.bottomAppBar.replaceMenu(
-                    if (currentFabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_CENTER) {
-                        R.menu.menu_main
-                    } else {
+                    if (isInDetails()) {
                         R.menu.menu_details
+                    } else {
+                        R.menu.menu_main
                     }
                 )
-                fab?.show()
+                fab?.show(this)
             }
         }
 
@@ -76,9 +84,17 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         }
 
         mBinding.fab.setOnClickListener {
+            if (isInDetails()) {
+                return@setOnClickListener
+            }
+
+            RevealSettingHolder.revealSetting = CircularRevealUtils.RevealSetting.with(mBinding.fab, mBinding.container)
             toggleBottomBar(true)
 
-            val fragment = MainDetailsFragment()
+            val fragment = MainDetailsFragment().apply {
+                this.revealSetting = RevealSettingHolder.revealSetting
+            }
+
             supportFragmentManager
                 .beginTransaction()
                 .setReorderingAllowed(true)
@@ -108,7 +124,7 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     override fun onBackPressed() {
-        if (currentFabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_END) {
+        if (isInDetails()) {
             supportFragmentManager.fragments
                 .filterIsInstance(OnBackPressedListener::class.java)
                 .forEach { it.onBackPressed() }
@@ -162,4 +178,6 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
             ContextCompat.getDrawable(this, R.drawable.ic_menu_black_24dp)
         }
     }
+
+    private fun isInDetails() = currentFabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_END
 }
