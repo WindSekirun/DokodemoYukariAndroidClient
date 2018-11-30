@@ -14,7 +14,7 @@ import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainActivityBinding
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
 import com.github.windsekirun.yukarisynthesizer.main.drawer.MainDrawerFragment
-import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackButtonClickListener
+import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
 import com.github.windsekirun.yukarisynthesizer.main.preset.MainPresetFragment
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryFragment
 import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
@@ -110,8 +110,8 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     override fun onBackPressed() {
         if (currentFabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_END) {
             supportFragmentManager.fragments
-                .filterIsInstance(OnBackButtonClickListener::class.java)
-                .forEach { it.onClickBack() }
+                .filterIsInstance(OnBackPressedListener::class.java)
+                .forEach { it.onBackPressed() }
         } else {
             DoubleBackInvoker.execute(getString(R.string.main_double_back_invoker))
         }

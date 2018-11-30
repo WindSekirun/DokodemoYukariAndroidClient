@@ -41,6 +41,7 @@ class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = getViewModel(MainStoryViewModel::class.java, viewModelFactory)
+        mBinding.setLifecycleOwner(this)
         mBinding.viewModel = viewModel
 
         storyItemAdapter = initRecyclerView(mBinding.recyclerView, StoryItemAdapter::class.java)

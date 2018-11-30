@@ -1,24 +1,20 @@
 package com.github.windsekirun.yukarisynthesizer.main.details
 
-import androidx.databinding.ObservableField
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
-import com.benoitquenaudon.rxdatabinding.databinding.RxObservableField
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.argsinjector.Argument
-import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
+import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
-import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
 /**
@@ -33,7 +29,7 @@ import javax.inject.Inject
 @InjectViewModel
 class MainDetailsViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
-    val itemData = ObservableField<List<VoiceItem>>(mutableListOf())
+    val itemData: MutableLiveData<List<VoiceItem>> = MutableLiveData()
     val title = ObservableString()
 
     private var changed: Boolean = false
@@ -51,11 +47,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         } else {
             storyItem = StoryItem()
         }
-
-        Observables.combineLatest(RxObservableField.propertyChanges(itemData), title.propertyChanges())
-            .subscribe { _, _ ->
-                changed = true
-            }.addTo(compositeDisposable)
     }
 
     fun onBackPressed() {
@@ -67,25 +58,34 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun bindItems(storyItem: StoryItem) {
-        itemData.set(storyItem.voices.toList())
-        title.set(storyItem.title)
+        val disposable = yukariOperator.getVoiceListAssociatedStoryItem(storyItem)
+            .compose(EnsureMainThreadComposer())
+            .subscribe { data, error ->
+                if (error != null) return@subscribe
+                title.set(storyItem.title)
+                itemData.value = data
+            }
+
+        addDisposable(disposable)
     }
 
     private fun save(autoClose: Boolean = false) {
-        if (itemData.get()!!.isEmpty()) return
+        if (itemData.value!!.isEmpty()) return
 
         storyItem.apply {
             this.title = this@MainDetailsViewModel.title.get()
             this.voices.clear()
-            this.voices.addAll(itemData.get()!!)
+            this.voices.addAll(itemData.value!!)
         }
 
-        yukariOperator.addStoryItem(storyItem)
+        val disposable = yukariOperator.addStoryItem(storyItem)
             .compose(EnsureMainThreadComposer())
             .subscribe { _, _ ->
                 showToast(getString(R.string.saved))
                 if (autoClose) postEvent(CloseFragmentEvent())
-            }.addTo(compositeDisposable)
+            }
+
+        addDisposable(disposable)
     }
 
     companion object {

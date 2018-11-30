@@ -45,7 +45,7 @@
     },
     {
       "id": "4:4604394046440767304",
-      "lastPropertyId": "5:6714567535894929895",
+      "lastPropertyId": "6:4915634599499807798",
       "name": "VoiceItem",
       "properties": [
         {
@@ -67,6 +67,10 @@
         {
           "id": "5:6714567535894929895",
           "name": "breakTime"
+        },
+        {
+          "id": "6:4915634599499807798",
+          "name": "regDate"
         }
       ],
       "relations": [

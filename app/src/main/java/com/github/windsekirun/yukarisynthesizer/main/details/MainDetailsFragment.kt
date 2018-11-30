@@ -11,7 +11,7 @@ import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
 import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
-import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackButtonClickListener
+import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
 import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -28,7 +28,7 @@ import javax.inject.Inject
  */
 
 @InjectFragment
-class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackButtonClickListener {
+class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPressedListener {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -41,12 +41,13 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackBu
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = getViewModel(MainDetailsViewModel::class.java, viewModelFactory)
+        mBinding.setLifecycleOwner(this)
         mBinding.viewModel = viewModel
 
         voiceItemAdapter = initRecyclerView(mBinding.recyclerView, VoiceItemAdapter::class.java)
     }
 
-    override fun onClickBack() {
+    override fun onBackPressed() {
         viewModel.onBackPressed()
     }
 

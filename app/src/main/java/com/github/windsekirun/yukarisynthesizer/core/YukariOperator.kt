@@ -151,10 +151,30 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         orderBy: Pair<@OrderType Int, Property<VoiceItem>> = OrderType.OrderFlags.ASCENDING to VoiceItem_.regDate
     ): Observable<List<VoiceItem>> {
         return Observable.create { emitter ->
-            val list = nativeQuerySearch(voiceBox, -1, -1, searchTitle to VoiceItem_.contentOrigin,
-                orderBy)
+            val list = nativeQuerySearch(
+                voiceBox, -1, -1, searchTitle to VoiceItem_.contentOrigin,
+                orderBy
+            )
 
             emitter.onNext(list)
+        }
+    }
+
+    /**
+     * get List of [VoiceItem] which associated with given [StoryItem]
+     *
+     * @param storyItem associated data
+     * @return searched list by given [storyItem]
+     */
+    fun getVoiceListAssociatedStoryItem(storyItem: StoryItem): Observable<List<VoiceItem>> {
+        return Observable.create { emitter ->
+            val ids = storyItem.voices.map { it.id }.toLongArray()
+
+            val query = voiceBox.query {
+                this.`in`(VoiceItem_.id, ids)
+            }.find()
+
+            emitter.onNext(query)
         }
     }
 
