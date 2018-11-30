@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.windsekirun.baseapp.base.BaseFragment
 import com.github.windsekirun.daggerautoinject.InjectFragment
 import com.github.windsekirun.yukarisynthesizer.R
+import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
 import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
@@ -32,6 +33,8 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    var storyItem: StoryItem? = null
+
     private lateinit var viewModel: MainDetailsViewModel
     private lateinit var voiceItemAdapter: VoiceItemAdapter
     override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainDetailsFragmentBinding {
@@ -41,10 +44,13 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = getViewModel(MainDetailsViewModel::class.java, viewModelFactory)
+
         mBinding.setLifecycleOwner(this)
         mBinding.viewModel = viewModel
 
         voiceItemAdapter = initRecyclerView(mBinding.recyclerView, VoiceItemAdapter::class.java)
+
+        viewModel.loadData(storyItem)
     }
 
     override fun onBackPressed() {

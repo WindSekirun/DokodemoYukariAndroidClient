@@ -11,6 +11,6 @@
     <string name="menu_details_star">Star</string>
     <string name="menu_details_share">Share</string>
     <string name="main_double_back_invoker">Please click BACK again to exit</string>
-    <string name="preset_details_format">%s - %s</string>
+    <string name="preset_details_format">%s :: %s</string>
     <string name="saved">Saved.</string>
 </resources>

@@ -17,9 +17,9 @@ import io.objectbox.kotlin.applyChangesToDb
 //@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun sm30193805Test(): StoryItem {
     // normal preset
-    val yukari = PresetItem(VoiceEngine.Yukari, 1.4, 1.2)
-    val maki = PresetItem(VoiceEngine.Maki, 1.4)
-    val ai = PresetItem(VoiceEngine.Ai, 1.4)
+    val yukari = PresetItem(VoiceEngine.Yukari, 1.4, 1.2).apply { title = "Yukari-1.4-1.2" }
+    val maki = PresetItem(VoiceEngine.Maki, 1.4).apply { title = "Maki-1.4" }
+    val ai = PresetItem(VoiceEngine.Ai, 1.4).apply { title = "Ai-1.4" }
 
     // content from https://www.nicovideo.jp/watch/sm30193805
     val yukari1 = buildVoiceItem(VoiceEngine.Yukari, yukari) {

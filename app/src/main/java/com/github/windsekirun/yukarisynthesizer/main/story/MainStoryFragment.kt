@@ -11,7 +11,6 @@ import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainStoryFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.StoryItemAdapter
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
-import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsViewModel
 import com.github.windsekirun.yukarisynthesizer.main.story.event.ClickStoryItem
 import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
 import org.greenrobot.eventbus.EventBus
@@ -49,12 +48,8 @@ class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
 
     @Subscribe
     fun onClickStoryItem(event: ClickStoryItem) {
-        val bundle = Bundle().apply {
-            putSerializable(MainDetailsViewModel.ARGUMENT_STORY_ITEM, event.item)
-        }
-
         val fragment = MainDetailsFragment().apply {
-            arguments = bundle
+            this.storyItem = event.item
         }
 
         EventBus.getDefault().post(RefreshBarEvent(true))

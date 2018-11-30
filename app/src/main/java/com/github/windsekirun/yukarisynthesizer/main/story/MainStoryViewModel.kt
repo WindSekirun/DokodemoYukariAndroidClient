@@ -30,8 +30,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
-        yukariOperator.generateTestData()
-
         val disposable = yukariOperator.getStoryList()
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
