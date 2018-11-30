@@ -98,9 +98,9 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
             supportFragmentManager
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.container, fragment)
+                .add(R.id.container, fragment)
                 .addToBackStack(null)
-                .commit()
+                .commitAllowingStateLoss()
         }
 
         replaceFragment(MainStoryFragment::class, 0)
