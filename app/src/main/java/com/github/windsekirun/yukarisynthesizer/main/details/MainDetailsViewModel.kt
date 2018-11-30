@@ -54,10 +54,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     fun loadData(storyItem: StoryItem?) {
         this.storyItem = storyItem ?: StoryItem()
         bindItems(storyItem == null)
-
-        itemData.observeForever(changeObserver)
-        val disposable = title.propertyChanges().subscribe { _, _ -> changed = true }
-        addDisposable(disposable)
     }
 
     fun onBackPressed() {
@@ -69,7 +65,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun bindItems(initial: Boolean) {
-        if (initial) return
+        if (initial) {
+            observeEvent()
+            return
+        }
 
         val disposable = yukariOperator.getVoiceListAssociatedStoryItem(storyItem)
             .compose(EnsureMainThreadComposer())
@@ -77,6 +76,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 if (error != null) return@subscribe
                 title.set(storyItem.title)
                 itemData.value = data
+
+                observeEvent()
             }
 
         addDisposable(disposable)
@@ -100,6 +101,12 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 if (autoClose) postEvent(CloseFragmentEvent())
             }
 
+        addDisposable(disposable)
+    }
+
+    private fun observeEvent() {
+        itemData.observeForever(changeObserver)
+        val disposable = title.propertyChanges().subscribe { _, _ -> changed = true }
         addDisposable(disposable)
     }
 }
