@@ -9,7 +9,7 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
-class StoryItem(): Serializable {
+class StoryItem() : Serializable {
     @Id
     var id: Long = 0
     var version: String = "1.1"
@@ -19,7 +19,7 @@ class StoryItem(): Serializable {
     var favoriteFlag: Boolean = false
 
     @Backlink(to = "stories")
-    lateinit var  voices: ToMany<VoiceItem>
+    lateinit var voices: ToMany<VoiceItem>
 
     @Transient
     var regDateFormat: String = ""

@@ -1,11 +1,10 @@
 package com.github.windsekirun.yukarisynthesizer.binding;
 
+import androidx.databinding.BindingAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter;
 
 import java.util.List;
-
-import androidx.databinding.BindingAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class JavaBindsAdapter {
 

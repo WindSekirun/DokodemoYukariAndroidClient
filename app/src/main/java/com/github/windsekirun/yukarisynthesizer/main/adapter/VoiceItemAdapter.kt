@@ -6,7 +6,6 @@ import androidx.databinding.DataBindingUtil
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
-import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsItemBinding
 import com.github.windsekirun.yukarisynthesizer.main.details.event.ClickVoiceItem
 
 /**

@@ -1,7 +1,6 @@
 package com.github.windsekirun.yukarisynthesizer.main.preset.event
 
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
-import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 
 /**
  * DokodemoYukariAndroidClient

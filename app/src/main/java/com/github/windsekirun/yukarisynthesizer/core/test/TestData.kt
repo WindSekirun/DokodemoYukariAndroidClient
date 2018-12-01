@@ -4,7 +4,6 @@ import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
-import io.objectbox.kotlin.applyChangesToDb
 
 /**
  * DokodemoYukariAndroidClient
@@ -17,7 +16,7 @@ import io.objectbox.kotlin.applyChangesToDb
 //@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun sm30193805Test(): StoryItem {
     // normal preset
- val yukari = PresetItem(VoiceEngine.Yukari, 1.4, 1.2).apply { title = "Yukari-1.4-1.2" }
+    val yukari = PresetItem(VoiceEngine.Yukari, 1.4, 1.2).apply { title = "Yukari-1.4-1.2" }
     val maki = PresetItem(VoiceEngine.Maki, 1.4).apply { title = "Maki-1.4" }
 
     // content from https://www.nicovideo.jp/watch/sm30193805

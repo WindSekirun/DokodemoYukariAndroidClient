@@ -10,7 +10,6 @@ import com.github.windsekirun.baseapp.base.BaseFragment
 import com.github.windsekirun.daggerautoinject.InjectFragment
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
-import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
 import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
@@ -79,7 +78,7 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         if (revealSetting != null) {
             val revealSetting = RevealSettingHolder.revealSetting
             CircularRevealUtils.revealExit(mBinding.root, revealSetting!!) {
-               exitDetails()
+                exitDetails()
             }
         } else {
             exitDetails()

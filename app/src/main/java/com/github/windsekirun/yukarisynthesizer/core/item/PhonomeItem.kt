@@ -8,7 +8,7 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
-class PhonomeItem(): Serializable {
+class PhonomeItem() : Serializable {
 
     @Id
     var id: Long = 0
@@ -18,11 +18,11 @@ class PhonomeItem(): Serializable {
 
     lateinit var voices: ToMany<VoiceItem>
 
-    constructor(origin: String): this() {
+    constructor(origin: String) : this() {
         this.origin = origin
     }
 
-    constructor(origin: String, phoneme: String): this() {
+    constructor(origin: String, phoneme: String) : this() {
         this.origin = origin
         this.phoneme = phoneme
     }

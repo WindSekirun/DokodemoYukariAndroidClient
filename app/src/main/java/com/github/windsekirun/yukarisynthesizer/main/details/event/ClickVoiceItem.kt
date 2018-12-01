@@ -1,7 +1,5 @@
 package com.github.windsekirun.yukarisynthesizer.main.details.event
 
-import android.graphics.Rect
-import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 
 /**

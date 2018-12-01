@@ -2,7 +2,6 @@ package com.github.windsekirun.yukarisynthesizer.utils
 
 import android.content.Context
 import pyxis.uzuki.live.richutilskt.utils.RPreference
-import java.lang.IllegalArgumentException
 import kotlin.reflect.KProperty
 
 class PreferenceTypeHolder<T : Any>(val context: Context, val key: String, val defaultValue: T?) {

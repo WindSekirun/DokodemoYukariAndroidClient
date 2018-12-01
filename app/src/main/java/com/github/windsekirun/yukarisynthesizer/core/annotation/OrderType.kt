@@ -3,12 +3,14 @@ package com.github.windsekirun.yukarisynthesizer.core.annotation
 import androidx.annotation.IntDef
 
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
-@IntDef(OrderType.OrderFlags.ASCENDING,
-        OrderType.OrderFlags.DESCENDING,
-        OrderType.OrderFlags.CASE_SENSITIVE,
-        OrderType.OrderFlags.NULLS_LAST,
-        OrderType.OrderFlags.NULLS_ZERO,
-        OrderType.OrderFlags.UNSIGNED)
+@IntDef(
+    OrderType.OrderFlags.ASCENDING,
+    OrderType.OrderFlags.DESCENDING,
+    OrderType.OrderFlags.CASE_SENSITIVE,
+    OrderType.OrderFlags.NULLS_LAST,
+    OrderType.OrderFlags.NULLS_ZERO,
+    OrderType.OrderFlags.UNSIGNED
+)
 annotation class OrderType {
 
     object OrderFlags {
