@@ -2,7 +2,6 @@ package com.github.windsekirun.yukarisynthesizer.core.item
 
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import io.objectbox.relation.ToMany
 import org.redundent.kotlin.xml.xml
 import java.io.Serializable
 import java.util.*
@@ -15,8 +14,6 @@ class PhonomeItem() : Serializable {
     var origin: String = ""
     var phoneme: String = ""
     var regDate: Date = Date()
-
-    lateinit var voices: ToMany<VoiceItem>
 
     constructor(origin: String) : this() {
         this.origin = origin

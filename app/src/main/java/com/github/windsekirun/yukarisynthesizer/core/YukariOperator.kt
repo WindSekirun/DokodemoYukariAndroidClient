@@ -2,10 +2,10 @@ package com.github.windsekirun.yukarisynthesizer.core
 
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.core.annotation.OrderType
-import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.*
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepository
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepositoryImpl
+import com.github.windsekirun.yukarisynthesizer.core.utils.YukariUtils
 import com.github.windsekirun.yukarisynthesizer.core.test.sm30193805Test
 import io.objectbox.Box
 import io.objectbox.Property
@@ -35,20 +35,31 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     private val preferenceRepository: PreferenceRepository by lazy { PreferenceRepositoryImpl(application) }
 
     /**
-     * add [StoryItem] to box with update asscioated [StoryItem.voices]
+     * add [StoryItem] to box with update asscioated [StoryItem.voiceEntries]
      *
      * @param storyItem [StoryItem] to add
      * @return id of added row
      */
     fun addStoryItem(storyItem: StoryItem): Observable<Long> {
-        return Observable.create {
+        return Observable.create { emitter ->
+            // save associated VoiceItem
+            val list = storyItem.voiceEntries.toList()
+            voiceBox.put(list)
+
+            val ids = list.map { it.id }
+
+            storyItem.apply {
+                this.voicesIds = ids
+                this.majorEngine = YukariUtils.findMajorEngine(storyItem)
+            }
+
             val id = storyBox.put(storyItem)
-            it.onNext(id)
+            emitter.onNext(id)
         }
     }
 
     fun generateTestData() {
-        val data1 = sm30193805Test()
+        val data1 = sm30193805Test(phonomeBox, voiceBox)
         storyBox.put(data1)
     }
 
@@ -57,7 +68,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      *
      * all parameter in [getPhonomeList] are optional parameter.
      *
-     * @param searchTitle return list by contains given value in [PhonomeItem.title]. Default value is ""
+     * @param searchTitle return list by contains given value in [PhonomeItem.origin]. Default value is ""
      * @param recent return list with last 10 items of [PhonomeItem]
      * @return searched list by given options.
      */
@@ -168,11 +179,11 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      */
     fun getVoiceListAssociatedStoryItem(storyItem: StoryItem): Observable<List<VoiceItem>> {
         return Observable.create { emitter ->
-            val ids = storyItem.voices.map { it.id }.toLongArray()
+            val ids = storyItem.voicesIds.toLongArray()
 
             val query = voiceBox.query {
                 this.`in`(VoiceItem_.id, ids)
-            }.find()
+            }.find().map { it.findMetaData() }
 
             emitter.onNext(query)
         }
@@ -204,6 +215,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             .addHeader("Accept", MIME_TYPE_L16)
             .post(body)
             .build()
+
         if (!ffmpeg.isSupported) {
             return Single.error(UnsupportedOperationException("Doesn't not support FFmpeg"))
         }
@@ -244,7 +256,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     private fun StoryItem.addStoryLocalPath(): StoryItem {
         if (localPath.isNotEmpty()) return this
 
-        val file = File(application.filesDir, "/local/$title.mp3")
+        val file = File(application.getExternalFilesDir(null), "/local/$title.mp3")
         file.parentFile.mkdirs()
 
         this.localPath = file.absolutePath
@@ -257,15 +269,19 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      * find and apply 'transient metadata' with given [StoryItem]
      */
     private fun StoryItem.findMetadata() = this.apply {
-        val majorEngine: VoiceEngine = voices.map { it.engine }
-            .groupBy { it }
-            .mapValues { it.value.size }
-            .toList()
-            .maxBy { it.second }
-            ?.first ?: VoiceEngine.NONE
-
         this.regDateFormat = this.regDate.asDateString("yyyy. MM. dd.")
-        this.majorEngine = majorEngine
+    }
+
+    /**
+     * find and apply `transient metadata` with given [VoiceItem]
+     */
+    private fun VoiceItem.findMetaData() = this.apply {
+        val ids = this.phonomeIds.toLongArray()
+        val query = phonomeBox.query {
+            this.`in`(PhonomeItem_.id, ids)
+        }.find()
+
+        this.phonomes = query
     }
 
     /**
@@ -306,7 +322,8 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
                 storyBox, -1, -1, "" to StoryItem_.title, orderBy, notEqual
             )
 
-            val target = list.filter { it.localPath.isNotEmpty() }
+            val target = list.asSequence()
+                .filter { it.localPath.isNotEmpty() }
                 .filter {
                     val file = it.localPath.toFile()
                     !(file.exists() && file.canRead())

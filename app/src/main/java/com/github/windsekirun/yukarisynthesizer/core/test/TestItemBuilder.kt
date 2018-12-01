@@ -4,6 +4,7 @@ import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
+import io.objectbox.Box
 
 //@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 class TestItemBuilder {
@@ -17,7 +18,7 @@ class TestItemBuilder {
 }
 
 fun buildVoiceItem(
-    engine: VoiceEngine, presetItem: PresetItem,
+    engine: VoiceEngine, presetItem: PresetItem, phonomeBox: Box<PhonomeItem>,
     setup: TestItemBuilder.() -> Unit
 ): VoiceItem {
     val builder = TestItemBuilder()
@@ -28,8 +29,15 @@ fun buildVoiceItem(
         this.preset = presetItem
     }
 
-    voiceItem.phonomes.addAll(builder.build())
-    voiceItem.bindContentOrigin()
+    val list = builder.build()
+    phonomeBox.put(list)
+    val ids = list.map { it.id }
+
+    voiceItem.apply {
+        phonomeIds = ids
+        phonomes.addAll(list)
+        bindContentOrigin()
+    }
 
     return voiceItem
 }

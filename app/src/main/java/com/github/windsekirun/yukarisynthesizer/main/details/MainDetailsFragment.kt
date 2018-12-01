@@ -10,12 +10,15 @@ import com.github.windsekirun.baseapp.base.BaseFragment
 import com.github.windsekirun.daggerautoinject.InjectFragment
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
+import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
 import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
+import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
 import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
 import com.github.windsekirun.yukarisynthesizer.utils.reveal.CircularRevealUtils
 import com.github.windsekirun.yukarisynthesizer.utils.reveal.RevealSettingHolder
+import kotlinx.android.synthetic.main.main_details_fragment.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
@@ -45,9 +48,7 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
         if (revealSetting != null) {
-            CircularRevealUtils.revealEnter(view!!, revealSetting!!) {
-
-            }
+            CircularRevealUtils.revealEnter(view!!, revealSetting!!)
         }
 
         return view
@@ -67,6 +68,8 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         voiceItemAdapter = initRecyclerView(mBinding.recyclerView, VoiceItemAdapter::class.java)
 
         viewModel.loadData(storyItem)
+
+        toolBar.setNavigationOnClickListener { viewModel.onBackPressed() }
     }
 
     override fun onBackPressed() {
@@ -83,6 +86,11 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         } else {
             exitDetails()
         }
+    }
+
+    @Subscribe
+    fun onMenuClickBarEvent(event: MenuClickBarEvent) {
+        viewModel.clickMenuItem(event.mode)
     }
 
     private fun exitDetails() {

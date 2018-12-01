@@ -21,7 +21,6 @@ object CharacterBindUtils {
         val resId = when (voiceEngine) {
             VoiceEngine.Yukari -> R.drawable.ic_yukari_selected
             VoiceEngine.Maki -> R.drawable.ic_maki_selected
-            VoiceEngine.Ai -> R.drawable.character_icon_selected
             VoiceEngine.NONE -> R.drawable.character_icon_selected
         }
 

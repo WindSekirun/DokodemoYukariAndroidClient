@@ -1,20 +1,26 @@
 package com.github.windsekirun.yukarisynthesizer.main.details
 
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.github.windsekirun.baseapp.base.BaseViewModel
+import com.github.windsekirun.baseapp.utils.ProgressDialogManager
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
-import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
+import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
 import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import io.objectbox.kotlin.applyChangesToDb
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -30,6 +36,7 @@ import javax.inject.Inject
 class MainDetailsViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
     val itemData: MutableLiveData<List<VoiceItem>> = MutableLiveData()
+    val favorite: ObservableBoolean = ObservableBoolean()
     val title = ObservableString()
 
     lateinit var storyItem: StoryItem
@@ -64,6 +71,14 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         }
     }
 
+    fun clickMenuItem(mode: MenuClickBarEvent.Mode) {
+        when (mode) {
+            MenuClickBarEvent.Mode.Play -> requestSynthesis()
+            MenuClickBarEvent.Mode.Star -> favorite.set(!favorite.get())
+            MenuClickBarEvent.Mode.Share -> TODO()
+        }
+    }
+
     private fun bindItems(initial: Boolean) {
         if (initial) {
             observeEvent()
@@ -75,6 +90,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .subscribe { data, error ->
                 if (error != null) return@subscribe
                 title.set(storyItem.title)
+                favorite.set(storyItem.favoriteFlag)
                 itemData.value = data
 
                 observeEvent()
@@ -88,16 +104,13 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         storyItem.apply {
             this.title = this@MainDetailsViewModel.title.get()
+            this.favoriteFlag = favorite.get()
+            this.voiceEntries = itemData.value!!
         }
 
         val disposable = yukariOperator.addStoryItem(storyItem)
             .compose(EnsureMainThreadComposer())
             .subscribe { _, _ ->
-                storyItem.voices.applyChangesToDb(true) {
-                    this.addAll(itemData.value!!)
-                }
-
-                showToast(getString(R.string.saved))
                 if (autoClose) postEvent(CloseFragmentEvent())
             }
 
@@ -106,7 +119,35 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun observeEvent() {
         itemData.observeForever(changeObserver)
-        val disposable = title.propertyChanges().subscribe { _, _ -> changed = true }
+
+        val disposable =
+            Observables.combineLatest(title.propertyChanges(), RxObservableBoolean.propertyChanges(favorite))
+                .subscribe { _, _ -> changed = true }
+        addDisposable(disposable)
+    }
+
+    private fun requestSynthesis() {
+        storyItem.apply {
+            this.title = this@MainDetailsViewModel.title.get()
+            this.favoriteFlag = favorite.get()
+            this.voiceEntries = itemData.value!!
+        }
+
+        val disposable = yukariOperator.addStoryItem(storyItem)
+            .flatMapSingle { yukariOperator.requestSynthesis(storyItem) }
+            .doOnSubscribe { ProgressDialogManager.instance.show() }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { data, error ->
+                ProgressDialogManager.instance.clear()
+                if (error != null) {
+                    showAlertDialog(error.message ?: "unknown error")
+                    return@subscribe
+                }
+
+                showToast("Done. TODO: Play")
+            }
+
         addDisposable(disposable)
     }
 }

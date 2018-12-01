@@ -11,6 +11,7 @@ import android.view.ViewAnimationUtils
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.yukarisynthesizer.R

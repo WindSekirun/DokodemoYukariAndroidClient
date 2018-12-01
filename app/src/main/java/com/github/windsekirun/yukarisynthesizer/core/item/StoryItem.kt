@@ -1,10 +1,10 @@
 package com.github.windsekirun.yukarisynthesizer.core.item
 
+import com.github.windsekirun.yukarisynthesizer.core.base.LongListConverter
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
-import io.objectbox.annotation.Backlink
+import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import io.objectbox.relation.ToMany
 import java.io.Serializable
 import java.util.*
 
@@ -18,14 +18,17 @@ class StoryItem() : Serializable {
     var localPath: String = ""
     var favoriteFlag: Boolean = false
 
-    @Backlink(to = "stories")
-    lateinit var voices: ToMany<VoiceItem>
+    @Convert(converter = VoiceEngine.VoiceEngineConverter::class, dbType = String::class)
+    var majorEngine: VoiceEngine = VoiceEngine.NONE
+
+    @Convert(converter = LongListConverter::class, dbType = String::class)
+    var voicesIds: List<Long> = mutableListOf()
 
     @Transient
     var regDateFormat: String = ""
 
     @Transient
-    var majorEngine: VoiceEngine = VoiceEngine.NONE
+    var voiceEntries: List<VoiceItem> = mutableListOf()
 
     constructor(id: Long, version: String, title: String, regDate: Date, localPath: String, favoriteFlag: Boolean)
             : this() {

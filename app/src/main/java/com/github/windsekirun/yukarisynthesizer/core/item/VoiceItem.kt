@@ -1,11 +1,10 @@
 package com.github.windsekirun.yukarisynthesizer.core.item
 
+import com.github.windsekirun.yukarisynthesizer.core.base.LongListConverter
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
-import io.objectbox.annotation.Backlink
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import io.objectbox.relation.ToMany
 import java.io.Serializable
 import java.util.*
 
@@ -24,10 +23,11 @@ class VoiceItem() : Serializable {
     var regDate: Date = Date()
     var contentOrigin: String = ""
 
-    lateinit var stories: ToMany<StoryItem>
+    @Convert(converter = LongListConverter::class, dbType = String::class)
+    var phonomeIds: List<Long> = mutableListOf()
 
-    @Backlink(to = "voices")
-    lateinit var phonomes: ToMany<PhonomeItem>
+    @Transient
+    var phonomes: MutableList<PhonomeItem> = mutableListOf()
 
     constructor(engine: VoiceEngine, preset: PresetItem) : this() {
         this.engine = engine

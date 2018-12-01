@@ -1,5 +1,6 @@
 package com.github.windsekirun.yukarisynthesizer.main.story
 
+import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
@@ -30,10 +31,15 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
+        yukariOperator.generateTestData()
+
         val disposable = yukariOperator.getStoryList()
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
-                if (error != null) return@subscribe
+                if (error != null) {
+                    Log.e(MainStoryViewModel::class.java.simpleName, "onResume: ",error )
+                    return@subscribe
+                }
                 itemData.value = data
             }
 

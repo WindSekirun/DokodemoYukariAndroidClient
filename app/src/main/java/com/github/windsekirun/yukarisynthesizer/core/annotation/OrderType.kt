@@ -1,6 +1,7 @@
 package com.github.windsekirun.yukarisynthesizer.core.annotation
 
 import androidx.annotation.IntDef
+import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
 
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 @IntDef(
@@ -11,7 +12,7 @@ import androidx.annotation.IntDef
     OrderType.OrderFlags.NULLS_ZERO,
     OrderType.OrderFlags.UNSIGNED
 )
-annotation class OrderType {
+annotation class OrderType() {
 
     object OrderFlags {
 

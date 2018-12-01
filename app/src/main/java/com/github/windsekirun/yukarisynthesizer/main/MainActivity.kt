@@ -13,6 +13,7 @@ import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainActivityBinding
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
+import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
 import com.github.windsekirun.yukarisynthesizer.main.drawer.MainDrawerFragment
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
 import com.github.windsekirun.yukarisynthesizer.main.preset.MainPresetFragment
@@ -25,6 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -101,6 +103,9 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.menu_home_setting -> viewModel.moveSettingActivity()
+            R.id.menu_details_play -> EventBus.getDefault().post(MenuClickBarEvent(MenuClickBarEvent.Mode.Play))
+            R.id.menu_details_star -> EventBus.getDefault().post(MenuClickBarEvent(MenuClickBarEvent.Mode.Star))
+            R.id.menu_details_share -> EventBus.getDefault().post(MenuClickBarEvent(MenuClickBarEvent.Mode.Share))
             android.R.id.home -> showBottomDrawer()
         }
 
