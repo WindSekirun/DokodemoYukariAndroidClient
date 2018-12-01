@@ -49,8 +49,7 @@ class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInject
         mBoxStore = MyObjectBox.builder().androidContext(this).build()
 
         if (BuildConfig.DEBUG) {
-            AndroidObjectBrowser(mBoxStore).start(this)
-
+//            AndroidObjectBrowser(mBoxStore).start(this)
         }
     }
 

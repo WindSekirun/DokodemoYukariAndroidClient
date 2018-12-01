@@ -250,8 +250,9 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      * request Synthesis with given [storyItem]
      *
      * @param storyItem [StoryItem] to synthesis
+     * @return updated [StoryItem]
      */
-    fun requestSynthesis(storyItem: StoryItem): Single<File> {
+    fun requestSynthesis(storyItem: StoryItem): Single<StoryItem> {
         val target = storyItem.addStoryLocalPath()
         val client = OkHttpClient()
         val ffmpeg = FFmpeg.getInstance(application)
@@ -290,11 +291,11 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
                     return@use pcmFile
                 })
             }.flatMap {
-                Single.create<File> { emitter ->
+                Single.create<StoryItem> { emitter ->
                     ffmpeg.execute(ffmpegCommend, object : ExecuteBinaryResponseHandler() {
                         override fun onSuccess(message: String?) {
                             super.onSuccess(message)
-                            emitter.onSuccess(mp3File)
+                            emitter.onSuccess(storyItem)
 
                         }
 

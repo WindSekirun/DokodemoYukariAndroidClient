@@ -10,6 +10,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import com.github.windsekirun.baseapp.base.BaseDialog
 import com.github.windsekirun.bindadapters.observable.ObservableString
+import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.databinding.PlayDialogBinding
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
@@ -36,15 +37,17 @@ class PlayDialog(context: Context) : BaseDialog<PlayDialogBinding>(context) {
     val max = ObservableInt()
     val progress = ObservableInt()
     val singleMode = ObservableBoolean()
+    val playState = ObservableBoolean()
 
     lateinit var disposable: Disposable
 
+    private var playIndex: Int = 0
     private val mediaPlayer: MediaPlayer = MediaPlayer()
 
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.play_dialog)
-        mBinding.setDialog(this)
+        mBinding.dialog = this
 
         setOnDismissListener { stopTimer() }
     }
@@ -56,41 +59,37 @@ class PlayDialog(context: Context) : BaseDialog<PlayDialogBinding>(context) {
         targetList.addAll(list)
         singleMode.set(targetList.size == 1)
 
-        play(targetList.first())
+        play(0)
     }
 
     fun clickSkipPrevious(view: View) {
-
+        moveStory(false)
     }
 
     fun clickRewind(view: View) {
-        val currentPosition = mediaPlayer.currentPosition
-        if (currentPosition + seekForwardTime <= mediaPlayer.duration) {
-            mediaPlayer.seekTo(currentPosition + seekForwardTime)
-        } else {
-            mediaPlayer.seekTo(mediaPlayer.duration)
-        }
+        moveSeconds(false)
     }
 
     fun clickPlay(view: View) {
-
-    }
-
-    fun clickForward(view: View) {
-        val currentPosition = mediaPlayer.currentPosition
-        if (currentPosition + seekForwardTime <= mediaPlayer.duration) {
-            mediaPlayer.seekTo(currentPosition + seekForwardTime)
+        if (playState.get()) {
+            mediaPlayer.pause()
+            playState.set(false)
         } else {
-            mediaPlayer.seekTo(mediaPlayer.duration)
+            mediaPlayer.start()
+            playState.set(true)
         }
     }
 
-    fun clickSkipNext(view: View) {
+    fun clickForward(view: View) {
+        moveSeconds(true)
+    }
 
+    fun clickSkipNext(view: View) {
+        moveStory(true)
     }
 
     fun clickClose(view: View) {
-
+        dismiss()
     }
 
     fun onStopTrackingTouch(seekBar: SeekBar) {
@@ -99,14 +98,23 @@ class PlayDialog(context: Context) : BaseDialog<PlayDialogBinding>(context) {
         this.progress.set(progress)
     }
 
-    private fun play(storyItem: StoryItem) {
+    private fun play(index: Int) {
+        val storyItem = targetList[index]
         title.set(storyItem.title)
         val file = storyItem.localPath.toFile()
+
+        if (mediaPlayer.isPlaying) mediaPlayer.stop()
+
+        mediaPlayer.setOnCompletionListener {
+            playState.set(false)
+        }
 
         mediaPlayer.setDataSource(context, Uri.fromFile(file))
         mediaPlayer.prepare()
         mediaPlayer.start()
 
+        playIndex = index
+        playState.set(true)
         startTimer()
     }
 
@@ -131,6 +139,29 @@ class PlayDialog(context: Context) : BaseDialog<PlayDialogBinding>(context) {
         if (!disposable.isDisposed) {
             disposable.dispose()
         }
+    }
+
+    private fun moveSeconds(forward: Boolean) {
+        val currentPosition = mediaPlayer.currentPosition
+        val duration = mediaPlayer.duration
+
+        if (forward && currentPosition + seekForwardTime <= duration) {
+            mediaPlayer.seekTo(currentPosition + seekForwardTime)
+        } else if (currentPosition - seekBackwardTime > 0) {
+            mediaPlayer.seekTo(currentPosition - seekBackwardTime)
+        } else if (forward) {
+            mediaPlayer.seekTo(duration)
+        } else {
+            mediaPlayer.seekTo(0)
+        }
+    }
+
+    private fun moveStory(forward: Boolean) {
+        if (playIndex == 0 && !forward) return
+        if (playIndex == targetList.size - 1 && forward) return
+
+        val newIndex = if (forward) ++playIndex else --playIndex
+        play(newIndex)
     }
 
     companion object {

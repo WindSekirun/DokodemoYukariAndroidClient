@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.github.windsekirun.baseapp.base.BaseViewModel
+import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.baseapp.utils.ProgressDialogManager
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
@@ -14,6 +15,7 @@ import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
+import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog
 import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
 import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
 import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
@@ -39,7 +41,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     val title = ObservableString()
 
     lateinit var storyItem: StoryItem
-    @Inject lateinit var yukariOperator: YukariOperator
+    @Inject
+    lateinit var yukariOperator: YukariOperator
 
     private var changed: Boolean = false
     private val favorite: ObservableBoolean = ObservableBoolean()
@@ -145,10 +148,16 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                     return@subscribe
                 }
 
-                showToast("Done. TODO: Play")
+                storyItem = data!!
+                playVoices()
             }
 
         addDisposable(disposable)
+    }
+
+    private fun playVoices() {
+        val playDialog = PlayDialog(ActivityReference.getActivtyReference()!!)
+        playDialog.show(listOf(storyItem))
     }
 
     private fun toggleFavorite() {

@@ -8,6 +8,8 @@
         <variable
             name="dialog"
             type="com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog" />
+
+        <import type="android.view.View" />
     </data>
 
     <FrameLayout
@@ -15,6 +17,7 @@
         android:layout_height="match_parent"
         android:background="#80000000"
         android:paddingLeft="20dp"
+        android:onClick="@{dialog::clickClose}"
         android:paddingRight="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,9 +74,10 @@
             <ImageView
                 android:id="@+id/image1"
                 android:layout_width="32dp"
-                android:onClick="@{dialog::clickSkipPrevious}"
                 android:layout_height="32dp"
+                android:onClick="@{dialog::clickSkipPrevious}"
                 android:src="@drawable/ic_skip_previous_black_24dp"
+                android:visibility="@{dialog.singleMode ? View.INVISIBLE : View.VISIBLE}"
                 app:layout_constraintEnd_toStartOf="@+id/image2"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -96,18 +100,19 @@
                 android:layout_height="32dp"
                 android:layout_marginTop="12dp"
                 android:onClick="@{dialog::clickPlay}"
-                android:src="@drawable/ic_play_black_24dp"
+                android:src="@{dialog.playState ? @drawable/ic_pause_black_24dp : @drawable/ic_play_black_24dp}"
                 app:layout_constraintEnd_toStartOf="@+id/image4"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/image2"
-                app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+                app:layout_constraintTop_toBottomOf="@+id/seekBar"
+                tools:src="@drawable/ic_play_black_24dp" />
 
 
             <ImageView
                 android:id="@+id/image4"
                 android:layout_width="32dp"
-                android:onClick="@{dialog::clickForward}"
                 android:layout_height="32dp"
+                android:onClick="@{dialog::clickForward}"
                 android:src="@drawable/ic_forward_5_black_24"
                 app:layout_constraintEnd_toStartOf="@+id/image5"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -117,9 +122,10 @@
             <ImageView
                 android:id="@+id/image5"
                 android:layout_width="32dp"
-                android:onClick="@{dialog::clickSkipNext}"
                 android:layout_height="32dp"
+                android:onClick="@{dialog::clickSkipNext}"
                 android:src="@drawable/ic_skip_next_black_24dp"
+                android:visibility="@{dialog.singleMode ? View.INVISIBLE : View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/image4"
@@ -130,9 +136,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:onClick="@{dialog::clickClose}"
                 android:text="@string/close"
                 android:textColor="@color/text_point"
-                android:onClick="@{dialog::clickClose}"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
