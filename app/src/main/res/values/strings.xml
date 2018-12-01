@@ -21,4 +21,6 @@
     <string name="main_details_voice_add_break">Add Break</string>
     <string name="main_details_voice_add_history">Add from History</string>
     <string name="main_details_voice_title">Add Voice</string>
+    <string name="close">Close</string>
+    <string name="play_dialog_title">Play Story</string>
 </resources>
