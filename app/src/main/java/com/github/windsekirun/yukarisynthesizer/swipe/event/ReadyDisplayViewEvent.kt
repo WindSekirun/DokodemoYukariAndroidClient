@@ -1,0 +1,3 @@
+package com.github.windsekirun.yukarisynthesizer.swipe.event
+
+class ReadyDisplayViewEvent

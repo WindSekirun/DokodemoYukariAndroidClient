@@ -73,6 +73,20 @@
                 tools:max="100"
                 tools:progress="50" />
 
+            <TextView
+                android:id="@+id/txtTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@{dialog.playTimeText}"
+                android:textSize="13sp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seekBar"
+                tools:text="00:00/00:00" />
+
             <ImageView
                 android:id="@+id/image1"
                 android:layout_width="32dp"
@@ -100,15 +114,15 @@
                 android:id="@+id/image3"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:onClick="@{dialog::clickPlay}"
                 android:src="@{dialog.playState ? @drawable/ic_pause_black_24dp : @drawable/ic_play_black_24dp}"
                 app:layout_constraintEnd_toStartOf="@+id/image4"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/image2"
-                app:layout_constraintTop_toBottomOf="@+id/seekBar"
+                app:layout_constraintTop_toBottomOf="@+id/txtTime"
+                tools:layout_editor_absoluteY="127dp"
                 tools:src="@drawable/ic_play_black_24dp" />
-
 
             <ImageView
                 android:id="@+id/image4"

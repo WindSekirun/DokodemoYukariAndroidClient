@@ -1,10 +1,13 @@
 package com.github.windsekirun.yukarisynthesizer.main.details
 
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.github.windsekirun.baseapp.base.BaseViewModel
+import com.github.windsekirun.baseapp.module.activityresult.RxActivityResult
 import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.baseapp.utils.ProgressDialogManager
 import com.github.windsekirun.bindadapters.observable.ObservableString
@@ -21,6 +24,8 @@ import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryDialog
 import com.github.windsekirun.yukarisynthesizer.main.details.dialog.MainDetailsVoiceFragment
 import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
 import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
+import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity
+import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderViewModel
 import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -89,6 +94,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         }
     }
 
+    fun clickSwipeOrder() {
+        save(swipeOrder = true)
+    }
+
     private fun bindItems(initial: Boolean) {
         if (initial) {
             itemData.value = mutableListOf()
@@ -110,7 +119,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         addDisposable(disposable)
     }
 
-    private fun save(autoClose: Boolean = false) {
+    private fun save(autoClose: Boolean = false, swipeOrder: Boolean = false) {
         if (itemData.value!!.isEmpty()) return
 
         storyItem.apply {
@@ -123,6 +132,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .compose(EnsureMainThreadComposer())
             .subscribe { _, _ ->
                 if (autoClose) postEvent(CloseFragmentEvent())
+                if (swipeOrder) moveToSwipeOrderActivity()
             }
 
         addDisposable(disposable)
@@ -138,6 +148,18 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun requestSynthesis() {
+        if (itemData.value!!.isEmpty()) return
+
+        val ids = itemData.value!!.map { it.id }.toTypedArray()
+        val original = storyItem.voicesIds.toTypedArray()
+        val contentEqual = ids contentEquals original
+
+        if (contentEqual && storyItem.localPath.isNotEmpty()) {
+            // if itemData and voiceIds is equal and localPath is valid, we don't need to synthesis this timing.
+            // just play sounds.
+            playVoices()
+        }
+
         storyItem.apply {
             this.title = this@MainDetailsViewModel.title.get()
             this.favoriteFlag = favorite.get()
@@ -223,5 +245,26 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             list.add(it)
             itemData.value = list
         }
+    }
+
+    private fun moveToSwipeOrderActivity() {
+        val bundle = Bundle()
+        bundle.putLong(SwipeOrderViewModel.EXTRA_STORY_ITEM_ID, storyItem.id)
+
+        val disposable = RxActivityResult.result()
+            .toObservable()
+            .flatMap { yukariOperator.getStoryItem(storyItem.id) }
+            .subscribe { data, error ->
+                if (error != null) return@subscribe
+                loadData(data)
+            }
+
+        RxActivityResult.startActivityForResult(
+            SwipeOrderActivity::class.java,
+            bundle,
+            ActivityReference.getActivtyReference() as? AppCompatActivity
+        )
+
+        addDisposable(disposable)
     }
 }

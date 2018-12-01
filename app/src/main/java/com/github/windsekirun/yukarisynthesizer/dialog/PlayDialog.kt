@@ -32,16 +32,17 @@ import java.util.concurrent.TimeUnit
  */
 
 class PlayDialog(context: Context) : BaseDialog<PlayDialogBinding>(context) {
-    val targetList = mutableListOf<StoryItem>()
     val title = ObservableString()
     val max = ObservableInt()
     val progress = ObservableInt()
     val singleMode = ObservableBoolean()
     val playState = ObservableBoolean()
+    val playTimeText = ObservableString()
 
     lateinit var disposable: Disposable
 
     private var playIndex: Int = 0
+    private val targetList = mutableListOf<StoryItem>()
     private val mediaPlayer: MediaPlayer = MediaPlayer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,6 +134,7 @@ class PlayDialog(context: Context) : BaseDialog<PlayDialogBinding>(context) {
 
         this.max.set(max)
         this.progress.set(duration)
+        this.playTimeText.set("${duration.convertTime()}/${max.convertTime()}")
     }
 
     private fun stopTimer() {
@@ -163,6 +165,9 @@ class PlayDialog(context: Context) : BaseDialog<PlayDialogBinding>(context) {
         val newIndex = if (forward) ++playIndex else --playIndex
         play(newIndex)
     }
+
+    private fun Int.convertTime() =
+        "${(this / 60).toString().padStart(2, '0')}:${(this % 60).toString().padStart(2, '0')}"
 
     companion object {
         const val seekForwardTime = 5 * 1000

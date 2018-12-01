@@ -1,5 +1,6 @@
 package com.github.windsekirun.yukarisynthesizer.core
 
+import com.annimon.stream.ComparatorCompat
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.core.annotation.OrderType
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
@@ -137,6 +138,26 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     }
 
     /**
+     * get [StoryItem] with given [id]
+     *
+     * @param id [StoryItem_.id] to find
+     * @return searched [StoryItem]
+     */
+    fun getStoryItem(id: Long): Observable<StoryItem> {
+        return Observable.create {
+            val query = storyBox.query {
+                equal(StoryItem_.id, id)
+            }.findFirst()
+
+            if (query != null) {
+                it.onNext(query)
+            } else {
+                it.onError(IOException("Not found StoryItem with id $id"))
+            }
+        }
+    }
+
+    /**
      * get List of [StoryItem] by given options
      *
      * all parameter in [getStoryList] are optional parameter.
@@ -201,6 +222,8 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     /**
      * get List of [VoiceItem] which associated with given [StoryItem]
      *
+     * it consider manually sorted when user changes order in [com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity]
+     *
      * @param storyItem associated data
      * @return searched list by given [storyItem]
      */
@@ -208,9 +231,11 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         return Observable.create { emitter ->
             val ids = storyItem.voicesIds.toLongArray()
 
-            val query = voiceBox.query {
-                this.`in`(VoiceItem_.id, ids)
-            }.find().map { it.findMetaData() }
+            // kotlin-ported version of https://stackoverflow.com/a/45699250
+            val query = voiceBox.query { this.`in`(VoiceItem_.id, ids) }
+                .find()
+                .map { it.findMetaData() }
+                .sortedWith(ComparatorCompat.comparing<VoiceItem, Int> { ids.indexOf(it.id) })
 
             emitter.onNext(query)
         }

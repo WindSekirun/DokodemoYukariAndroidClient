@@ -31,4 +31,6 @@
     <string name="voice_history_search">Search</string>
     <string name="voice_history_search_hint">Search text</string>
     <string name="break_time">Break time</string>
+    <string name="menu_details_order">Order</string>
+    <string name="swipe_order_title">Swipe Order</string>
 </resources>

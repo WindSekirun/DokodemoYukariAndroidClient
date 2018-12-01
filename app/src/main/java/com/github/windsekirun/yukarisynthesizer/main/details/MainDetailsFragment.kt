@@ -66,6 +66,15 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         mBinding.setLifecycleOwner(this)
         mBinding.viewModel = viewModel
         toolBar.setNavigationOnClickListener { viewModel.onBackPressed() }
+        toolBar.inflateMenu(R.menu.menu_details_top)
+        toolBar.setOnMenuItemClickListener {
+            val id = it.itemId
+            when (id) {
+                R.id.menu_details_top_order -> viewModel.clickSwipeOrder()
+            }
+
+            true
+        }
 
         voiceItemAdapter = initRecyclerView(mBinding.recyclerView, VoiceItemAdapter::class.java)
         viewModel.loadData(storyItem)

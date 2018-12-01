@@ -162,5 +162,8 @@ dependencies {
 
     // ffmpeg
     implementation 'nl.bravobit:android-ffmpeg:1.1.5'
+
+    // Drag & Drop n' Swipe Recyclerview
+    implementation 'com.ernestoyaquello.dragdropswiperecyclerview:drag-drop-swipe-recyclerview:0.1.0'
 }
 
