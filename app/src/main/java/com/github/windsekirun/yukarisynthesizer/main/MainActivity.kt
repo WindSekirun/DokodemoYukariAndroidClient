@@ -13,6 +13,8 @@ import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainActivityBinding
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
+import com.github.windsekirun.yukarisynthesizer.main.details.dialog.MainDetailsVoiceFragment
+import com.github.windsekirun.yukarisynthesizer.main.details.event.AddVoiceEvent
 import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
 import com.github.windsekirun.yukarisynthesizer.main.drawer.MainDrawerFragment
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
@@ -187,7 +189,11 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     }
 
     private fun addNewVoices() {
-
+        val voiceFragment = MainDetailsVoiceFragment()
+        voiceFragment.onMenuClickListener = {
+            EventBus.getDefault().post(AddVoiceEvent(it))
+        }
+        voiceFragment.show(supportFragmentManager, voiceFragment.tag)
     }
 
     private fun isInDetails() = viewModel.currentFabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_END

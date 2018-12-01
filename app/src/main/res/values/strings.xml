@@ -17,4 +17,8 @@
     <string name="main_details_favorite_on">Favored.</string>
     <string name="main_details_favorite_off">Unfavored.</string>
     <string name="main_details_removed">Removed.</string>
+    <string name="main_details_voice_add_voice">Add new Voice</string>
+    <string name="main_details_voice_add_break">Add Break</string>
+    <string name="main_details_voice_add_history">Add from History</string>
+    <string name="main_details_voice_title">Add Voice</string>
 </resources>
