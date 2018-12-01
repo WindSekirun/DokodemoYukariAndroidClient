@@ -15,7 +15,6 @@ import dagger.android.HasActivityInjector
 import dagger.android.HasServiceInjector
 import io.objectbox.Box
 import io.objectbox.BoxStore
-import io.objectbox.android.AndroidObjectBrowser
 import pyxis.uzuki.live.attribute.parser.annotation.AttributeParser
 import javax.inject.Inject
 
@@ -30,8 +29,10 @@ import javax.inject.Inject
 @AttributeParser("com.appg.baseappset")
 @InjectApplication(component = AppComponent::class)
 class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInjector {
-    @Inject lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
-    @Inject lateinit var serviceDispatchingAndroidInjector: DispatchingAndroidInjector<Service>
+    @Inject
+    lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    @Inject
+    lateinit var serviceDispatchingAndroidInjector: DispatchingAndroidInjector<Service>
     private var mBoxStore: BoxStore? = null
 
     override val configFilePath: String

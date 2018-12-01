@@ -10,11 +10,11 @@ import com.github.windsekirun.daggerautoinject.ViewModelModule;
 import com.github.windsekirun.yukarisynthesizer.MainApplication;
 import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryDialog;
 
+import javax.inject.Singleton;
+
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.support.AndroidSupportInjectionModule;
-
-import javax.inject.Singleton;
 
 @Singleton
 @Component(

@@ -1,7 +1,6 @@
 package com.github.windsekirun.yukarisynthesizer.core.annotation
 
 import androidx.annotation.IntDef
-import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
 
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 @IntDef(

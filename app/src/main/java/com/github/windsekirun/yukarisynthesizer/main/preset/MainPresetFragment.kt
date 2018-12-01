@@ -23,7 +23,8 @@ import javax.inject.Inject
 
 @InjectFragment
 class MainPresetFragment() : BaseFragment<MainPresetFragmentBinding>() {
-    @Inject lateinit var mViewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var mViewModelFactory: ViewModelProvider.Factory
     private var mViewModel: MainPresetViewModel? = null
     private lateinit var presetItemAdapter: PresetItemAdapter
 

@@ -27,7 +27,8 @@ class MainStoryViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
     val itemData: MutableLiveData<List<StoryItem>> = MutableLiveData()
 
-    @Inject lateinit var yukariOperator: YukariOperator
+    @Inject
+    lateinit var yukariOperator: YukariOperator
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
@@ -35,7 +36,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
                 if (error != null) {
-                    Log.e(MainStoryViewModel::class.java.simpleName, "onResume: ",error )
+                    Log.e(MainStoryViewModel::class.java.simpleName, "onResume: ", error)
                     return@subscribe
                 }
                 itemData.value = data

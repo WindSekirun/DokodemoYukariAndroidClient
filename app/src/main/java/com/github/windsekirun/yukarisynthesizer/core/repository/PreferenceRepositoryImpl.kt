@@ -18,7 +18,11 @@ import javax.inject.Singleton
 class PreferenceRepositoryImpl @Inject
 constructor(context: Context) : PreferenceRepository {
     override var registrationKey: String by PreferenceTypeHolder(context, REGISTRATION_KEY, "")
-    override var apiKey: String by PreferenceTypeHolder(context, API_KEY, "67375458343230674173395a64654730682f61774830736e39597859634331476d4276496b756a6e467544")
+    override var apiKey: String by PreferenceTypeHolder(
+        context,
+        API_KEY,
+        "67375458343230674173395a64654730682f61774830736e39597859634331476d4276496b756a6e467544"
+    )
 
     companion object {
         private val REGISTRATION_KEY = "1af49084-8820-449e-9039-d86863184592"
