@@ -19,7 +19,6 @@ import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.databinding.SwipeOrderActivityBinding
 import com.github.windsekirun.yukarisynthesizer.swipe.event.ReadyDisplayViewEvent
 import com.github.windsekirun.yukarisynthesizer.utils.CharacterBindUtils
-import kotlinx.android.synthetic.main.main_details_fragment.*
 import org.greenrobot.eventbus.Subscribe
 
 
@@ -59,12 +58,11 @@ class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
         swipeOrderAdapter = SwipeOrderAdapter(viewModel.itemData.value!!)
         mBinding.recyclerView.layoutManager = LinearLayoutManager(this)
         mBinding.recyclerView.adapter = swipeOrderAdapter
-        mBinding.recyclerView.orientation =
-                DragDropSwipeRecyclerView.ListOrientation.VERTICAL_LIST_WITH_VERTICAL_DRAGGING
+        mBinding.recyclerView.orientation = Orientation.VERTICAL_LIST_WITH_VERTICAL_DRAGGING
 
         // disable any swipe function (we don't need it)
-        mBinding.recyclerView.orientation?.removeSwipeDirectionFlag(DragDropSwipeRecyclerView.ListOrientation.DirectionFlag.RIGHT)
-        mBinding.recyclerView.orientation?.removeSwipeDirectionFlag(DragDropSwipeRecyclerView.ListOrientation.DirectionFlag.LEFT)
+        mBinding.recyclerView.orientation?.removeSwipeDirectionFlag(Direction.RIGHT)
+        mBinding.recyclerView.orientation?.removeSwipeDirectionFlag(Direction.LEFT)
 
         mBinding.recyclerView.dragListener = object : OnItemDragListener<VoiceItem> {
             override fun onItemDragged(previousPosition: Int, newPosition: Int, item: VoiceItem) {
@@ -119,3 +117,6 @@ class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
         private fun convertBreakTimeFormat(breakTime: Long): String = "${breakTime.toDouble() / 1000.0}s"
     }
 }
+
+typealias Direction = DragDropSwipeRecyclerView.ListOrientation.DirectionFlag
+typealias Orientation = DragDropSwipeRecyclerView.ListOrientation
