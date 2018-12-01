@@ -16,6 +16,7 @@ object YukariUtils {
      * find MajorEngine with given [storyItem]
      */
     fun findMajorEngine(storyItem: StoryItem): VoiceEngine = storyItem.voiceEntries.map { it.engine }
+        .filter { it != VoiceEngine.Break }
         .groupBy { it }
         .mapValues { it.value.size }
         .toList()

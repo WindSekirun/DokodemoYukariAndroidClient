@@ -8,6 +8,8 @@ import com.github.windsekirun.daggerautoinject.FragmentModule;
 import com.github.windsekirun.daggerautoinject.ServiceModule;
 import com.github.windsekirun.daggerautoinject.ViewModelModule;
 import com.github.windsekirun.yukarisynthesizer.MainApplication;
+import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryDialog;
+
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.support.AndroidSupportInjectionModule;
@@ -40,4 +42,6 @@ public interface AppComponent {
     }
 
     void inject(MainApplication mainApp);
+
+    void inject(VoiceHistoryDialog dialog);
 }

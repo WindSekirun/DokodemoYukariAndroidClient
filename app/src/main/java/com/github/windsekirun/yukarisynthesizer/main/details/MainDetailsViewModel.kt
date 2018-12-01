@@ -15,7 +15,10 @@ import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
+import com.github.windsekirun.yukarisynthesizer.dialog.BreakTimeDialog
 import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog
+import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryDialog
+import com.github.windsekirun.yukarisynthesizer.main.details.dialog.MainDetailsVoiceFragment
 import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
 import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
 import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
@@ -37,15 +40,15 @@ import javax.inject.Inject
 @InjectViewModel
 class MainDetailsViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
-    val itemData: MutableLiveData<List<VoiceItem>> = MutableLiveData()
+    val itemData: MutableLiveData<MutableList<VoiceItem>> = MutableLiveData()
     val title = ObservableString()
 
-    lateinit var storyItem: StoryItem
     @Inject
     lateinit var yukariOperator: YukariOperator
 
-    private var changed: Boolean = false
     private val favorite: ObservableBoolean = ObservableBoolean()
+    private var changed: Boolean = false
+    private lateinit var storyItem: StoryItem
     private val changeObserver = Observer<List<VoiceItem>> {
         changed = true
     }
@@ -66,11 +69,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun onBackPressed() {
-        if (changed) {
-            save(true)
-        } else {
-            postEvent(CloseFragmentEvent())
-        }
+        if (!changed || (title.isEmpty && itemData.value!!.isEmpty())) postEvent(CloseFragmentEvent())
+        save(true)
     }
 
     fun clickMenuItem(mode: MenuClickBarEvent.Mode) {
@@ -81,8 +81,17 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         }
     }
 
+    fun clickAddVoice(mode: MainDetailsVoiceFragment.Mode) {
+        when (mode) {
+            MainDetailsVoiceFragment.Mode.Voice -> addVoice()
+            MainDetailsVoiceFragment.Mode.Break -> addBreak()
+            MainDetailsVoiceFragment.Mode.History -> addVoiceHistory()
+        }
+    }
+
     private fun bindItems(initial: Boolean) {
         if (initial) {
+            itemData.value = mutableListOf()
             observeEvent()
             return
         }
@@ -93,7 +102,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 if (error != null) return@subscribe
                 title.set(storyItem.title)
                 favorite.set(storyItem.favoriteFlag)
-                itemData.value = data
+                itemData.value = data!!.toMutableList()
 
                 observeEvent()
             }
@@ -185,5 +194,34 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             }
 
         addDisposable(disposable)
+    }
+
+    private fun addBreak() {
+        val breakTimeDialog = BreakTimeDialog(ActivityReference.getActivtyReference()!!)
+        breakTimeDialog.show(VoiceItem()) {
+            val disposable = yukariOperator.addVoiceItem(it)
+                .compose(EnsureMainThreadComposer())
+                .subscribe { data, error ->
+                    if (error != null) return@subscribe
+                    val list = itemData.value!!
+                    list.add(data!!)
+                    itemData.value = list
+                }
+
+            addDisposable(disposable)
+        }
+    }
+
+    private fun addVoice() {
+
+    }
+
+    private fun addVoiceHistory() {
+        val voiceHistoryDialog = VoiceHistoryDialog(ActivityReference.getActivtyReference()!!)
+        voiceHistoryDialog.show {
+            val list = itemData.value!!
+            list.add(it)
+            itemData.value = list
+        }
     }
 }

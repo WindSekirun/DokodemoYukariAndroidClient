@@ -2,6 +2,7 @@ package com.github.windsekirun.yukarisynthesizer.core
 
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.core.annotation.OrderType
+import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.*
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepository
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepositoryImpl
@@ -35,7 +36,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     private val preferenceRepository: PreferenceRepository by lazy { PreferenceRepositoryImpl(application) }
 
     /**
-     * add [StoryItem] to box with update asscioated [StoryItem.voiceEntries]
+     * add [StoryItem] to box with update associated [StoryItem.voiceEntries]
      *
      * @param storyItem [StoryItem] to add
      * @return id of added row
@@ -59,7 +60,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     }
 
     /**
-     * add [VoiceItem] to box with update asscioated [VoiceItem.phonomes]
+     * add [VoiceItem] to box with update associated [VoiceItem.phonomes]
      *
      * @param voiceItem [VoiceItem] to add
      * @return added row
@@ -170,7 +171,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     }
 
     /**
-     * get List of [VoiceItem] by given options
+     * get List of [VoiceItem] by given options without [VoiceEngine.Break] and duplicate [VoiceItem.contentOrigin]
      *
      * all parameter in [getVoiceList] are optional parameter.
      *
@@ -189,6 +190,9 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
                 voiceBox, -1, -1, searchTitle to VoiceItem_.contentOrigin,
                 orderBy
             )
+                .map { it.findMetaData() }
+                .filter { it.engine != VoiceEngine.Break }
+                .distinctBy { it.contentOrigin }
 
             emitter.onNext(list)
         }

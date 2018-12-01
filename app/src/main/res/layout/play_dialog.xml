@@ -16,8 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#80000000"
-        android:paddingLeft="20dp"
         android:onClick="@{dialog::clickClose}"
+        android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +33,7 @@
             <TextView
                 android:id="@+id/text1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="18dp"
                 android:layout_marginTop="16dp"
                 android:gravity="center_horizontal|top"
                 android:text="@string/play_dialog_title"
@@ -66,6 +66,8 @@
                 android:max="@{dialog.max}"
                 android:onStopTrackingTouch="@{dialog::onStopTrackingTouch}"
                 android:progress="@={dialog.progress}"
+                android:progressTint="@color/accent_color"
+                android:thumbTint="@color/accent_color"
                 app:layout_constraintTop_toBottomOf="@+id/textView7"
                 tools:layout_editor_absoluteX="36dp"
                 tools:max="100"

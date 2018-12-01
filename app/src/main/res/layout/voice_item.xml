@@ -6,6 +6,11 @@
     <data>
 
         <import type="com.github.windsekirun.yukarisynthesizer.utils.CharacterBindUtils" />
+        <import type="com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine"/>
+
+        <variable
+            name="adapter"
+            type="com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter"/>
 
         <variable
             name="item"
@@ -35,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="@{@string/preset_details_format(item.engine.id, item.preset.title)}"
+            android:text='@{item.engine == VoiceEngine.Break ? @string/break_time : @string/preset_details_format(item.engine.id, item.preset.title)}'
             android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/textView3"
@@ -49,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:text="@{item.contentOrigin}"
+            android:text="@{item.engine == VoiceEngine.Break ? adapter.convertBreakTimeFormat(item.breakTime) : item.contentOrigin}"
             android:textColor="@color/text_disable"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"

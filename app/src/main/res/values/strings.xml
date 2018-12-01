@@ -23,4 +23,12 @@
     <string name="main_details_voice_title">Add Voice</string>
     <string name="close">Close</string>
     <string name="play_dialog_title">Play Story</string>
+    <string name="save">Save</string>
+    <string name="break_time_title">Add Break</string>
+    <string name="break_time_desc">Sets the blank space between sentences and sentences. (0.1s ~ 2.0s)</string>
+    <string name="voice_history_desc">Select from the sentence you used previously.</string>
+    <string name="voice_history_title">Add from History</string>
+    <string name="voice_history_search">Search</string>
+    <string name="voice_history_search_hint">Search text</string>
+    <string name="break_time">Break time</string>
 </resources>

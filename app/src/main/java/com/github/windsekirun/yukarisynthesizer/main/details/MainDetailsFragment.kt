@@ -12,6 +12,7 @@ import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
+import com.github.windsekirun.yukarisynthesizer.main.details.event.AddVoiceEvent
 import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
 import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
@@ -89,6 +90,11 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
     @Subscribe
     fun onMenuClickBarEvent(event: MenuClickBarEvent) {
         viewModel.clickMenuItem(event.mode)
+    }
+
+    @Subscribe
+    fun onAddVoiceEvent(event: AddVoiceEvent) {
+        viewModel.clickAddVoice(event.mode)
     }
 
     private fun exitDetails() {

@@ -62,7 +62,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/divider"
                     tools:itemCount="10"
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/main_details_item" />
+                    tools:listitem="@layout/voice_item" />
 
                 <EditText
                     android:id="@+id/textView4"

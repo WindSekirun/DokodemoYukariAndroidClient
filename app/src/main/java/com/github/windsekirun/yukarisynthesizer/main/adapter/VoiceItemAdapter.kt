@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
-import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsItemBinding
+import com.github.windsekirun.yukarisynthesizer.databinding.VoiceItemBinding
 import com.github.windsekirun.yukarisynthesizer.main.details.event.ClickVoiceItem
 
 /**
@@ -17,21 +17,33 @@ import com.github.windsekirun.yukarisynthesizer.main.details.event.ClickVoiceIte
  *
  * Description:
  */
-class VoiceItemAdapter : BaseRecyclerAdapter<VoiceItem, MainDetailsItemBinding>() {
+class VoiceItemAdapter : BaseRecyclerAdapter<VoiceItem, VoiceItemBinding>() {
+    var voiceItemClickListener: OnVoiceItemClickListener? = null
 
-    override fun bind(binding: MainDetailsItemBinding, item: VoiceItem, position: Int) {
+    override fun bind(binding: VoiceItemBinding, item: VoiceItem, position: Int) {
         binding.item = item
+        binding.adapter = this
     }
 
-    override fun onClickedItem(binding: MainDetailsItemBinding, item: VoiceItem, position: Int) {
-        postEvent(ClickVoiceItem(item, position))
+    override fun onClickedItem(binding: VoiceItemBinding, item: VoiceItem, position: Int) {
+        if (voiceItemClickListener != null) {
+            voiceItemClickListener?.onClick(item)
+        } else {
+            postEvent(ClickVoiceItem(item, position))
+        }
     }
 
-    override fun onLongClickedItem(binding: MainDetailsItemBinding, item: VoiceItem, position: Int): Boolean {
+    override fun onLongClickedItem(binding: VoiceItemBinding, item: VoiceItem, position: Int): Boolean {
         return false
     }
 
-    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup): MainDetailsItemBinding {
-        return DataBindingUtil.inflate(inflater, R.layout.main_details_item, parent, false)
+    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup): VoiceItemBinding {
+        return DataBindingUtil.inflate(inflater, R.layout.voice_item, parent, false)
+    }
+
+    fun convertBreakTimeFormat(breakTime: Long): String = "${breakTime.toDouble() / 1000.0}s"
+
+    interface OnVoiceItemClickListener {
+        fun onClick(voiceItem: VoiceItem)
     }
 }
