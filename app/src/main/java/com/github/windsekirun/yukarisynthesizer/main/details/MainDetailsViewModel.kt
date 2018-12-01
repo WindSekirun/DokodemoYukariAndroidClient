@@ -255,12 +255,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .flatMap { yukariOperator.getStoryItem(storyItem.id) }
             .subscribe { data, error ->
                 if (error != null) return@subscribe
-                if (!checkEqualContent(data?.voicesIds, storyItem.voicesIds)) {
-                    // if ordering is complete, we have to remove synthesis data cause it doesn't match.
-                    val file = storyItem.localPath.toFile()
-                    file.delete()
-                }
-
                 loadData(data)
             }
 

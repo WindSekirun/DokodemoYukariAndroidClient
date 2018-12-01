@@ -11,6 +11,7 @@ import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadCo
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.swipe.event.ReadyDisplayViewEvent
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
+import pyxis.uzuki.live.richutilskt.utils.toFile
 import javax.inject.Inject
 
 
@@ -47,7 +48,16 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         val disposable = yukariOperator.getStoryItem(storyItemId)
             .flatMap {
-                it.apply { this.voiceEntries = itemData.value!! }
+                // if ordering is complete, we have to remove synthesis data cause it doesn't match.
+                if (it.localPath.isNotEmpty()) {
+                    val file = it.localPath.toFile()
+                    file.delete()
+                }
+
+                it.apply {
+                    this.voiceEntries = itemData.value!!
+                    this.localPath = ""
+                }
                 yukariOperator.addStoryItem(it)
             }
             .compose(EnsureMainThreadComposer())
