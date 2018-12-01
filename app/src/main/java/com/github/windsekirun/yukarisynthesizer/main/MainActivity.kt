@@ -105,7 +105,7 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
             R.id.menu_home_setting -> viewModel.moveSettingActivity()
             R.id.menu_details_play -> EventBus.getDefault().post(MenuClickBarEvent(MenuClickBarEvent.Mode.Play))
             R.id.menu_details_star -> EventBus.getDefault().post(MenuClickBarEvent(MenuClickBarEvent.Mode.Star))
-            R.id.menu_details_share -> EventBus.getDefault().post(MenuClickBarEvent(MenuClickBarEvent.Mode.Share))
+            R.id.menu_details_remove -> EventBus.getDefault().post(MenuClickBarEvent(MenuClickBarEvent.Mode.Remove))
             android.R.id.home -> showBottomDrawer()
         }
 

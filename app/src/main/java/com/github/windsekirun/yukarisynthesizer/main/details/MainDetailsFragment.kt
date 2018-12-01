@@ -64,12 +64,10 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
 
         mBinding.setLifecycleOwner(this)
         mBinding.viewModel = viewModel
+        toolBar.setNavigationOnClickListener { viewModel.onBackPressed() }
 
         voiceItemAdapter = initRecyclerView(mBinding.recyclerView, VoiceItemAdapter::class.java)
-
         viewModel.loadData(storyItem)
-
-        toolBar.setNavigationOnClickListener { viewModel.onBackPressed() }
     }
 
     override fun onBackPressed() {

@@ -11,6 +11,6 @@ package com.github.windsekirun.yukarisynthesizer.main.details.event
 class MenuClickBarEvent(val mode: Mode) {
 
     enum class Mode {
-        Play, Star, Share
+        Play, Star, Remove
     }
 }

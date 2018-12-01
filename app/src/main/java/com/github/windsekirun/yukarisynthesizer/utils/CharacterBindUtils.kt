@@ -9,7 +9,7 @@ import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 /**
  * DokodemoYukariAndroidClient
  * Class: CharacterBindUtils
- * Created by Pyxis on 2018-11-27.ㅓ
+ * Created by Pyxis on 2018-11-27.
  *
  *
  * Description:
@@ -21,6 +21,7 @@ object CharacterBindUtils {
         val resId = when (voiceEngine) {
             VoiceEngine.Yukari -> R.drawable.ic_yukari_selected
             VoiceEngine.Maki -> R.drawable.ic_maki_selected
+            VoiceEngine.Break -> R.drawable.ic_break
             VoiceEngine.NONE -> R.drawable.character_icon_selected
         }
 

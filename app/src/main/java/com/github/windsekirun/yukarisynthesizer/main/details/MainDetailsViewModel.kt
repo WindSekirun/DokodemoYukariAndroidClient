@@ -9,6 +9,7 @@ import com.github.windsekirun.baseapp.utils.ProgressDialogManager
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
+import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
@@ -17,7 +18,6 @@ import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragment
 import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
 import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
-import io.objectbox.kotlin.applyChangesToDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
@@ -36,14 +36,13 @@ import javax.inject.Inject
 class MainDetailsViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
     val itemData: MutableLiveData<List<VoiceItem>> = MutableLiveData()
-    val favorite: ObservableBoolean = ObservableBoolean()
     val title = ObservableString()
 
     lateinit var storyItem: StoryItem
-    @Inject
-    lateinit var yukariOperator: YukariOperator
+    @Inject lateinit var yukariOperator: YukariOperator
 
     private var changed: Boolean = false
+    private val favorite: ObservableBoolean = ObservableBoolean()
     private val changeObserver = Observer<List<VoiceItem>> {
         changed = true
     }
@@ -74,8 +73,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     fun clickMenuItem(mode: MenuClickBarEvent.Mode) {
         when (mode) {
             MenuClickBarEvent.Mode.Play -> requestSynthesis()
-            MenuClickBarEvent.Mode.Star -> favorite.set(!favorite.get())
-            MenuClickBarEvent.Mode.Share -> TODO()
+            MenuClickBarEvent.Mode.Star -> toggleFavorite()
+            MenuClickBarEvent.Mode.Remove -> removeStoryItem()
         }
     }
 
@@ -133,9 +132,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             this.voiceEntries = itemData.value!!
         }
 
+        ProgressDialogManager.instance.show()
+
         val disposable = yukariOperator.addStoryItem(storyItem)
             .flatMapSingle { yukariOperator.requestSynthesis(storyItem) }
-            .doOnSubscribe { ProgressDialogManager.instance.show() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data, error ->
@@ -146,6 +146,33 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 }
 
                 showToast("Done. TODO: Play")
+            }
+
+        addDisposable(disposable)
+    }
+
+    private fun toggleFavorite() {
+        favorite.set(!favorite.get())
+        if (favorite.get()) {
+            showToast(getString(R.string.main_details_favorite_on))
+        } else {
+            showToast(getString(R.string.main_details_favorite_off))
+        }
+    }
+
+    private fun removeStoryItem() {
+        ProgressDialogManager.instance.show()
+
+        val disposable = yukariOperator.removeStoryItem(storyItem)
+            .compose(EnsureMainThreadComposer())
+            .subscribe { _, error ->
+                ProgressDialogManager.instance.clear()
+                if (error != null) return@subscribe
+
+                showAlertDialog(getString(R.string.main_details_removed)) { _, _ ->
+                    changed = false
+                    onBackPressed()
+                }
             }
 
         addDisposable(disposable)

@@ -5,8 +5,8 @@ import com.github.windsekirun.yukarisynthesizer.core.annotation.OrderType
 import com.github.windsekirun.yukarisynthesizer.core.item.*
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepository
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepositoryImpl
-import com.github.windsekirun.yukarisynthesizer.core.utils.YukariUtils
 import com.github.windsekirun.yukarisynthesizer.core.test.sm30193805Test
+import com.github.windsekirun.yukarisynthesizer.core.utils.YukariUtils
 import io.objectbox.Box
 import io.objectbox.Property
 import io.objectbox.kotlin.query
@@ -55,6 +55,29 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
 
             val id = storyBox.put(storyItem)
             emitter.onNext(id)
+        }
+    }
+
+    /**
+     * add [VoiceItem] to box with update asscioated [VoiceItem.phonomes]
+     *
+     * @param voiceItem [VoiceItem] to add
+     * @return added row
+     */
+    fun addVoiceItem(voiceItem: VoiceItem): Observable<VoiceItem> {
+        return Observable.create { emitter ->
+            val list = voiceItem.phonomes.toList()
+            phonomeBox.put(list)
+
+            val ids = list.map { it.id }
+
+            voiceItem.apply {
+                this.phonomeIds = ids
+                bindContentOrigin()
+            }
+
+            voiceBox.put(voiceItem)
+            emitter.onNext(voiceItem)
         }
     }
 
@@ -186,6 +209,40 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             }.find().map { it.findMetaData() }
 
             emitter.onNext(query)
+        }
+    }
+
+    /**
+     * remove StoryItem with autoRemove [VoiceItem] and [PhonomeItem] which not used.
+     *
+     * @param storyItem target item
+     * @param autoRemove optional, remove [VoiceItem], [PhonomeItem] which not used any stories.
+     * @return result of operation.
+     */
+    fun removeStoryItem(storyItem: StoryItem, autoRemove: Boolean = true): Observable<Boolean> {
+        return Observable.create { emitter ->
+            // remove given [StoryItem]
+            storyBox.remove(storyItem)
+
+            if (autoRemove) {
+                // remove unused voices which doesn't used in any stories.
+                val usedVoiceIds = storyBox.all.flatMap { it.voicesIds }.distinctBy { it }.toLongArray()
+                val voiceQuery = voiceBox.query {
+                    this.notIn(VoiceItem_.id, usedVoiceIds)
+                }.find()
+
+                voiceBox.remove(voiceQuery)
+
+                // remove unused phonomes with doesn't used in any voices
+                val usedPhonomeIds = voiceBox.all.flatMap { it.phonomeIds }.distinctBy { it }.toLongArray()
+                val phonomeQuery = phonomeBox.query {
+                    this.notIn(PhonomeItem_.id, usedPhonomeIds)
+                }.find()
+
+                phonomeBox.remove(phonomeQuery)
+            }
+
+            emitter.onNext(true)
         }
     }
 
