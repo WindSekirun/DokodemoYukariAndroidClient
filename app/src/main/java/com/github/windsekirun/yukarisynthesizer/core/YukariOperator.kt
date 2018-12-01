@@ -183,9 +183,8 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             .flatMap {
                 val notEqual = if (localPlayable) "" to StoryItem_.localPath else null
 
-                val list = nativeQuerySearch(
-                    storyBox, page, limit, searchTitle to StoryItem_.title, orderBy, notEqual
-                ).map { item -> item.findMetadata() }
+                val list = nativeQuerySearch(storyBox, page, limit, searchTitle to StoryItem_.title, orderBy, notEqual)
+                    .map { item -> item.findMetadata() }
 
                 Observable.just(list)
             }
@@ -207,10 +206,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         orderBy: Pair<@OrderType Int, Property<VoiceItem>> = OrderType.OrderFlags.ASCENDING to VoiceItem_.regDate
     ): Observable<List<VoiceItem>> {
         return Observable.create { emitter ->
-            val list = nativeQuerySearch(
-                voiceBox, -1, -1, searchTitle to VoiceItem_.contentOrigin,
-                orderBy
-            )
+            val list = nativeQuerySearch(voiceBox, -1, -1, searchTitle to VoiceItem_.contentOrigin, orderBy)
                 .map { it.findMetaData() }
                 .filter { it.engine != VoiceEngine.Break }
                 .distinctBy { it.contentOrigin }

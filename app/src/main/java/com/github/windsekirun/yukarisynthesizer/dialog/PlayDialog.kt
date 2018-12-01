@@ -138,6 +138,10 @@ class PlayDialog(context: Context) : BaseDialog<PlayDialogBinding>(context) {
     }
 
     private fun stopTimer() {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.stop()
+        }
+
         if (!disposable.isDisposed) {
             disposable.dispose()
         }

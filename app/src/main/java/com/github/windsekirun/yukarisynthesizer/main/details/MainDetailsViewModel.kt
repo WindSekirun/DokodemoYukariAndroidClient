@@ -31,6 +31,7 @@ import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
+import pyxis.uzuki.live.richutilskt.utils.toFile
 import javax.inject.Inject
 
 /**
@@ -75,7 +76,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     fun onBackPressed() {
         if (!changed || (title.isEmpty && itemData.value!!.isEmpty())) postEvent(CloseFragmentEvent())
-        save(true)
+        save(autoClose = true)
     }
 
     fun clickMenuItem(mode: MenuClickBarEvent.Mode) {
@@ -150,11 +151,9 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     private fun requestSynthesis() {
         if (itemData.value!!.isEmpty()) return
 
-        val ids = itemData.value!!.map { it.id }.toTypedArray()
-        val original = storyItem.voicesIds.toTypedArray()
-        val contentEqual = ids contentEquals original
-
-        if (contentEqual && storyItem.localPath.isNotEmpty()) {
+        val ids = itemData.value!!.map { it.id }
+        val contentEqual = checkEqualContent(ids, storyItem.voicesIds)
+        if (contentEqual && (storyItem.localPath.isNotEmpty() && storyItem.localPath.toFile().canRead())) {
             // if itemData and voiceIds is equal and localPath is valid, we don't need to synthesis this timing.
             // just play sounds.
             playVoices()
@@ -256,6 +255,12 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .flatMap { yukariOperator.getStoryItem(storyItem.id) }
             .subscribe { data, error ->
                 if (error != null) return@subscribe
+                if (!checkEqualContent(data?.voicesIds, storyItem.voicesIds)) {
+                    // if ordering is complete, we have to remove synthesis data cause it doesn't match.
+                    val file = storyItem.localPath.toFile()
+                    file.delete()
+                }
+
                 loadData(data)
             }
 
@@ -266,5 +271,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         )
 
         addDisposable(disposable)
+    }
+
+    private fun checkEqualContent(target: List<Long?>?, original: List<Long>): Boolean {
+        val ids = target?.toTypedArray() ?: arrayOfNulls(storyItem.voicesIds.size)
+        return ids contentEquals original.toTypedArray()
     }
 }
