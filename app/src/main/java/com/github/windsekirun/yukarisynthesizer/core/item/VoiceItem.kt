@@ -1,13 +1,16 @@
 package com.github.windsekirun.yukarisynthesizer.core.item
 
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
+import io.objectbox.annotation.Backlink
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
+import io.objectbox.relation.ToMany
 import java.io.Serializable
+import java.util.*
 
 @Entity
-class VoiceItem: Serializable {
+class VoiceItem() : Serializable {
     @Id
     var id: Long = 0
 
@@ -17,23 +20,37 @@ class VoiceItem: Serializable {
     @Convert(converter = PresetItem.PresetItemConverter::class, dbType = String::class)
     var preset: PresetItem = PresetItem(VoiceEngine.NONE, 1.0)
 
-    var contentOrigin: String = ""
-    var contentPhonemes: List<PhonomeItem> = mutableListOf()
     var breakTime: Long = 0
+    var regDate: Date = Date()
+    var contentOrigin: String = ""
 
-    constructor(engine: VoiceEngine, preset: PresetItem, contentPhonemes: List<PhonomeItem>) {
-            this.engine = engine
+    lateinit var stories: ToMany<StoryItem>
+
+    @Backlink(to = "voices")
+    lateinit var phonomes: ToMany<PhonomeItem>
+
+    constructor(engine: VoiceEngine, preset: PresetItem) : this() {
+        this.engine = engine
         this.preset = preset
-        this.contentPhonemes = contentPhonemes
-        this.contentOrigin = contentPhonemes.asSequence().map { it.origin }.joinToString(separator = "") { it }
     }
 
-    constructor(breakTime: Long) {
+    constructor(breakTime: Long) : this() {
         this.breakTime = breakTime
     }
 
+    constructor(id: Long, engine: VoiceEngine, preset: PresetItem, breakTime: Long) : this() {
+        this.id = id
+        this.engine = engine
+        this.preset = preset
+        this.breakTime = breakTime
+    }
+
+    fun bindContentOrigin() {
+        contentOrigin = phonomes.asSequence().map { it.origin }.joinToString(separator = "") { it }
+    }
+
     override fun toString(): String {
-        return "VoiceItem(engine=$engine, contentPhonemes=$contentPhonemes)"
+        return "VoiceItem(engine=$engine, content=$phonomes)"
     }
 
     companion object {

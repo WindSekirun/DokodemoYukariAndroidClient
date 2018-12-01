@@ -11,7 +11,7 @@ object SSMLBuilder {
         val ssml = xml("speak") {
             attribute("version", item.version)
 
-            for (voice in item.voices) {
+            for (voice in item.voices!!) {
                 if (voice.breakTime != 0L) {
                     "break" {
                         attribute("time", "${voice.breakTime}ms")
@@ -32,7 +32,7 @@ object SSMLBuilder {
                             "volume" to preset.volume
                         )
 
-                        -voice.contentPhonemes.build()
+                        -voice.phonomes.build()
                     }
                 }
             }

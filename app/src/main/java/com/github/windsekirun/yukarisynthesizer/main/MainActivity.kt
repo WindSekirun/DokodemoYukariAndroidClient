@@ -8,15 +8,24 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.github.windsekirun.baseapp.base.BaseActivity
+import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainActivityBinding
+import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
 import com.github.windsekirun.yukarisynthesizer.main.drawer.MainDrawerFragment
+import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
 import com.github.windsekirun.yukarisynthesizer.main.preset.MainPresetFragment
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryFragment
+import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
+import com.github.windsekirun.yukarisynthesizer.utils.reveal.CircularRevealUtils
+import com.github.windsekirun.yukarisynthesizer.utils.reveal.RevealSettingHolder
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
@@ -33,7 +42,30 @@ import kotlin.reflect.full.createInstance
 @InjectActivity
 class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInjector {
     private lateinit var viewModel: MainViewModel
-    @Inject lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+
+    private val addVisibilityChanged: FloatingActionButton.OnVisibilityChangedListener =
+        object : FloatingActionButton.OnVisibilityChangedListener() {
+            override fun onShown(fab: FloatingActionButton?) {
+                super.onShown(fab)
+                RevealSettingHolder.revealSetting =
+                        CircularRevealUtils.RevealSetting.with(mBinding.fab, mBinding.container)
+            }
+
+            override fun onHidden(fab: FloatingActionButton?) {
+                super.onHidden(fab)
+                mBinding.bottomAppBar.fabAlignmentMode = viewModel.currentFabAlignmentMode
+                mBinding.bottomAppBar.replaceMenu(
+                    if (isInDetails()) {
+                        R.menu.menu_details
+                    } else {
+                        R.menu.menu_main
+                    }
+                )
+                fab?.show(this)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +79,14 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             window.statusBarColor = ContextCompat.getColor(this, R.color.status_color)
+        }
+
+        mBinding.fab.setOnClickListener {
+            if (isInDetails()) {
+                addNewVoices()
+            } else {
+                addNewStory()
+            }
         }
 
         replaceFragment(MainStoryFragment::class, 0)
@@ -69,6 +109,21 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
+    override fun onBackPressed() {
+        if (isInDetails()) {
+            supportFragmentManager.fragments
+                .filterIsInstance(OnBackPressedListener::class.java)
+                .forEach { it.onBackPressed() }
+        } else {
+            DoubleBackInvoker.execute(getString(R.string.main_double_back_invoker))
+        }
+    }
+
+    @Subscribe
+    fun onRefreshBarEvent(event: RefreshBarEvent) {
+        toggleBottomBar(event.attached)
+    }
+
     private fun showBottomDrawer() {
         val drawerFragment = MainDrawerFragment()
         drawerFragment.onMenuClickListener = {
@@ -84,10 +139,51 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     }
 
     private fun <T : Fragment> replaceFragment(cls: KClass<T>, pagePosition: Int = 0) {
-        if (viewModel.pagePosition == pagePosition) return // if pagePosition is same, block that.
+        if (viewModel.pagePosition == pagePosition) return
         viewModel.pagePosition = pagePosition
 
         val fragment = cls.createInstance()
-        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commitAllowingStateLoss()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container, fragment)
+            .commitAllowingStateLoss()
     }
+
+    private fun toggleBottomBar(attached: Boolean) {
+        viewModel.currentFabAlignmentMode = if (attached) {
+            BottomAppBar.FAB_ALIGNMENT_MODE_END
+        } else {
+            BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+        }
+
+        mBinding.fab.hide(addVisibilityChanged)
+        invalidateOptionsMenu()
+        mBinding.bottomAppBar.navigationIcon = if (attached) {
+            null
+        } else {
+            ContextCompat.getDrawable(this, R.drawable.ic_menu_black_24dp)
+        }
+    }
+
+    private fun addNewStory() {
+        RevealSettingHolder.revealSetting = CircularRevealUtils.RevealSetting.with(mBinding.fab, mBinding.container)
+        toggleBottomBar(true)
+
+        val fragment = MainDetailsFragment().apply {
+            this.revealSetting = RevealSettingHolder.revealSetting
+        }
+
+        supportFragmentManager
+            .beginTransaction()
+            .setReorderingAllowed(true)
+            .add(R.id.container, fragment)
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
+    }
+
+    private fun addNewVoices() {
+
+    }
+
+    private fun isInDetails() = viewModel.currentFabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_END
 }

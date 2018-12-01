@@ -1,6 +1,5 @@
 package com.github.windsekirun.yukarisynthesizer.core.test
 
-import androidx.annotation.VisibleForTesting
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
@@ -17,9 +16,20 @@ class TestItemBuilder {
     fun build() = phonomes
 }
 
-fun buildVoiceItem(engine: VoiceEngine, presetItem: PresetItem,
-                   setup: TestItemBuilder.() -> Unit): VoiceItem {
+fun buildVoiceItem(
+    engine: VoiceEngine, presetItem: PresetItem,
+    setup: TestItemBuilder.() -> Unit
+): VoiceItem {
     val builder = TestItemBuilder()
     builder.setup()
-    return VoiceItem(engine, presetItem, builder.build())
+
+    val voiceItem = VoiceItem().apply {
+        this.engine = engine
+        this.preset = presetItem
+    }
+
+    voiceItem.phonomes.addAll(builder.build())
+    voiceItem.bindContentOrigin()
+
+    return voiceItem
 }

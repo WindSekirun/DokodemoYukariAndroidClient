@@ -10,6 +10,11 @@ import com.github.windsekirun.daggerautoinject.InjectFragment
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainStoryFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.StoryItemAdapter
+import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
+import com.github.windsekirun.yukarisynthesizer.main.story.event.ClickStoryItem
+import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
 /**
@@ -23,9 +28,10 @@ import javax.inject.Inject
 
 @InjectFragment
 class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
-    @Inject lateinit var mViewModelFactory: ViewModelProvider.Factory
-    private var mViewModel: MainStoryViewModel? = null
-    private lateinit var mStoryItemAdapter: StoryItemAdapter
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private lateinit var viewModel: MainStoryViewModel
+    private lateinit var storyItemAdapter: StoryItemAdapter
 
     override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainStoryFragmentBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_story_fragment, container, false)
@@ -33,9 +39,26 @@ class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewModel = getViewModel(MainStoryViewModel::class.java, mViewModelFactory)
-        mBinding.viewModel = mViewModel
+        viewModel = getViewModel(MainStoryViewModel::class.java, viewModelFactory)
+        mBinding.setLifecycleOwner(this)
+        mBinding.viewModel = viewModel
 
-        mStoryItemAdapter = initRecyclerView(mBinding.recyclerView, StoryItemAdapter::class.java)
+        storyItemAdapter = initRecyclerView(mBinding.recyclerView, StoryItemAdapter::class.java)
+    }
+
+    @Subscribe
+    fun onClickStoryItem(event: ClickStoryItem) {
+        val fragment = MainDetailsFragment().apply {
+            this.storyItem = event.item
+        }
+
+        EventBus.getDefault().post(RefreshBarEvent(true))
+
+        activity!!.supportFragmentManager
+            .beginTransaction()
+            .setReorderingAllowed(true)
+            .replace(R.id.container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

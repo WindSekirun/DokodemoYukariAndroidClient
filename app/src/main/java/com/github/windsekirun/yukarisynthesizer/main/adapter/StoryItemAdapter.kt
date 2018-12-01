@@ -2,13 +2,11 @@ package com.github.windsekirun.yukarisynthesizer.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
+import androidx.databinding.DataBindingUtil
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainStoryItemBinding
-
-import androidx.databinding.DataBindingUtil
 import com.github.windsekirun.yukarisynthesizer.main.story.event.ClickStoryItem
 
 /**
@@ -26,7 +24,7 @@ class StoryItemAdapter : BaseRecyclerAdapter<StoryItem, MainStoryItemBinding>() 
     }
 
     override fun onClickedItem(binding: MainStoryItemBinding, item: StoryItem, position: Int) {
-        postEvent(ClickStoryItem(item))
+        postEvent(ClickStoryItem(item, position))
     }
 
     override fun onLongClickedItem(binding: MainStoryItemBinding, item: StoryItem, position: Int): Boolean {
@@ -36,4 +34,6 @@ class StoryItemAdapter : BaseRecyclerAdapter<StoryItem, MainStoryItemBinding>() 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup): MainStoryItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_story_item, parent, false)
     }
+
+
 }

@@ -9,7 +9,7 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
-class PresetItem : Serializable {
+class PresetItem() : Serializable {
     @Id
     var id: Long = 0
     var title: String = ""
@@ -23,15 +23,29 @@ class PresetItem : Serializable {
     var range: Double = 1.0
     var volume: Double = 1.0
 
-    constructor(engine: VoiceEngine, rate: Double) {
+    constructor(engine: VoiceEngine, rate: Double) : this() {
         this.engine = engine
         this.rate = rate
     }
 
-    constructor(engine: VoiceEngine, rate: Double, pitch: Double) {
+    constructor(engine: VoiceEngine, rate: Double, pitch: Double) : this() {
         this.engine = engine
         this.rate = rate
         this.pitch = pitch
+    }
+
+    constructor(
+        id: Long, title: String, regDate: Date, engine: VoiceEngine,
+        rate: Double, pitch: Double, range: Double, volume: Double
+    ) : this() {
+        this.id = id
+        this.title = title
+        this.regDate = regDate
+        this.engine = engine
+        this.range = range
+        this.rate = rate
+        this.pitch = pitch
+        this.volume = volume
     }
 
     class PresetItemConverter : PropertyJsonConverter<PresetItem>(PresetItem::class.java)

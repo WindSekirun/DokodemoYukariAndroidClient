@@ -1,7 +1,8 @@
-package com.github.windsekirun.yukarisynthesizer.main.story.event
+package com.github.windsekirun.yukarisynthesizer.main.details.event
 
 import android.graphics.Rect
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
+import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 
 /**
  * DokodemoYukariAndroidClient
@@ -10,4 +11,4 @@ import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
  *
  * Description:
  */
-class ClickStoryItem(val item: StoryItem, val position: Int)
+class ClickVoiceItem(val item: VoiceItem, val position: Int)
