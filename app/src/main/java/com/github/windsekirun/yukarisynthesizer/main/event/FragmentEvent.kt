@@ -49,3 +49,5 @@ class CloseFragmentEvent
 class InvokeBackEvent
 
 class CloseSpeedDialEvent
+
+class RefreshFragmentEvent

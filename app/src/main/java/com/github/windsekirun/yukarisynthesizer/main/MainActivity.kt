@@ -13,10 +13,7 @@ import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainActivityBinding
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
-import com.github.windsekirun.yukarisynthesizer.main.event.AddFragmentEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.CloseSpeedDialEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.InvokeBackEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.SwapDetailEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryFragment
 import com.github.windsekirun.yukarisynthesizer.utils.reveal.CircularRevealUtils
@@ -24,6 +21,7 @@ import com.github.windsekirun.yukarisynthesizer.utils.reveal.RevealSettingHolder
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
@@ -150,5 +148,7 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         switchToolbarTitle(titleRes)
 
         viewModel.shownDetail = !exitDetail
+
+        if (exitDetail) EventBus.getDefault().post(RefreshFragmentEvent())
     }
 }

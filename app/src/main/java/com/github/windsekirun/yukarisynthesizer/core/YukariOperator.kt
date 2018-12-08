@@ -7,7 +7,6 @@ import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.*
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepository
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepositoryImpl
-import com.github.windsekirun.yukarisynthesizer.core.test.sm30193805Test
 import com.github.windsekirun.yukarisynthesizer.core.utils.YukariUtils
 import io.objectbox.Box
 import io.objectbox.Property
@@ -28,6 +27,7 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Suppress("UNUSED_EXPRESSION")
 @Singleton
 class YukariOperator @Inject constructor(val application: MainApplication) {
     private val phonomeBox: Box<PhonomeItem> by lazy { application.getBox(PhonomeItem::class.java) }
@@ -35,6 +35,21 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     private val storyBox: Box<StoryItem> by lazy { application.getBox(StoryItem::class.java) }
     private val voiceBox: Box<VoiceItem> by lazy { application.getBox(VoiceItem::class.java) }
     private val preferenceRepository: PreferenceRepository by lazy { PreferenceRepositoryImpl(application) }
+
+    /**
+     * add List of [PhonomeItem] to box
+     *
+     * @param list [PhonomeItem] to add
+     * @return List of id to store in [VoiceItem]
+     */
+    fun addPhonomeItems(list: List<PhonomeItem>): Observable<List<Long>> {
+        return Observable.create { emitter ->
+            val target = mutableListOf<PhonomeItem>().apply { addAll(list) }
+            phonomeBox.put(target)
+            val ids = target.map { it.id }
+            emitter.onNext(ids)
+        }
+    }
 
     /**
      * add [StoryItem] to box with update associated [StoryItem.voiceEntries]
@@ -86,9 +101,43 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         }
     }
 
-    fun generateTestData() {
-        val data1 = sm30193805Test(phonomeBox, voiceBox)
-        storyBox.put(data1)
+    /**
+     * execute First run for new comer!
+     */
+    fun firstRunSetup(): Observable<Boolean> {
+        return Observable.create { emitter ->
+            if (!preferenceRepository.newUser) {
+                emitter.onNext(true)
+                return@create
+            }
+
+            val yukariPreset = getInternalPresetItem(VoiceEngine.Yukari)
+            val makiPreset = getInternalPresetItem(VoiceEngine.Maki)
+
+            presetBox.put(yukariPreset, makiPreset)
+
+            emitter.onNext(true)
+        }
+    }
+
+    /**
+     * get Default [PresetItem] with given [VoiceEngine] to add [VoiceItem] with voice recognition feature.
+     *
+     * @param engine [VoiceEngine] to find
+     * @return [PresetItem]
+     */
+    fun getDefaultPresetItem(engine: VoiceEngine): Observable<PresetItem> {
+        return getPresetList()
+            .flatMap { list ->
+                val presetItem: PresetItem = if (list.isNotEmpty()) {
+                    list.firstOrNull { it.default && it.engine == engine } ?: getInternalPresetItem(engine)
+                } else {
+                    getInternalPresetItem(engine)
+                }
+
+                if (presetItem.id == 0L) presetBox.put(presetItem)
+                Observable.just(presetItem)
+            }
     }
 
     /**
@@ -368,6 +417,20 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         }.find()
 
         this.phonomes = query
+    }
+
+    /**
+     * get Default settings of [PresetItem]
+     */
+    private fun getInternalPresetItem(voiceEngine: VoiceEngine): PresetItem {
+        return PresetItem().apply {
+            this.engine = voiceEngine
+            this.pitch = 1.0
+            this.range = 1.0
+            this.rate = 1.0
+            this.volume = 1.0
+            this.default = true
+        }
     }
 
     /**

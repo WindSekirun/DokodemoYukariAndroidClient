@@ -14,6 +14,7 @@ import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.dialog.BreakDialogFragment
 import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryFragment
+import com.github.windsekirun.yukarisynthesizer.dialog.VoiceRecognitionFragment
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
@@ -109,6 +110,11 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         showHistoryDialog(event.callback)
     }
 
+    @Subscribe
+    fun onShowVoiceRecognitionEvent(event: ShowVoiceRecognitionEvent) {
+        showVoiceRecognitionDialog(event.callback)
+    }
+
     private fun exitDetails() {
         requireActivity().supportFragmentManager.popBackStackImmediate()
         postEvent(SwapDetailEvent(true))
@@ -131,5 +137,14 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
 
         requireActivity().supportFragmentManager.beginTransaction()
             .add(fragment, "history").commit()
+    }
+
+    private fun showVoiceRecognitionDialog(callback: (String) -> Unit) {
+        val fragment = VoiceRecognitionFragment().apply {
+            this.callback = callback
+        }
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .add(fragment, "voice").commit()
     }
 }

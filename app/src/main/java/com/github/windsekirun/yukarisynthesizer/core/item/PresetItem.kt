@@ -23,6 +23,8 @@ class PresetItem() : Serializable {
     var range: Double = 1.0
     var volume: Double = 1.0
 
+    var default: Boolean = false
+
     constructor(engine: VoiceEngine, rate: Double) : this() {
         this.engine = engine
         this.rate = rate

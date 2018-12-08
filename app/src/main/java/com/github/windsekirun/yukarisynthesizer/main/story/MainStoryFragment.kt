@@ -11,6 +11,7 @@ import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainStoryFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.StoryItemAdapter
 import com.github.windsekirun.yukarisynthesizer.main.event.ClickStoryItem
+import com.github.windsekirun.yukarisynthesizer.main.event.RefreshFragmentEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.SpeedDialClickEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ToggleFavoriteItem
 import org.greenrobot.eventbus.Subscribe
@@ -60,5 +61,10 @@ class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
     @Subscribe
     fun onToggleFavoriteItem(event: ToggleFavoriteItem) {
         viewModel.clickFavorite(event.item)
+    }
+
+    @Subscribe
+    fun onRefreshFragmentEvent(event: RefreshFragmentEvent) {
+        viewModel.refreshData()
     }
 }

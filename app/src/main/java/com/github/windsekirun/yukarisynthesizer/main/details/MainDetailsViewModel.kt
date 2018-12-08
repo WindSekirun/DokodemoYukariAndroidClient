@@ -1,5 +1,6 @@
 package com.github.windsekirun.yukarisynthesizer.main.details
 
+import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
@@ -15,6 +16,8 @@ import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
+import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
+import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog
@@ -24,7 +27,9 @@ import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderViewModel
 import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
+import pyxis.uzuki.live.richutilskt.utils.RPermission
 import pyxis.uzuki.live.richutilskt.utils.toFile
 import javax.inject.Inject
 
@@ -224,7 +229,45 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun addSTT() {
+        val event = ShowVoiceRecognitionEvent { voiceResult ->
+            val splitResult = voiceResult.split(" ").map { it.trim() }
+            val phonomes = splitResult.map { PhonomeItem(it, "") }.toMutableList()
 
+            val disposable = yukariOperator.getPresetList()
+                .flatMap {
+                    Observables.combineLatest(
+                        yukariOperator.getDefaultPresetItem(VoiceEngine.Yukari),
+                        yukariOperator.addPhonomeItems(phonomes)
+                    )
+                }
+                .subscribe { data, _ ->
+                    val preset = data!!.first
+                    val phonomeIds = data.second
+
+                    val voiceItem = VoiceItem().apply {
+                        this.engine = preset.engine
+                        this.preset = preset
+                        this.breakTime = 0
+                        this.phonomes = phonomes
+                        this.phonomeIds = phonomeIds
+                        bindContentOrigin()
+                    }
+
+                    val list = itemData.value!!
+                    list.add(voiceItem)
+                    itemData.value = list
+                }
+
+            addDisposable(disposable)
+        }
+
+        requestPermission({ code ->
+            if (code == RPermission.PERMISSION_GRANTED) {
+                postEvent(event)
+            } else {
+                showToast(getString(R.string.main_detail_record_permission))
+            }
+        }, arrayOf(Manifest.permission.RECORD_AUDIO))
     }
 
     private fun addVoiceHistory() {

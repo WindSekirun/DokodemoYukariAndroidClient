@@ -63,8 +63,13 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         addDisposable(disposable)
     }
 
+    fun refreshData() {
+        loadData()
+    }
+
     private fun loadData() {
-        val disposable = yukariOperator.getStoryList()
+        val disposable = yukariOperator.firstRunSetup()
+            .flatMap { yukariOperator.getStoryList() }
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
                 if (error != null) {

@@ -34,4 +34,6 @@
     <string name="menu_details_order">Order</string>
     <string name="swipe_order_title">Swipe Order</string>
     <string name="break_time_help">Inserts an <b>empty space</b> between the sentence and the sentence.\nIt can be set from 0.1 seconds to 2 seconds and is reflected in the sound source.\n0.2 seconds is usually appropriate.</string>
+    <string name="select_nearest_result">Select nearest result</string>
+    <string name="main_detail_record_permission">Please allow RECORD permission to use this feature.</string>
 </resources>
