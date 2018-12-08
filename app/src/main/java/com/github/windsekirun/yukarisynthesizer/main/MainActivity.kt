@@ -2,9 +2,9 @@ package com.github.windsekirun.yukarisynthesizer.main
 
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
+import androidx.annotation.MenuRes
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.github.windsekirun.baseapp.base.BaseActivity
@@ -12,28 +12,20 @@ import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainActivityBinding
-import com.github.windsekirun.yukarisynthesizer.dialog.PresetDialog
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
-import com.github.windsekirun.yukarisynthesizer.main.details.dialog.MainDetailsVoiceFragment
-import com.github.windsekirun.yukarisynthesizer.main.details.event.AddVoiceEvent
-import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
-import com.github.windsekirun.yukarisynthesizer.main.drawer.MainDrawerFragment
+import com.github.windsekirun.yukarisynthesizer.main.event.AddFragmentEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.CloseSpeedDialEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.InvokeBackEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.SwapDetailEvent
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
-import com.github.windsekirun.yukarisynthesizer.main.preset.MainPresetFragment
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryFragment
-import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
 import com.github.windsekirun.yukarisynthesizer.utils.reveal.CircularRevealUtils
 import com.github.windsekirun.yukarisynthesizer.utils.reveal.RevealSettingHolder
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
-import kotlin.reflect.KClass
-import kotlin.reflect.full.createInstance
 
 /**
  * DokodemoYukariAndroidClient
@@ -50,35 +42,11 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
-    private val addVisibilityChanged: FloatingActionButton.OnVisibilityChangedListener =
-        object : FloatingActionButton.OnVisibilityChangedListener() {
-            override fun onShown(fab: FloatingActionButton?) {
-                super.onShown(fab)
-                RevealSettingHolder.revealSetting =
-                        CircularRevealUtils.RevealSetting.with(mBinding.fab, mBinding.container)
-            }
-
-            override fun onHidden(fab: FloatingActionButton?) {
-                super.onHidden(fab)
-                mBinding.bottomAppBar.fabAlignmentMode = viewModel.currentFabAlignmentMode
-                mBinding.bottomAppBar.replaceMenu(
-                    if (isInDetails()) {
-                        R.menu.menu_details
-                    } else {
-                        R.menu.menu_main
-                    }
-                )
-                fab?.show(this)
-            }
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         viewModel = getViewModel(MainViewModel::class.java)
         mBinding.viewModel = viewModel
-
-        setSupportActionBar(mBinding.bottomAppBar)
 
         // make darker if available.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -86,43 +54,18 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
             window.statusBarColor = ContextCompat.getColor(this, R.color.status_color)
         }
 
-        mBinding.fab.setOnClickListener {
-            if (isInDetails()) {
-                addNewVoices()
-                return@setOnClickListener
-            }
-
-            when (viewModel.pagePosition) {
-                0 -> addNewStory()
-                1 -> addNewPreset()
-            }
-        }
-
-        replaceFragment(MainStoryFragment::class, 0)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
-            R.id.menu_home_setting -> viewModel.moveSettingActivity()
-            R.id.menu_details_play -> EventBus.getDefault().post(MenuClickBarEvent(MenuClickBarEvent.Mode.Play))
-            R.id.menu_details_star -> EventBus.getDefault().post(MenuClickBarEvent(MenuClickBarEvent.Mode.Star))
-            R.id.menu_details_remove -> EventBus.getDefault().post(MenuClickBarEvent(MenuClickBarEvent.Mode.Remove))
-            android.R.id.home -> showBottomDrawer()
-        }
-
-        return true
+        init()
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     override fun onBackPressed() {
-        if (isInDetails()) {
+        if (mBinding.speedDial.isOpen) {
+            closeSpeedDial()
+            return
+        }
+
+        if (viewModel.shownDetail) {
             supportFragmentManager.fragments
                 .filterIsInstance(OnBackPressedListener::class.java)
                 .forEach { it.onBackPressed() }
@@ -132,79 +75,80 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     }
 
     @Subscribe
-    fun onRefreshBarEvent(event: RefreshBarEvent) {
-        toggleBottomBar(event.attached)
+    fun onAddFragmentEvent(event: AddFragmentEvent<*>) {
+        replaceFragment(event.fragment, event.animated, event.backStack, event.reveal)
     }
 
-    private fun showBottomDrawer() {
-        val drawerFragment = MainDrawerFragment()
-        drawerFragment.onMenuClickListener = {
-            when (it) {
-                R.id.menu_drawer_story -> replaceFragment(MainStoryFragment::class, 0)
-                R.id.menu_drawer_preset -> replaceFragment(MainPresetFragment::class, 1)
-                R.id.menu_drawer_play -> replaceFragment(MainStoryFragment::class, 2)
-                R.id.menu_drawer_import -> replaceFragment(MainStoryFragment::class, 3)
-            }
-        }
-        drawerFragment.pagePosition = viewModel.pagePosition
-        drawerFragment.show(supportFragmentManager, drawerFragment.tag)
+    @Subscribe
+    fun onSwapDetailEvent(event: SwapDetailEvent) {
+        swapDetail(event.exitDetail)
     }
 
-    private fun <T : Fragment> replaceFragment(cls: KClass<T>, pagePosition: Int = 0) {
-        if (viewModel.pagePosition == pagePosition) return
-        viewModel.pagePosition = pagePosition
-
-        val fragment = cls.createInstance()
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container, fragment)
-            .commitAllowingStateLoss()
+    @Subscribe
+    fun onInvokeBackEvent(event: InvokeBackEvent) {
+        onBackPressed()
     }
 
-    private fun toggleBottomBar(attached: Boolean) {
-        viewModel.currentFabAlignmentMode = if (attached) {
-            BottomAppBar.FAB_ALIGNMENT_MODE_END
+    @Subscribe
+    fun onCloseSpeedDialEvent(event: CloseSpeedDialEvent) {
+        closeSpeedDial()
+    }
+
+    private fun closeSpeedDial() {
+        mBinding.speedDial.close(true)
+    }
+
+    private fun init() {
+        switchSpeedDialMenu(R.menu.menu_main_speed_dial)
+        switchToolbarMenu(R.menu.menu_main)
+
+        replaceFragment(MainStoryFragment(), true, false, false)
+    }
+
+    private fun switchToolbarMenu(@MenuRes menuRes: Int) {
+        mBinding.toolbar.menu.clear() // clear before inflate new menu
+        mBinding.toolbar.inflateMenu(menuRes)
+    }
+
+    private fun switchSpeedDialMenu(@MenuRes menuRes: Int) {
+        mBinding.speedDial.inflate(menuRes)
+    }
+
+    private fun switchToolbarTitle(@StringRes title: Int) {
+        mBinding.toolbar.title = getString(title)
+    }
+
+    private fun <T : Fragment> replaceFragment(fragment: T, animated: Boolean, backStack: Boolean, reveal: Boolean) {
+        val revealSetting = if (reveal) {
+            CircularRevealUtils.RevealSetting.with(mBinding.speedDial, mBinding.container)
+        } else null
+
+        RevealSettingHolder.revealSetting = revealSetting
+
+        val transaction = supportFragmentManager.beginTransaction()
+        if (animated) transaction.setCustomAnimations(R.anim.fadein_fragment, R.anim.fadeout_fragment)
+
+        if (backStack) {
+            transaction.setReorderingAllowed(true)
+                .add(R.id.container, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
         } else {
-            BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
-        }
-
-        mBinding.fab.hide(addVisibilityChanged)
-        invalidateOptionsMenu()
-        mBinding.bottomAppBar.navigationIcon = if (attached) {
-            null
-        } else {
-            ContextCompat.getDrawable(this, R.drawable.ic_menu_black_24dp)
+            transaction.replace(R.id.container, fragment)
+                .commitAllowingStateLoss()
         }
     }
 
-    private fun addNewStory() {
-        RevealSettingHolder.revealSetting = CircularRevealUtils.RevealSetting.with(mBinding.fab, mBinding.container)
-        toggleBottomBar(true)
+    private fun swapDetail(exitDetail: Boolean) {
+        val toolbarRes = if (exitDetail) R.menu.menu_main else R.menu.menu_details_top
+        val speedDialRes = if (exitDetail) R.menu.menu_main_speed_dial else R.menu.menu_details_speed_dial
+        val titleRes = R.string.story_title
 
-        val fragment = MainDetailsFragment().apply {
-            this.revealSetting = RevealSettingHolder.revealSetting
-        }
+        mBinding.toolbar.navigationIcon = if (exitDetail) null else getDrawable(R.drawable.ic_arrow_left_black_24dp)
+        switchToolbarMenu(toolbarRes)
+        switchSpeedDialMenu(speedDialRes)
+        switchToolbarTitle(titleRes)
 
-        supportFragmentManager
-            .beginTransaction()
-            .setReorderingAllowed(true)
-            .add(R.id.container, fragment)
-            .addToBackStack(null)
-            .commitAllowingStateLoss()
-    }
-
-    private fun addNewVoices() {
-        val voiceFragment = MainDetailsVoiceFragment()
-        voiceFragment.onMenuClickListener = {
-            EventBus.getDefault().post(AddVoiceEvent(it))
-        }
-        voiceFragment.show(supportFragmentManager, voiceFragment.tag)
-    }
-
-    private fun isInDetails() = viewModel.currentFabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_END
-
-    private fun addNewPreset() {
-        val presetDialog = PresetDialog(this)
-        presetDialog.show()
+        viewModel.shownDetail = !exitDetail
     }
 }

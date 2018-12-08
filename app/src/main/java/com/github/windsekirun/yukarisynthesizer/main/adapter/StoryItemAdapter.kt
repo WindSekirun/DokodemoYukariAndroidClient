@@ -7,7 +7,8 @@ import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.databinding.StoryItemBinding
-import com.github.windsekirun.yukarisynthesizer.main.story.event.ClickStoryItem
+import com.github.windsekirun.yukarisynthesizer.main.event.ClickStoryItem
+import com.github.windsekirun.yukarisynthesizer.main.event.ToggleFavoriteItem
 
 /**
  * DokodemoYukariAndroidClient
@@ -21,6 +22,7 @@ class StoryItemAdapter : BaseRecyclerAdapter<StoryItem, StoryItemBinding>() {
 
     override fun bind(binding: StoryItemBinding, item: StoryItem, position: Int) {
         binding.item = item
+        binding.adapter = this
     }
 
     override fun onClickedItem(binding: StoryItemBinding, item: StoryItem, position: Int) {
@@ -33,5 +35,9 @@ class StoryItemAdapter : BaseRecyclerAdapter<StoryItem, StoryItemBinding>() {
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup): StoryItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.story_item, parent, false)
+    }
+
+    fun clickFavorite(storyItem: StoryItem) {
+        postEvent(ToggleFavoriteItem(storyItem))
     }
 }

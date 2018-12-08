@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_dial_voice"
+        android:title="Add Voice"
+        android:icon="@drawable/ic_plus_black_24dp"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_dial_break"
+        android:title="Add Break"
+        android:icon="@drawable/baseline_free_breakfast_black_24"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_dial_history"
+        android:title="From History"
+        android:icon="@drawable/baseline_free_breakfast_black_24"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_dial_stt"
+        android:title="From Voice"
+        android:icon="@drawable/baseline_mic_black_24"
+        app:showAsAction="ifRoom"/>
+
+</menu>

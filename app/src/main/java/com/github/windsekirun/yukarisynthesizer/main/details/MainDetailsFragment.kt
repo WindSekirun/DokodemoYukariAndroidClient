@@ -12,15 +12,13 @@ import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
-import com.github.windsekirun.yukarisynthesizer.main.details.event.AddVoiceEvent
-import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
-import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.CloseFragmentEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.SpeedDialClickEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.SwapDetailEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.ToolbarMenuClickEvent
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
-import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
 import com.github.windsekirun.yukarisynthesizer.utils.reveal.CircularRevealUtils
 import com.github.windsekirun.yukarisynthesizer.utils.reveal.RevealSettingHolder
-import kotlinx.android.synthetic.main.main_details_fragment.*
-import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
@@ -52,6 +50,8 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
             CircularRevealUtils.revealEnter(view!!, revealSetting!!)
         }
 
+        postEvent(SwapDetailEvent(false))
+
         return view
     }
 
@@ -65,17 +65,6 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
 
         mBinding.setLifecycleOwner(this)
         mBinding.viewModel = viewModel
-        toolBar.setNavigationOnClickListener { viewModel.onBackPressed() }
-        toolBar.inflateMenu(R.menu.menu_details_top)
-        toolBar.setOnMenuItemClickListener {
-            val id = it.itemId
-            when (id) {
-                R.id.menu_details_top_order -> viewModel.clickSwipeOrder()
-            }
-
-            true
-        }
-
         voiceItemAdapter = initRecyclerView(mBinding.recyclerView, VoiceItemAdapter::class.java)
         viewModel.loadData(storyItem)
     }
@@ -97,17 +86,21 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
     }
 
     @Subscribe
-    fun onMenuClickBarEvent(event: MenuClickBarEvent) {
-        viewModel.clickMenuItem(event.mode)
+    fun onToolbarMenuClickEvent(event: ToolbarMenuClickEvent) {
+        if (ToolbarMenuClickEvent.checkAvailable(this.javaClass, event.mode)) {
+            viewModel.clickMenuItem(event.mode)
+        }
     }
 
     @Subscribe
-    fun onAddVoiceEvent(event: AddVoiceEvent) {
-        viewModel.clickAddVoice(event.mode)
+    fun onSpeedDialClickEvent(event: SpeedDialClickEvent) {
+        if (SpeedDialClickEvent.checkAvailable(this.javaClass, event.mode)) {
+            viewModel.clickSpeedDial(event.mode)
+        }
     }
 
     private fun exitDetails() {
-        EventBus.getDefault().post(RefreshBarEvent(false))
         activity!!.supportFragmentManager.popBackStackImmediate()
+        postEvent(SwapDetailEvent(true))
     }
 }

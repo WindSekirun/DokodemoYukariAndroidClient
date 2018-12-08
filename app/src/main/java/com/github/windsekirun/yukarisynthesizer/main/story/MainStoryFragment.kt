@@ -10,10 +10,9 @@ import com.github.windsekirun.daggerautoinject.InjectFragment
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainStoryFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.StoryItemAdapter
-import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
-import com.github.windsekirun.yukarisynthesizer.main.story.event.ClickStoryItem
-import com.github.windsekirun.yukarisynthesizer.main.story.event.RefreshBarEvent
-import org.greenrobot.eventbus.EventBus
+import com.github.windsekirun.yukarisynthesizer.main.event.ClickStoryItem
+import com.github.windsekirun.yukarisynthesizer.main.event.SpeedDialClickEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.ToggleFavoriteItem
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
@@ -48,17 +47,18 @@ class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
 
     @Subscribe
     fun onClickStoryItem(event: ClickStoryItem) {
-        val fragment = MainDetailsFragment().apply {
-            this.storyItem = event.item
+        viewModel.clickStoryItem(event.item)
+    }
+
+    @Subscribe
+    fun onSpeedDialClickEvent(event: SpeedDialClickEvent) {
+        if (SpeedDialClickEvent.checkAvailable(this.javaClass, event.mode)) {
+            viewModel.clickStory()
         }
+    }
 
-        EventBus.getDefault().post(RefreshBarEvent(true))
-
-        activity!!.supportFragmentManager
-            .beginTransaction()
-            .setReorderingAllowed(true)
-            .replace(R.id.container, fragment)
-            .addToBackStack(null)
-            .commit()
+    @Subscribe
+    fun onToggleFavoriteItem(event: ToggleFavoriteItem) {
+        viewModel.clickFavorite(event.item)
     }
 }

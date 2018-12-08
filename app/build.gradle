@@ -169,5 +169,8 @@ dependencies {
 
     // flexbox
     implementation 'com.google.android:flexbox:1.1.0'
+
+    // speed dial
+    implementation "com.leinardi.android:speed-dial:2.0.0"
 }
 

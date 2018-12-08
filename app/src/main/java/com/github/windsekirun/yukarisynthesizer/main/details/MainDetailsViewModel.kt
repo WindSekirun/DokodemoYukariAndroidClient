@@ -2,11 +2,9 @@ package com.github.windsekirun.yukarisynthesizer.main.details
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.activityresult.RxActivityResult
 import com.github.windsekirun.baseapp.module.reference.ActivityReference
@@ -22,15 +20,14 @@ import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.dialog.BreakTimeDialog
 import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog
 import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryDialog
-import com.github.windsekirun.yukarisynthesizer.main.details.dialog.MainDetailsVoiceFragment
-import com.github.windsekirun.yukarisynthesizer.main.details.event.CloseFragmentEvent
-import com.github.windsekirun.yukarisynthesizer.main.details.event.MenuClickBarEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.CloseFragmentEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.SpeedDialClickEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.ToolbarMenuClickEvent
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderViewModel
 import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.toFile
 import javax.inject.Inject
@@ -53,7 +50,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     @Inject
     lateinit var yukariOperator: YukariOperator
 
-    private val favorite: ObservableBoolean = ObservableBoolean()
     private var changed: Boolean = false
     private lateinit var storyItem: StoryItem
     private val changeObserver = Observer<List<VoiceItem>> {
@@ -76,28 +72,29 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun onBackPressed() {
-        if (!changed || (title.isEmpty && itemData.value!!.isEmpty())) postEvent(CloseFragmentEvent())
-        save(autoClose = true)
-    }
-
-    fun clickMenuItem(mode: MenuClickBarEvent.Mode) {
-        when (mode) {
-            MenuClickBarEvent.Mode.Play -> requestSynthesis()
-            MenuClickBarEvent.Mode.Star -> toggleFavorite()
-            MenuClickBarEvent.Mode.Remove -> removeStoryItem()
+        if (!changed || (title.isEmpty && itemData.value!!.isEmpty())) {
+            postEvent(CloseFragmentEvent())
+        } else {
+            save(autoClose = true)
         }
     }
 
-    fun clickAddVoice(mode: MainDetailsVoiceFragment.Mode) {
+    fun clickMenuItem(mode: ToolbarMenuClickEvent.Mode) {
         when (mode) {
-            MainDetailsVoiceFragment.Mode.Voice -> addVoice()
-            MainDetailsVoiceFragment.Mode.Break -> addBreak()
-            MainDetailsVoiceFragment.Mode.History -> addVoiceHistory()
+            ToolbarMenuClickEvent.Mode.Play -> requestSynthesis()
+            ToolbarMenuClickEvent.Mode.TopOrder -> save(swipeOrder = true)
+            ToolbarMenuClickEvent.Mode.Remove -> removeStoryItem()
+
         }
     }
 
-    fun clickSwipeOrder() {
-        save(swipeOrder = true)
+    fun clickSpeedDial(mode: SpeedDialClickEvent.Mode) {
+        when (mode) {
+            SpeedDialClickEvent.Mode.Voice -> addVoice()
+            SpeedDialClickEvent.Mode.Break -> addBreak()
+            SpeedDialClickEvent.Mode.History -> addVoiceHistory()
+            SpeedDialClickEvent.Mode.STT -> addSTT()
+        }
     }
 
     private fun bindItems(initial: Boolean) {
@@ -112,7 +109,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .subscribe { data, error ->
                 if (error != null) return@subscribe
                 title.set(storyItem.title)
-                favorite.set(storyItem.favoriteFlag)
                 itemData.value = data!!.toMutableList()
 
                 observeEvent()
@@ -122,11 +118,13 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun save(autoClose: Boolean = false, swipeOrder: Boolean = false) {
-        if (itemData.value!!.isEmpty()) return
+        if (itemData.value!!.isEmpty()) {
+            postEvent(CloseFragmentEvent())
+            return
+        }
 
         storyItem.apply {
             this.title = this@MainDetailsViewModel.title.get()
-            this.favoriteFlag = favorite.get()
             this.voiceEntries = itemData.value!!
         }
 
@@ -144,7 +142,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         itemData.observeForever(changeObserver)
 
         val disposable =
-            Observables.combineLatest(title.propertyChanges(), RxObservableBoolean.propertyChanges(favorite))
+            title.propertyChanges()
                 .subscribe { _, _ -> changed = true }
         addDisposable(disposable)
     }
@@ -162,7 +160,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         storyItem.apply {
             this.title = this@MainDetailsViewModel.title.get()
-            this.favoriteFlag = favorite.get()
             this.voiceEntries = itemData.value!!
         }
 
@@ -189,15 +186,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     private fun playVoices() {
         val playDialog = PlayDialog(ActivityReference.getActivtyReference()!!)
         playDialog.show(listOf(storyItem))
-    }
-
-    private fun toggleFavorite() {
-        favorite.set(!favorite.get())
-        if (favorite.get()) {
-            showToast(getString(R.string.main_details_favorite_on))
-        } else {
-            showToast(getString(R.string.main_details_favorite_off))
-        }
     }
 
     private fun removeStoryItem() {
@@ -235,6 +223,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun addVoice() {
+
+    }
+
+    private fun addSTT() {
 
     }
 

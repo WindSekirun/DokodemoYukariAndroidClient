@@ -16,6 +16,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.yukarisynthesizer.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.leinardi.android.speeddial.SpeedDialView
 
 /**
  * Animation utils for circular reveal animation
@@ -156,7 +157,7 @@ object CircularRevealUtils {
 
     data class RevealSetting(var centerX: Int, var centerY: Int, var width: Int, var height: Int) {
         companion object {
-            fun with(fab: FloatingActionButton, container: View): RevealSetting =
+            fun with(fab: View, container: View): RevealSetting =
                 RevealSetting(
                     (fab.x + (fab.width / 2)).toInt(), (fab.y + (fab.height / 2)).toInt(),
                     container.width, container.height
