@@ -16,6 +16,6 @@
     <item
         android:id="@+id/menu_page_play"
         android:title="Play"
-        android:icon="@drawable/ic_toolbox_black_24dp"
+        android:icon="@drawable/ic_play_black_24dp"
         app:showAsAction="ifRoom"/>
 </menu>

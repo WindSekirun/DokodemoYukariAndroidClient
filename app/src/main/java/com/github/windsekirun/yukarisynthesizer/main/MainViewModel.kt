@@ -9,10 +9,7 @@ import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.dialog.PresetDialog
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
-import com.github.windsekirun.yukarisynthesizer.main.event.AddFragmentEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.InvokeBackEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.SpeedDialClickEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.ToolbarMenuClickEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import javax.inject.Inject
 
@@ -31,6 +28,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     var shownDetail: Boolean = false
 
     fun clickSpeedDial(actionItem: SpeedDialActionItem): Boolean {
+        postEvent(CloseSpeedDialEvent())
+
         clickSpeedDialEvent(
             when (actionItem.id) {
                 R.id.menu_dial_story -> SpeedDialClickEvent.Mode.Story

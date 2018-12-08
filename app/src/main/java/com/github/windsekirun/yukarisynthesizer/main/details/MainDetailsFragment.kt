@@ -10,12 +10,11 @@ import com.github.windsekirun.baseapp.base.BaseFragment
 import com.github.windsekirun.daggerautoinject.InjectFragment
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
+import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
+import com.github.windsekirun.yukarisynthesizer.dialog.BreakDialogFragment
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
-import com.github.windsekirun.yukarisynthesizer.main.event.CloseFragmentEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.SpeedDialClickEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.SwapDetailEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.ToolbarMenuClickEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
 import com.github.windsekirun.yukarisynthesizer.utils.reveal.CircularRevealUtils
 import com.github.windsekirun.yukarisynthesizer.utils.reveal.RevealSettingHolder
@@ -99,8 +98,23 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         }
     }
 
+    @Subscribe
+    fun onShowBreakDialogEvent(event: ShowBreakDialogEvent) {
+        showBreakDialog(event.callback, event.param)
+    }
+
     private fun exitDetails() {
-        activity!!.supportFragmentManager.popBackStackImmediate()
+        requireActivity().supportFragmentManager.popBackStackImmediate()
         postEvent(SwapDetailEvent(true))
+    }
+
+    private fun showBreakDialog(callback: (VoiceItem) -> Unit, param: VoiceItem) {
+        val fragment = BreakDialogFragment().apply {
+            this.voiceItem = param
+            this.callback = callback
+        }
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .add(fragment, "break").commit()
     }
 }

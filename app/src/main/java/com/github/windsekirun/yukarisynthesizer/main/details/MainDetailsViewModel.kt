@@ -17,10 +17,10 @@ import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
-import com.github.windsekirun.yukarisynthesizer.dialog.BreakTimeDialog
 import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog
 import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryDialog
 import com.github.windsekirun.yukarisynthesizer.main.event.CloseFragmentEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.ShowBreakDialogEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.SpeedDialClickEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ToolbarMenuClickEvent
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity
@@ -207,8 +207,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun addBreak() {
-        val breakTimeDialog = BreakTimeDialog(ActivityReference.getActivtyReference()!!)
-        breakTimeDialog.show(VoiceItem()) {
+        val event = ShowBreakDialogEvent(VoiceItem()) {
             val disposable = yukariOperator.addVoiceItem(it)
                 .compose(EnsureMainThreadComposer())
                 .subscribe { data, error ->
@@ -220,6 +219,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
             addDisposable(disposable)
         }
+
+        postEvent(event)
     }
 
     private fun addVoice() {
