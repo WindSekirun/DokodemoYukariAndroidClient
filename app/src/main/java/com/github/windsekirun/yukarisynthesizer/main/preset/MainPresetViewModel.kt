@@ -4,15 +4,15 @@ import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.github.windsekirun.baseapp.base.BaseViewModel
+import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
-import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
+import com.github.windsekirun.yukarisynthesizer.dialog.PresetDialog
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryViewModel
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
-
 import javax.inject.Inject
 
 /**
@@ -47,4 +47,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         addDisposable(disposable)
     }
+
+    fun clickPreset() {
+        val presetDialog = PresetDialog(ActivityReference.getActivtyReference()!!)
+        presetDialog.show()
+    }
+
 }

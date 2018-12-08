@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_dial_story"
+        android:title="Add Story"
+        android:icon="@drawable/ic_heart_black_24dp"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_dial_preset"
+        android:title="Add Preset"
+        android:icon="@drawable/ic_toolbox_black_24dp"
+        app:showAsAction="ifRoom"/>
+</menu>

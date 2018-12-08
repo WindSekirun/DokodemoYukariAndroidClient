@@ -7,7 +7,7 @@ import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainPresetItemBinding
-import com.github.windsekirun.yukarisynthesizer.main.preset.event.ClickPresetItem
+import com.github.windsekirun.yukarisynthesizer.main.event.ClickPresetItem
 
 /**
  * DokodemoYukariAndroidClient

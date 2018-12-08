@@ -40,19 +40,22 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      * add [StoryItem] to box with update associated [StoryItem.voiceEntries]
      *
      * @param storyItem [StoryItem] to add
+     * @param simpleChange doesn't execute saving associated VoiceItem
      * @return id of added row
      */
-    fun addStoryItem(storyItem: StoryItem): Observable<Long> {
+    fun addStoryItem(storyItem: StoryItem, simpleChange: Boolean = false): Observable<Long> {
         return Observable.create { emitter ->
             // save associated VoiceItem
-            val list = storyItem.voiceEntries.toList()
-            voiceBox.put(list)
+            if (!simpleChange) {
+                val list = storyItem.voiceEntries.toList()
+                voiceBox.put(list)
 
-            val ids = list.map { it.id }
+                val ids = list.map { it.id }
 
-            storyItem.apply {
-                this.voicesIds = ids
-                this.majorEngine = YukariUtils.findMajorEngine(storyItem)
+                storyItem.apply {
+                    this.voicesIds = ids
+                    this.majorEngine = YukariUtils.findMajorEngine(storyItem)
+                }
             }
 
             val id = storyBox.put(storyItem)

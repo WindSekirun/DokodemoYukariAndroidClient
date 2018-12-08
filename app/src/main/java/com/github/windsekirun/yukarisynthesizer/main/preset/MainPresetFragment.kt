@@ -10,6 +10,8 @@ import com.github.windsekirun.daggerautoinject.InjectFragment
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainPresetFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.PresetItemAdapter
+import com.github.windsekirun.yukarisynthesizer.main.event.SpeedDialClickEvent
+import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
 /**
@@ -24,8 +26,8 @@ import javax.inject.Inject
 @InjectFragment
 class MainPresetFragment() : BaseFragment<MainPresetFragmentBinding>() {
     @Inject
-    lateinit var mViewModelFactory: ViewModelProvider.Factory
-    private var mViewModel: MainPresetViewModel? = null
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private lateinit var viewModel: MainPresetViewModel
     private lateinit var presetItemAdapter: PresetItemAdapter
 
     override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainPresetFragmentBinding {
@@ -34,9 +36,16 @@ class MainPresetFragment() : BaseFragment<MainPresetFragmentBinding>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewModel = getViewModel(MainPresetViewModel::class.java, mViewModelFactory)
-        mBinding.viewModel = mViewModel
+        viewModel = getViewModel(MainPresetViewModel::class.java, viewModelFactory)
+        mBinding.viewModel = viewModel
 
         presetItemAdapter = initRecyclerView(mBinding.recyclerView, PresetItemAdapter::class.java)
+    }
+
+    @Subscribe
+    fun onSpeedDialClickEvent(event: SpeedDialClickEvent) {
+        if (SpeedDialClickEvent.checkAvailable(this.javaClass, event.mode)) {
+            viewModel.clickPreset()
+        }
     }
 }
