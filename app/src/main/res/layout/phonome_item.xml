@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="item"
+            type="com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem"/>
+
+        <variable
+            name="selected"
+            type="java.lang.Boolean"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@{selected ? @drawable/bg_preset_round_title : @drawable/bg_preset_round}"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:text="@{item.phoneme}"
+            tools:text="D-" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{item.origin}"
+            tools:text="あとハカーじゃなくてハッカーね" />
+
+    </LinearLayout>
+</layout>

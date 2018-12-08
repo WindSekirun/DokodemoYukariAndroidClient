@@ -164,6 +164,25 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     }
 
     /**
+     * get List of [PhonomeItem] which associated with given [VoiceItem]
+     *
+     * @param voiceItem associated data
+     * @return searched list by given [voiceItem]
+     */
+    fun getPhonomeListAssociatedVoiceItem(voiceItem: VoiceItem): Observable<List<PhonomeItem>> {
+        return Observable.create { emitter ->
+            val ids = voiceItem.phonomeIds.toLongArray()
+
+            // kotlin-ported version of https://stackoverflow.com/a/45699250
+            val query = phonomeBox.query { this.`in`(PhonomeItem_.id, ids) }
+                .find()
+                .sortedWith(ComparatorCompat.comparing<PhonomeItem, Int> { ids.indexOf(it.id) })
+
+            emitter.onNext(query)
+        }
+    }
+
+    /**
      * get List of [PresetItem] by given options
      *
      * all parameter in [getPresetList] are optional parameter.
@@ -242,6 +261,25 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             }
     }
 
+    /**
+     * get [VoiceItem] with given [id]
+     *
+     * @param id [VoiceItem_.id] to find
+     * @return searched [VoiceItem]
+     */
+    fun getVoiceItem(id: Long) : Observable<VoiceItem> {
+        return Observable.create {
+            val query = voiceBox.query {
+                equal(VoiceItem_.id, id)
+            }.findFirst()
+
+            if (query != null) {
+                it.onNext(query)
+            } else {
+                it.onError(IOException("Not found VoiceItem with id $id"))
+            }
+        }
+    }
     /**
      * get List of [VoiceItem] by given options without [VoiceEngine.Break] and duplicate [VoiceItem.contentOrigin]
      *

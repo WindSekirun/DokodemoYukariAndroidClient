@@ -167,13 +167,13 @@ dependencies {
     // Drag & Drop n' Swipe Recyclerview
     implementation 'com.ernestoyaquello.dragdropswiperecyclerview:drag-drop-swipe-recyclerview:0.1.0'
 
-    // flexbox
-    implementation 'com.google.android:flexbox:1.1.0'
-
     // speed dial
     implementation "com.leinardi.android:speed-dial:2.0.0"
 
     // RippleBackground
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
+
+    // flexbox
+    implementation 'com.google.android:flexbox:1.1.0'
 }
 

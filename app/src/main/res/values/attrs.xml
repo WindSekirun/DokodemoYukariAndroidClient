@@ -3,4 +3,8 @@
     <declare-styleable name="TitleView">
         <attr name="titleName" format="string"/>
     </declare-styleable>
+
+    <dimen name="predicate_default_spacing">4dp</dimen>
+    <dimen name="predicate_default_size">14sp</dimen>
+    <color name="predicate_default_color">@android:color/white</color>
 </resources>

@@ -18,10 +18,8 @@
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/title_color"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_arrow_left_black_24dp"
-            app:title="@string/swipe_order_title" />
+            app:navigationIcon="@drawable/ic_arrow_left_black_24dp" />
 
         <com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView
             android:id="@+id/recyclerView"

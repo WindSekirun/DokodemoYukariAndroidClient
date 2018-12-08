@@ -36,4 +36,13 @@
     <string name="break_time_help">Inserts an <b>empty space</b> between the sentence and the sentence.\nIt can be set from 0.1 seconds to 2 seconds and is reflected in the sound source.\n0.2 seconds is usually appropriate.</string>
     <string name="select_nearest_result">Select nearest result</string>
     <string name="main_detail_record_permission">Please allow RECORD permission to use this feature.</string>
+    <string name="voice_detail_limit">%s/<font color="#ff0000">100</font></string>
+    <string name="voice_detail_jeita">Must be a character defined in <b>JEITA IT-4006</b> (symbol for Japanese text-to-speech synthesis).\n<b>Use only when the synthesized text is strange.</b> (For professionals)</string>
+    <string name="voice_detail_write">Write Sentenses</string>
+    <string name="voice_select">Select voice</string>
+    <string name="enter">Enter</string>
+    <string name="text">Text</string>
+    <string name="history">History</string>
+    <string name="remove">Remove</string>
+    <string name="deceptions">Deceptions</string>
 </resources>
