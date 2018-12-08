@@ -82,9 +82,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.core:core-ktx:1.0.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
+    implementation group: 'android.arch.lifecycle', name: 'common-java8', version: '1.1.1'
 
     // base
-    implementation("com.github.WindSekirun:PyxisBaseApp:1.2.5") {
+    implementation("com.github.WindSekirun:PyxisBaseApp:1.2.9") {
         exclude group: 'androidx.databinding'
     }
 
@@ -165,5 +166,8 @@ dependencies {
 
     // Drag & Drop n' Swipe Recyclerview
     implementation 'com.ernestoyaquello.dragdropswiperecyclerview:drag-drop-swipe-recyclerview:0.1.0'
+
+    // flexbox
+    implementation 'com.google.android:flexbox:1.1.0'
 }
 

@@ -3,6 +3,7 @@ package com.github.windsekirun.yukarisynthesizer.main.details
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
@@ -64,8 +65,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         itemData.removeObserver(changeObserver)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
         itemData.removeObserver(changeObserver)
     }
 

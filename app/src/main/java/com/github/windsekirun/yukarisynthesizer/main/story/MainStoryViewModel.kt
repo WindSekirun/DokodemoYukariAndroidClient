@@ -1,9 +1,8 @@
 package com.github.windsekirun.yukarisynthesizer.main.story
 
 import android.util.Log
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
@@ -30,8 +29,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     @Inject
     lateinit var yukariOperator: YukariOperator
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
         val disposable = yukariOperator.getStoryList()
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
@@ -44,5 +43,4 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         addDisposable(disposable)
     }
-
 }

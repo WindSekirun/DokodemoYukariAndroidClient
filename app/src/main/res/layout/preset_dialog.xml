@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="dialog"
+            type="com.github.windsekirun.yukarisynthesizer.dialog.PresetDialog" />
+
+        <import type="android.view.View" />
+
+        <import type="com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/dialog_surface"
+            android:paddingStart="20dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="30dp">
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView5"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:text="@string/main_details_title"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="15sp"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/textView4"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="@+id/textView4" />-->
+
+
+            <!--<EditText-->
+            <!--android:id="@+id/textView4"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="36dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="16dp"-->
+            <!--android:background="@null"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:singleLine="true"-->
+            <!--android:text="@={viewModel.title}"-->
+            <!--android:textSize="14sp"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView5"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--app:layout_goneMarginStart="8dp"-->
+            <!--tools:text="Title" />-->
+
+            <!--<View-->
+            <!--android:id="@+id/divider"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginEnd="16dp"-->
+            <!--android:background="@color/divider"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/textView4" />-->
+
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView13"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:text="Adjust Value"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintStart_toStartOf="@+id/imageView3"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/imageView3" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView12"-->
+            <!--android:layout_width="103dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Select Voice"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/divider"-->
+            <!--tools:layout_editor_absoluteX="20dp" />-->
+
+            <!--<ImageView-->
+            <!--android:id="@+id/imageView3"-->
+            <!--android:layout_width="56dp"-->
+            <!--android:layout_height="56dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:src="@{dialog.selectedEngine == VoiceEngine.Yukari ? @drawable/ic_yukari_selected : @drawable/ic_yukari}"-->
+            <!--app:layout_constraintStart_toStartOf="@+id/textView12"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/textView12"-->
+            <!--tools:src="@drawable/ic_yukari_selected" />-->
+
+            <!--<ImageView-->
+            <!--android:layout_width="56dp"-->
+            <!--android:layout_height="56dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:src="@{dialog.selectedEngine == VoiceEngine.Maki ? @drawable/ic_maki_selected : @drawable/ic_maki}"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/imageView3"-->
+            <!--app:layout_constraintTop_toTopOf="@+id/imageView3"-->
+            <!--tools:src="@drawable/ic_maki" />-->
+
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView14"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:text="Rate"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="15sp"-->
+            <!--app:layout_constraintStart_toStartOf="@+id/textView13"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/textView13" />-->
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+</layout>

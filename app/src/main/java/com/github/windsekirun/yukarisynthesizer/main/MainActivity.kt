@@ -12,6 +12,7 @@ import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainActivityBinding
+import com.github.windsekirun.yukarisynthesizer.dialog.PresetDialog
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
 import com.github.windsekirun.yukarisynthesizer.main.details.dialog.MainDetailsVoiceFragment
 import com.github.windsekirun.yukarisynthesizer.main.details.event.AddVoiceEvent
@@ -88,8 +89,12 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         mBinding.fab.setOnClickListener {
             if (isInDetails()) {
                 addNewVoices()
-            } else {
-                addNewStory()
+                return@setOnClickListener
+            }
+
+            when (viewModel.pagePosition) {
+                0 -> addNewStory()
+                1 -> addNewPreset()
             }
         }
 
@@ -197,4 +202,9 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
     }
 
     private fun isInDetails() = viewModel.currentFabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_END
+
+    private fun addNewPreset() {
+        val presetDialog = PresetDialog(this)
+        presetDialog.show()
+    }
 }

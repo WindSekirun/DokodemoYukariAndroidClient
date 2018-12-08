@@ -80,7 +80,7 @@
                     app:layout_constraintStart_toEndOf="@+id/textView5"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_goneMarginStart="8dp"
-                    tools:text="타이틀" />
+                    tools:text="Title" />
 
                 <View
                     android:id="@+id/divider"
