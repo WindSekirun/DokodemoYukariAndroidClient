@@ -1,58 +1,48 @@
 package com.github.windsekirun.yukarisynthesizer.dialog
 
-import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.ObservableArrayList
-import com.github.windsekirun.baseapp.base.BaseDialog
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.yukarisynthesizer.MainApplication
-import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.annotation.OrderType
 import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem_
-import com.github.windsekirun.yukarisynthesizer.databinding.VoiceHistoryDialogBinding
+import com.github.windsekirun.yukarisynthesizer.databinding.VoiceHistoryFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
+import com.github.windsekirun.yukarisynthesizer.module.sheet.RoundedBottomSheetDialogFragment
+import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
+import com.github.windsekirun.yukarisynthesizer.utils.safeDispose
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
-/**
- * DokodemoYukariAndroidClient
- * Class: PlayDialog
- * Created by Pyxis on 12/1/18.
- *
- *
- * Description:
- */
-
-class VoiceHistoryDialog(context: Context) : BaseDialog<VoiceHistoryDialogBinding>(context) {
+class VoiceHistoryFragment : RoundedBottomSheetDialogFragment<VoiceHistoryFragmentBinding>() {
     val searchTitle = ObservableString()
     val itemData = ObservableArrayList<VoiceItem>()
 
     @Inject
     lateinit var yukariOperator: YukariOperator
+    lateinit var callback: (VoiceItem) -> Unit
 
-    private lateinit var disposable: Disposable
+    private var disposable: Disposable? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.voice_history_dialog)
-        mBinding.dialog = this
+    override fun createView(inflater: LayoutInflater, container: ViewGroup?) =
+        VoiceHistoryFragmentBinding.inflate(inflater, container, false)
 
-        setOnDismissListener {
-            if (::disposable.isInitialized && !disposable.isDisposed) disposable.dispose()
-        }
-    }
-
-    fun show(callback: (VoiceItem) -> Unit) {
-        super.show()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.fragment = this
 
         MainApplication.appComponent!!.inject(this)
-        val voiceItemAdapter = initRecyclerView(mBinding.recyclerView, VoiceItemAdapter::class.java)
+        val voiceItemAdapter = initRecyclerView(binding.recyclerView, VoiceItemAdapter::class.java)
         voiceItemAdapter.voiceItemClickListener = object : VoiceItemAdapter.OnVoiceItemClickListener {
             override fun onClick(voiceItem: VoiceItem) {
                 callback.invoke(voiceItem)
@@ -60,19 +50,22 @@ class VoiceHistoryDialog(context: Context) : BaseDialog<VoiceHistoryDialogBindin
             }
         }
 
+        searchTitle.propertyChanges()
+            .throttleLast(500, TimeUnit.MILLISECONDS)
+            .subscribe { _, _ ->
+                searchData()
+            }.addTo(compositeDisposable)
+
         searchData()
     }
 
-    fun clickClose(view: View) {
-        dismiss()
-    }
-
-    fun clickSearch(view: View) {
-        searchData()
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        disposable.safeDispose()
     }
 
     private fun searchData() {
-        if (::disposable.isInitialized && !disposable.isDisposed) disposable.dispose()
+        disposable.safeDispose()
 
         disposable = yukariOperator.getVoiceList(
             searchTitle = searchTitle.get(),
@@ -85,5 +78,4 @@ class VoiceHistoryDialog(context: Context) : BaseDialog<VoiceHistoryDialogBindin
                 itemData.addAll(data!!)
             }
     }
-
 }

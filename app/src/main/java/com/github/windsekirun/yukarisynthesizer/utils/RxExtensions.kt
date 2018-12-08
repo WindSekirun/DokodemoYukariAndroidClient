@@ -22,3 +22,8 @@ fun <T> Observable<T>.subscribe(callback: (T?, Throwable?) -> Unit): Disposable 
         callback.invoke(null, it)
     })
 }
+
+
+fun Disposable?.safeDispose() {
+    if (this != null && !this.isDisposed) this.dispose()
+}

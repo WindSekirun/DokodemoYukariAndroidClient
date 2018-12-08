@@ -13,6 +13,7 @@ import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.dialog.BreakDialogFragment
+import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryFragment
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
@@ -103,6 +104,11 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         showBreakDialog(event.callback, event.param)
     }
 
+    @Subscribe
+    fun onShowHistoryDialogEvent(event: ShowHistoryDialogEvent) {
+        showHistoryDialog(event.callback)
+    }
+
     private fun exitDetails() {
         requireActivity().supportFragmentManager.popBackStackImmediate()
         postEvent(SwapDetailEvent(true))
@@ -116,5 +122,14 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
 
         requireActivity().supportFragmentManager.beginTransaction()
             .add(fragment, "break").commit()
+    }
+
+    private fun showHistoryDialog(callback: (VoiceItem) -> Unit) {
+        val fragment = VoiceHistoryFragment().apply {
+            this.callback = callback
+        }
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .add(fragment, "history").commit()
     }
 }

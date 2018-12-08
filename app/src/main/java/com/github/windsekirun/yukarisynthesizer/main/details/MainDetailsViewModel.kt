@@ -18,11 +18,7 @@ import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadCo
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog
-import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryDialog
-import com.github.windsekirun.yukarisynthesizer.main.event.CloseFragmentEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.ShowBreakDialogEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.SpeedDialClickEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.ToolbarMenuClickEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderViewModel
 import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
@@ -232,12 +228,13 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun addVoiceHistory() {
-        val voiceHistoryDialog = VoiceHistoryDialog(ActivityReference.getActivtyReference()!!)
-        voiceHistoryDialog.show {
+        val event = ShowHistoryDialogEvent {
             val list = itemData.value!!
             list.add(it)
             itemData.value = list
         }
+
+        postEvent(event)
     }
 
     private fun moveToSwipeOrderActivity() {

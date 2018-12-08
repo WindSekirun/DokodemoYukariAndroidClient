@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import androidx.databinding.ObservableInt
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
-import com.github.windsekirun.yukarisynthesizer.databinding.BreakDialogBinding
+import com.github.windsekirun.yukarisynthesizer.databinding.BreakDialogFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.module.sheet.RoundedBottomSheetDialogFragment
 
-class BreakDialogFragment : RoundedBottomSheetDialogFragment<BreakDialogBinding>() {
+class BreakDialogFragment : RoundedBottomSheetDialogFragment<BreakDialogFragmentBinding>() {
     val progress: ObservableInt = ObservableInt(0)
     lateinit var voiceItem: VoiceItem
     lateinit var callback: (VoiceItem) -> Unit
 
     override fun createView(inflater: LayoutInflater, container: ViewGroup?) =
-        BreakDialogBinding.inflate(inflater, container, false)
+        BreakDialogFragmentBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
