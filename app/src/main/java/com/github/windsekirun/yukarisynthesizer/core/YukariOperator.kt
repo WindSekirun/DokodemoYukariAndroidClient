@@ -7,6 +7,7 @@ import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.*
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepository
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepositoryImpl
+import com.github.windsekirun.yukarisynthesizer.core.test.sm30193805Test
 import com.github.windsekirun.yukarisynthesizer.core.utils.YukariUtils
 import io.objectbox.Box
 import io.objectbox.Property
@@ -118,6 +119,11 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
 
             emitter.onNext(true)
         }
+    }
+
+    fun generateTestData() {
+        val data1 = sm30193805Test(phonomeBox, voiceBox)
+        storyBox.put(data1)
     }
 
     /**

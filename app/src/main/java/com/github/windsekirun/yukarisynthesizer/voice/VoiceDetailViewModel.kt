@@ -3,6 +3,7 @@ package com.github.windsekirun.yukarisynthesizer.voice
 import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -14,6 +15,7 @@ import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
+import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
 import io.reactivex.Observable
@@ -27,12 +29,14 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     val selectedPreset = ObservableString()
     val selectedDeceptions = ObservableString()
     val selectedText = ObservableString()
+    val voiceOriginLength = ObservableInt()
 
     val itemData: MutableLiveData<MutableList<PhonomeItem>> = MutableLiveData()
     var selectedPhonomesIndex = -1
     var selectedPhonomeItem: PhonomeItem? = null
 
     private val changeObserver = Observer<List<PhonomeItem>> { refreshFlexBox() }
+    private var selectedPresetItem: PresetItem = PresetItem()
 
     @Inject
     lateinit var yukariOperator: YukariOperator
@@ -56,6 +60,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun onBackPressed() {
+
+    }
+
+    fun clickPresetSelect(view: View) {
 
     }
 
@@ -103,13 +111,19 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 }
 
                 itemData.value = data!!.first.toMutableList()
+                selectedEngine.set(data.second.engine)
+                selectedPresetItem = data.second.preset
 
+                selectedPreset.set(data.second.preset.title)
             }
 
         addDisposable(disposable)
     }
 
     private fun refreshFlexBox() {
+        val sum = itemData.value!!.map { it.origin.length }.sum()
+
+        voiceOriginLength.set(sum)
         postEvent(RefreshLayoutEvent())
     }
 

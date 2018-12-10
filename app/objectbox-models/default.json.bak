@@ -1,0 +1,158 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:3263847893303621902",
+      "lastPropertyId": "4:6223392096439602940",
+      "name": "PhonomeItem",
+      "properties": [
+        {
+          "id": "1:3445439193261810846",
+          "name": "id"
+        },
+        {
+          "id": "2:2916254773567698774",
+          "name": "origin"
+        },
+        {
+          "id": "3:1447080987916125318",
+          "name": "phoneme"
+        },
+        {
+          "id": "4:6223392096439602940",
+          "name": "regDate"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:594976174274197394",
+      "lastPropertyId": "7:4863556033001404277",
+      "name": "VoiceItem",
+      "properties": [
+        {
+          "id": "1:3215709408534262896",
+          "name": "id"
+        },
+        {
+          "id": "2:7597547375400290621",
+          "name": "engine"
+        },
+        {
+          "id": "3:5005453905578100468",
+          "name": "preset"
+        },
+        {
+          "id": "4:4440351103280488214",
+          "name": "breakTime"
+        },
+        {
+          "id": "5:299376795323185632",
+          "name": "regDate"
+        },
+        {
+          "id": "6:3016216962651593599",
+          "name": "contentOrigin"
+        },
+        {
+          "id": "7:4863556033001404277",
+          "name": "phonomeIds"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:3795121387532253911",
+      "lastPropertyId": "8:4190109209697597215",
+      "name": "StoryItem",
+      "properties": [
+        {
+          "id": "1:8267425766339808761",
+          "name": "id"
+        },
+        {
+          "id": "2:6909404230880688108",
+          "name": "version"
+        },
+        {
+          "id": "3:5777450429293189160",
+          "name": "title"
+        },
+        {
+          "id": "4:489643209720892926",
+          "name": "regDate"
+        },
+        {
+          "id": "5:4373285134740785357",
+          "name": "localPath"
+        },
+        {
+          "id": "6:2685377886162910727",
+          "name": "favoriteFlag"
+        },
+        {
+          "id": "7:7122649885957604270",
+          "name": "majorEngine"
+        },
+        {
+          "id": "8:4190109209697597215",
+          "name": "voicesIds"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:6160224303393219465",
+      "lastPropertyId": "8:1168445576327495331",
+      "name": "PresetItem",
+      "properties": [
+        {
+          "id": "1:4453255251705689176",
+          "name": "id"
+        },
+        {
+          "id": "2:4772546088469581458",
+          "name": "title"
+        },
+        {
+          "id": "3:7149434710558968494",
+          "name": "regDate"
+        },
+        {
+          "id": "4:3931007846557155153",
+          "name": "engine"
+        },
+        {
+          "id": "5:3148890487719753718",
+          "name": "rate"
+        },
+        {
+          "id": "6:5696736575535729414",
+          "name": "pitch"
+        },
+        {
+          "id": "7:8972647085404854536",
+          "name": "range"
+        },
+        {
+          "id": "8:1168445576327495331",
+          "name": "volume"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "4:6160224303393219465",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

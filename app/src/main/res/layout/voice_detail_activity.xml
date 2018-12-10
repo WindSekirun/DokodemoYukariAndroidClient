@@ -79,6 +79,7 @@
             android:drawableRight="@drawable/ic_arrow_both"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
+            android:onClick="@{viewModel::clickPresetSelect}"
             android:text="@{viewModel.selectedPreset}"
             android:paddingRight="10dp"
             android:textSize="15sp"
@@ -104,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/voice_detail_limit"
+            android:text="@{@string/voice_detail_limit(viewModel.voiceOriginLength)}"
             app:layout_constraintBottom_toTopOf="@+id/predicateLayout"
             app:layout_constraintEnd_toEndOf="@+id/predicateLayout" />
 
