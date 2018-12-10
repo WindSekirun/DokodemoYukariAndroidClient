@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.github.windsekirun.baseapp.base.BaseViewModel
+import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
-import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
 import com.github.windsekirun.yukarisynthesizer.main.event.AddFragmentEvent

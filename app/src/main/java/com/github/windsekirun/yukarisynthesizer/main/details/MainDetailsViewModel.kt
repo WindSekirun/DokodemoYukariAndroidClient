@@ -8,14 +8,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.activityresult.RxActivityResult
+import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
 import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.baseapp.utils.ProgressDialogManager
+import com.github.windsekirun.baseapp.utils.propertyChanges
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
-import com.github.windsekirun.yukarisynthesizer.core.composer.EnsureMainThreadComposer
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
@@ -24,7 +25,6 @@ import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderViewModel
-import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables

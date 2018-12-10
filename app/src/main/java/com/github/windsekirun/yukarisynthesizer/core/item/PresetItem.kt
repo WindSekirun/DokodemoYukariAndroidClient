@@ -1,6 +1,6 @@
 package com.github.windsekirun.yukarisynthesizer.core.item
 
-import com.github.windsekirun.yukarisynthesizer.core.base.PropertyJsonConverter
+import com.github.windsekirun.baseapp.module.converter.PropertyJsonConverter
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
