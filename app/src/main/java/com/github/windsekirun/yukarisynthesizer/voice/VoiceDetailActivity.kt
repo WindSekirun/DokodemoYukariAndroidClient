@@ -9,8 +9,12 @@ import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
+import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.databinding.PhonomeItemBinding
 import com.github.windsekirun.yukarisynthesizer.databinding.VoiceDetailActivityBinding
+import com.github.windsekirun.yukarisynthesizer.dialog.BreakDialogFragment
+import com.github.windsekirun.yukarisynthesizer.dialog.VoicePresetFragment
+import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
 import org.greenrobot.eventbus.Subscribe
 
@@ -44,6 +48,20 @@ class VoiceDetailActivity : BaseActivity<VoiceDetailActivityBinding>() {
     @Subscribe
     fun onRefreshLayoutEvent(event: RefreshLayoutEvent) {
         addPredicateKeywords()
+    }
+
+    @Subscribe
+    fun onShowPresetDialogEvent(event: ShowPresetDialogEvent) {
+        showPresetDialogEvent(event.callback)
+    }
+
+    private fun showPresetDialogEvent(callback: (PresetItem) -> Unit) {
+        val fragment = VoicePresetFragment().apply {
+            this.callback = callback
+        }
+
+        supportFragmentManager.beginTransaction()
+            .add(fragment, "voice-preset").commit()
     }
 
     private fun init() {

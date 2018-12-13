@@ -16,6 +16,7 @@ import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
+import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
 import io.reactivex.Observable
@@ -60,11 +61,16 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun onBackPressed() {
-
+        // TODO: implement this
     }
 
     fun clickPresetSelect(view: View) {
+        val event = ShowPresetDialogEvent {
+            selectedPresetItem = it
+            selectedPreset.set(it.title)
+        }
 
+        postEvent(event)
     }
 
     fun clickEnter(view: View) {
@@ -93,7 +99,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun clickHistory(view: View) {
-
+        // TODO: implement this
     }
 
     private fun loadData() {

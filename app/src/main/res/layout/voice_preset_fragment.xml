@@ -7,7 +7,7 @@
 
         <variable
             name="fragment"
-            type="com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryFragment" />
+            type="com.github.windsekirun.yukarisynthesizer.dialog.VoicePresetFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,33 +25,13 @@
             android:fontFamily="sans-serif-medium"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:text="@string/voice_history_title"
+            android:text="Select Preset"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:hint="@string/main_details_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={fragment.searchTitle}" />
-
-        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -60,10 +40,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             app:items="@{fragment.itemData}"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-            tools:itemCount="4"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:itemCount="8"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/voice_item" />
+            tools:listitem="@layout/main_preset_item" />
 
         <View
             android:layout_width="1dp"

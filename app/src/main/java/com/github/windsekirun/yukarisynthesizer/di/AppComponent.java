@@ -9,6 +9,7 @@ import com.github.windsekirun.daggerautoinject.ServiceModule;
 import com.github.windsekirun.daggerautoinject.ViewModelModule;
 import com.github.windsekirun.yukarisynthesizer.MainApplication;
 import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryFragment;
+import com.github.windsekirun.yukarisynthesizer.dialog.VoicePresetFragment;
 
 import javax.inject.Singleton;
 
@@ -44,4 +45,6 @@ public interface AppComponent {
     void inject(MainApplication mainApp);
 
     void inject(VoiceHistoryFragment fragment);
+
+    void inject(VoicePresetFragment fragment);
 }

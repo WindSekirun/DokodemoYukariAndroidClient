@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
+import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainPresetItemBinding
 import com.github.windsekirun.yukarisynthesizer.main.event.ClickPresetItem
 
@@ -18,13 +19,18 @@ import com.github.windsekirun.yukarisynthesizer.main.event.ClickPresetItem
  * Description:
  */
 class PresetItemAdapter : BaseRecyclerAdapter<PresetItem, MainPresetItemBinding>() {
+    var presetItemClickListener: OnPresetItemClickListener? = null
 
     override fun bind(binding: MainPresetItemBinding, item: PresetItem, position: Int) {
         binding.item = item
     }
 
     override fun onClickedItem(binding: MainPresetItemBinding, item: PresetItem, position: Int) {
-        postEvent(ClickPresetItem(item))
+        if (presetItemClickListener != null) {
+            presetItemClickListener?.onClick(item)
+        } else {
+            postEvent(ClickPresetItem(item))
+        }
     }
 
     override fun onLongClickedItem(binding: MainPresetItemBinding, item: PresetItem, position: Int): Boolean {
@@ -33,5 +39,9 @@ class PresetItemAdapter : BaseRecyclerAdapter<PresetItem, MainPresetItemBinding>
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup): MainPresetItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_preset_item, parent, false)
+    }
+
+    interface OnPresetItemClickListener {
+        fun onClick(voiceItem: PresetItem)
     }
 }
