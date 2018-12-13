@@ -66,12 +66,20 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun clickPresetSelect(view: View) {
-        val event = ShowPresetDialogEvent {
+        val event = ShowPresetDialogEvent(selectedEngine.get()!!) {
             selectedPresetItem = it
             selectedPreset.set(it.title)
         }
 
         postEvent(event)
+    }
+
+    fun clickYukari(view: View) {
+        selectedEngine.set(VoiceEngine.Yukari)
+    }
+
+    fun clickMaki(view: View) {
+        selectedEngine.set(VoiceEngine.Maki)
     }
 
     fun clickEnter(view: View) {
@@ -116,7 +124,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun loadData() {
-        if (voiceId == 0L) return
+        if (voiceId == 0L) {
+            selectedEngine.set(VoiceEngine.Yukari)
+            return
+        }
 
         val disposable = yukariOperator.getVoiceItem(voiceId)
             .flatMap {

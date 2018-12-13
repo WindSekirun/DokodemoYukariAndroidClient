@@ -207,10 +207,12 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         page: Int = -1,
         limit: Long = 20L,
         searchTitle: String = "",
-        orderBy: Pair<@OrderType Int, Property<PresetItem>> = OrderType.OrderFlags.ASCENDING to PresetItem_.regDate
+        orderBy: Pair<@OrderType Int, Property<PresetItem>> = OrderType.OrderFlags.ASCENDING to PresetItem_.regDate,
+        voiceEngine: VoiceEngine? = null
     ): Observable<List<PresetItem>> {
         return Observable.create {
-            val list = nativeQuerySearch(presetBox, page, limit, searchTitle to PresetItem_.title, orderBy)
+            val equalPair = if (voiceEngine != null) voiceEngine.id to PresetItem_.engine else null
+            val list = nativeQuerySearch(presetBox, page, limit, searchTitle to PresetItem_.title, orderBy, equalPair)
             it.onNext(list)
         }
     }
@@ -489,12 +491,14 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         limit: Long,
         searchTitle: Pair<String, Property<ENTITY>>,
         orderBy: Pair<@OrderType Int, Property<ENTITY>>,
-        notEqual: Pair<String, Property<ENTITY>>? = null
+        notEqual: Pair<String, Property<ENTITY>>? = null,
+        equal: Pair<String, Property<ENTITY>>? = null
     ): MutableList<ENTITY> {
         val query = box.query {
             if (searchTitle.first.isNotEmpty()) this.contains(searchTitle.second, searchTitle.first)
             this.order(orderBy.second, orderBy.first)
             if (notEqual != null) this.notEqual(notEqual.second, notEqual.first)
+            if (equal != null) this.equal(equal.second, equal.first)
         }
 
         return if (page != -1 && limit != -1L) {

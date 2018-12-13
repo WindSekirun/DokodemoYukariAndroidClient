@@ -11,6 +11,7 @@ import com.github.windsekirun.baseapp.utils.subscribe
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.annotation.OrderType
+import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem_
 import com.github.windsekirun.yukarisynthesizer.databinding.VoicePresetFragmentBinding
@@ -26,6 +27,7 @@ class VoicePresetFragment : RoundedBottomSheetDialogFragment<VoicePresetFragment
     @Inject
     lateinit var yukariOperator: YukariOperator
     lateinit var callback: (PresetItem) -> Unit
+    lateinit var selectedEngine: VoiceEngine
 
     private var disposable: Disposable? = null
 
@@ -56,7 +58,10 @@ class VoicePresetFragment : RoundedBottomSheetDialogFragment<VoicePresetFragment
     private fun searchData() {
         disposable.safeDispose()
 
-        disposable = yukariOperator.getPresetList(orderBy = OrderType.OrderFlags.ASCENDING to PresetItem_.title)
+        disposable = yukariOperator.getPresetList(
+            orderBy = OrderType.OrderFlags.ASCENDING to PresetItem_.title,
+            voiceEngine = selectedEngine
+        )
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
                 if (error != null) return@subscribe

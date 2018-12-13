@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
+import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.databinding.PhonomeItemBinding
@@ -53,7 +54,7 @@ class VoiceDetailActivity : BaseActivity<VoiceDetailActivityBinding>() {
 
     @Subscribe
     fun onShowPresetDialogEvent(event: ShowPresetDialogEvent) {
-        showVoicePresetDialog(event.callback)
+        showVoicePresetDialog(event.param, event.callback)
     }
 
     @Subscribe
@@ -70,8 +71,9 @@ class VoiceDetailActivity : BaseActivity<VoiceDetailActivityBinding>() {
             .add(fragment, "phonome-history").commit()
     }
 
-    private fun showVoicePresetDialog(callback: (PresetItem) -> Unit) {
+    private fun showVoicePresetDialog(param: VoiceEngine, callback: (PresetItem) -> Unit) {
         val fragment = VoicePresetFragment().apply {
+            this.selectedEngine = param
             this.callback = callback
         }
 

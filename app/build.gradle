@@ -9,8 +9,8 @@ dependencies {
 
 apply plugin: 'io.objectbox'
 
-def Properties properties = new Properties()
-properties.load(project.rootProject.file("local.properties").newDataInputStream())
+def systemToken = System.getenv('docomo_api')
+ext.api_token = systemToken != null ? systemToken : "\"\""
 
 android {
     compileSdkVersion 28
@@ -23,7 +23,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
-        buildConfigField("String", "DOCOMO_API_KEY_FOR_DEVELOP", properties.getProperty("docomo.api.key", "\"\""))
+        buildConfigField("String", "DOCOMO_API_KEY_FOR_DEVELOP", api_token)
     }
 
     buildTypes {

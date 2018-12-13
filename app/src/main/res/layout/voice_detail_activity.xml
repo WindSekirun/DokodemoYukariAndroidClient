@@ -54,6 +54,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginStart="16dp"
+            android:onClick="@{viewModel::clickYukari}"
             android:layout_marginTop="16dp"
             android:src="@{viewModel.selectedEngine == VoiceEngine.Yukari ? @drawable/ic_yukari_selected : @drawable/ic_yukari}"
             app:layout_constraintStart_toStartOf="@id/guideline"
@@ -63,6 +64,7 @@
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="56dp"
+            android:onClick="@{viewModel::clickMaki}"
             android:layout_height="56dp"
             android:layout_marginStart="8dp"
             android:src="@{viewModel.selectedEngine == VoiceEngine.Maki ? @drawable/ic_maki_selected : @drawable/ic_maki}"
@@ -171,13 +173,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:onClick="@{viewModel::clickEnter}"
             android:text="@string/enter"
             android:textColor="@color/black"
             app:backgroundTint="@color/title_color"
-            android:onClick="@{viewModel::clickEnter}"
             app:icon="@drawable/ic_plus_black_24dp"
             app:iconTint="@color/colorAccent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/materialButton3"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
@@ -187,7 +189,6 @@
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:text="@string/history"
             android:onClick="@{viewModel::clickHistory}"
             android:textColor="@color/black"
@@ -204,14 +205,13 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="@string/remove"
             android:onClick="@{viewModel::clickRemove}"
+            android:text="@string/remove"
             android:textColor="@color/black"
             app:icon="@drawable/ic_delete_black_24dp"
             app:layout_constraintEnd_toStartOf="@+id/materialButton3"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="@+id/materialButton2" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -226,7 +226,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="16dp" />
+            app:layout_constraintGuide_end="24dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
