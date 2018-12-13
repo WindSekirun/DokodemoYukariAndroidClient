@@ -9,6 +9,9 @@ dependencies {
 
 apply plugin: 'io.objectbox'
 
+def Properties properties = new Properties()
+properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -19,6 +22,8 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+
+        buildConfigField("String", "DOCOMO_API_KEY_FOR_DEVELOP", properties.getProperty("docomo.api.key", "\"\""))
     }
 
     buildTypes {

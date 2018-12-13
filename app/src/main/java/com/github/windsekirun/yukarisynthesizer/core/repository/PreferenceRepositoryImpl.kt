@@ -2,6 +2,7 @@ package com.github.windsekirun.yukarisynthesizer.core.repository
 
 import android.content.Context
 import com.github.windsekirun.baseapp.module.delegate.PreferenceTypeHolder
+import com.github.windsekirun.yukarisynthesizer.BuildConfig
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +22,7 @@ constructor(context: Context) : PreferenceRepository {
     override var apiKey: String by PreferenceTypeHolder(
         context,
         API_KEY,
-        "67375458343230674173395a64654730682f61774830736e39597859634331476d4276496b756a6e467544"
+        BuildConfig.DOCOMO_API_KEY_FOR_DEVELOP
     )
     override var newUser: Boolean by PreferenceTypeHolder(context, NEW_USER, true)
 
