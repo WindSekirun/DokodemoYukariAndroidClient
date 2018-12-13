@@ -39,7 +39,7 @@ class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = nu
      * @param items String...
      */
     fun addItem(vararg items: T) {
-        this.mItems.addAll(Arrays.asList(*items))
+        this.mItems.addAll(items)
     }
 
     /**

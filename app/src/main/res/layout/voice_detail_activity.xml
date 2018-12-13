@@ -12,222 +12,226 @@
             type="com.github.windsekirun.yukarisynthesizer.voice.VoiceDetailViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/voice_detail_write"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolBar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_arrow_left_black_24dp" />
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/voice_select"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/toolBar" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
-            android:onClick="@{viewModel::clickYukari}"
-            android:layout_marginTop="16dp"
-            android:src="@{viewModel.selectedEngine == VoiceEngine.Yukari ? @drawable/ic_yukari_selected : @drawable/ic_yukari}"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/textView1"
-            tools:src="@drawable/ic_yukari_selected" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="56dp"
-            android:onClick="@{viewModel::clickMaki}"
-            android:layout_height="56dp"
-            android:layout_marginStart="8dp"
-            android:src="@{viewModel.selectedEngine == VoiceEngine.Maki ? @drawable/ic_maki_selected : @drawable/ic_maki}"
-            app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="@+id/imageView3"
-            tools:src="@drawable/ic_maki" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_preset_round"
-            android:drawableRight="@drawable/ic_arrow_both"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:onClick="@{viewModel::clickPresetSelect}"
-            android:text="@{viewModel.selectedPreset}"
-            android:paddingRight="10dp"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3"
-            tools:text="Selected Preset" />
-
-        <com.github.windsekirun.yukarisynthesizer.widget.PredicateLayout
-            android:id="@+id/predicateLayout"
-            android:layout_width="0dp"
-            android:layout_height="180dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_preset_round"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="@{@string/voice_detail_limit(viewModel.voiceOriginLength)}"
-            app:layout_constraintBottom_toTopOf="@+id/predicateLayout"
-            app:layout_constraintEnd_toEndOf="@+id/predicateLayout" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:hint="@string/deceptions"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/predicateLayout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="@={viewModel.selectedDeceptions}"
-                android:textSize="13sp" />
+                android:layout_marginTop="16dp"
+                android:text="@string/voice_detail_write"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/voice_detail_jeita"
-            android:textSize="11sp"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/textInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout2"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="@string/text"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
-            app:layout_constraintStart_toStartOf="@+id/textInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/textView2">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolBar"
                 android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/ic_arrow_left_black_24dp" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="@={viewModel.selectedText}"
-                android:singleLine="true"
-                android:textSize="15sp" />
+                android:layout_marginTop="8dp"
+                android:text="@string/voice_select"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:onClick="@{viewModel::clickYukari}"
+                android:src="@{viewModel.selectedEngine == VoiceEngine.Yukari ? @drawable/ic_yukari_selected : @drawable/ic_yukari}"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@id/textView1"
+                tools:src="@drawable/ic_yukari_selected" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/materialButton2"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:onClick="@{viewModel::clickEnter}"
-            android:text="@string/enter"
-            android:textColor="@color/black"
-            app:backgroundTint="@color/title_color"
-            app:icon="@drawable/ic_plus_black_24dp"
-            app:iconTint="@color/colorAccent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/materialButton3"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="8dp"
+                android:onClick="@{viewModel::clickMaki}"
+                android:src="@{viewModel.selectedEngine == VoiceEngine.Maki ? @drawable/ic_maki_selected : @drawable/ic_maki}"
+                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintTop_toTopOf="@+id/imageView3"
+                tools:src="@drawable/ic_maki" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/materialButton3"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/history"
-            android:onClick="@{viewModel::clickHistory}"
-            android:textColor="@color/black"
-            app:backgroundTint="@color/title_color"
-            app:icon="@drawable/ic_history_black_24dp"
-            app:iconTint="@color/colorAccent"
-            app:layout_constraintEnd_toStartOf="@+id/materialButton2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/materialButton"
-            app:layout_constraintTop_toTopOf="@+id/materialButton2" />
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_preset_round"
+                android:drawableRight="@drawable/ic_arrow_both"
+                android:gravity="center_vertical"
+                android:onClick="@{viewModel::clickPresetSelect}"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@{viewModel.selectedPreset}"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                tools:text="Selected Preset" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/materialButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{viewModel::clickRemove}"
-            android:text="@string/remove"
-            android:textColor="@color/black"
-            app:icon="@drawable/ic_delete_black_24dp"
-            app:layout_constraintEnd_toStartOf="@+id/materialButton3"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="@+id/materialButton2" />
+            <com.github.windsekirun.yukarisynthesizer.widget.PredicateLayout
+                android:id="@+id/predicateLayout"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_preset_round"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="16dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@{@string/voice_detail_limit(viewModel.voiceOriginLength)}"
+                app:layout_constraintBottom_toTopOf="@+id/predicateLayout"
+                app:layout_constraintEnd_toEndOf="@+id/predicateLayout" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="24dp" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:hint="@string/deceptions"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/predicateLayout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@={viewModel.selectedDeceptions}"
+                    android:textSize="13sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/voice_detail_jeita"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/text"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@={viewModel.selectedText}"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/materialButton2"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:onClick="@{viewModel::clickEnter}"
+                android:text="@string/enter"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/title_color"
+                app:icon="@drawable/ic_plus_black_24dp"
+                app:iconTint="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/materialButton3"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:onClick="@{viewModel::clickHistory}"
+                android:text="@string/history"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/title_color"
+                app:icon="@drawable/ic_history_black_24dp"
+                app:iconTint="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/materialButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:onClick="@{viewModel::clickRemove}"
+                android:text="@string/remove"
+                android:textColor="@color/black"
+                app:icon="@drawable/ic_delete_black_24dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="16dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="24dp" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 </layout>
