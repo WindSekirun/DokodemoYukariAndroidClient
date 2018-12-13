@@ -12,8 +12,9 @@ import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.databinding.PhonomeItemBinding
 import com.github.windsekirun.yukarisynthesizer.databinding.VoiceDetailActivityBinding
-import com.github.windsekirun.yukarisynthesizer.dialog.BreakDialogFragment
+import com.github.windsekirun.yukarisynthesizer.dialog.PhonomeHistoryFragment
 import com.github.windsekirun.yukarisynthesizer.dialog.VoicePresetFragment
+import com.github.windsekirun.yukarisynthesizer.main.event.ShowPhonomeHistoryEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
 import org.greenrobot.eventbus.Subscribe
@@ -52,10 +53,24 @@ class VoiceDetailActivity : BaseActivity<VoiceDetailActivityBinding>() {
 
     @Subscribe
     fun onShowPresetDialogEvent(event: ShowPresetDialogEvent) {
-        showPresetDialogEvent(event.callback)
+        showVoicePresetDialog(event.callback)
     }
 
-    private fun showPresetDialogEvent(callback: (PresetItem) -> Unit) {
+    @Subscribe
+    fun onShowPhonomeHistoryEvent(event: ShowPhonomeHistoryEvent) {
+        showPhonomeHistoryDialog(event.callback)
+    }
+
+    private fun showPhonomeHistoryDialog(callback: (PhonomeItem) -> Unit) {
+        val fragment = PhonomeHistoryFragment().apply {
+            this.callback = callback
+        }
+
+        supportFragmentManager.beginTransaction()
+            .add(fragment, "phonome-history").commit()
+    }
+
+    private fun showVoicePresetDialog(callback: (PresetItem) -> Unit) {
         val fragment = VoicePresetFragment().apply {
             this.callback = callback
         }

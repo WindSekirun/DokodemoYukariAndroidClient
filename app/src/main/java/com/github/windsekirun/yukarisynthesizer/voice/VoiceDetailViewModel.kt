@@ -16,6 +16,7 @@ import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
+import com.github.windsekirun.yukarisynthesizer.main.event.ShowPhonomeHistoryEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
@@ -99,7 +100,19 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun clickHistory(view: View) {
-        // TODO: implement this
+        val list = itemData.value!!
+        val event = ShowPhonomeHistoryEvent {
+            list.add(it)
+            itemData.value = list
+        }
+
+        postEvent(event)
+    }
+
+    fun selectItem(item: PhonomeItem) {
+        selectedPhonomeItem = item
+        selectedPhonomesIndex = itemData.value!!.indexOf(item)
+        refreshFlexBox()
     }
 
     private fun loadData() {
@@ -131,12 +144,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         voiceOriginLength.set(sum)
         postEvent(RefreshLayoutEvent())
-    }
-
-    fun selectItem(item: PhonomeItem) {
-        selectedPhonomeItem = item
-        selectedPhonomesIndex = itemData.value!!.indexOf(item)
-        refreshFlexBox()
     }
 
     companion object {

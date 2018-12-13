@@ -152,7 +152,8 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      * all parameter in [getPhonomeList] are optional parameter.
      *
      * @param searchTitle return list by contains given value in [PhonomeItem.origin]. Default value is ""
-     * @param recent return list with last 10 items of [PhonomeItem]
+     * @param recent return list with last 10 items of [PhonomeItem]. if false, orderby [OrderType.OrderFlags.ASCENDING]
+     * to [PhonomeItem_.origin]
      * @return searched list by given options.
      */
     fun getPhonomeList(searchTitle: String = "", recent: Boolean = true): Observable<List<PhonomeItem>> {
@@ -273,7 +274,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      * @param id [VoiceItem_.id] to find
      * @return searched [VoiceItem]
      */
-    fun getVoiceItem(id: Long) : Observable<VoiceItem> {
+    fun getVoiceItem(id: Long): Observable<VoiceItem> {
         return Observable.create {
             val query = voiceBox.query {
                 equal(VoiceItem_.id, id)
@@ -286,6 +287,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             }
         }
     }
+
     /**
      * get List of [VoiceItem] by given options without [VoiceEngine.Break] and duplicate [VoiceItem.contentOrigin]
      *
@@ -314,7 +316,8 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     /**
      * get List of [VoiceItem] which associated with given [StoryItem]
      *
-     * it consider manually sorted when user changes order in [com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity]
+     * it consider manually sorted when user changes order in
+     * [com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity]
      *
      * @param storyItem associated data
      * @return searched list by given [storyItem]

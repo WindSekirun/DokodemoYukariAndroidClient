@@ -1,8 +1,11 @@
 package com.github.windsekirun.yukarisynthesizer.main.event
 
+import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
+
+class ClickPhonomeItem(val item: PhonomeItem)
 
 class ClickPresetItem(val item: PresetItem)
 
