@@ -26,8 +26,10 @@ import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderViewModel
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
+import com.github.windsekirun.yukarisynthesizer.voice.VoiceDetailActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.RPermission
 import pyxis.uzuki.live.richutilskt.utils.toFile
@@ -225,7 +227,12 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun addVoice() {
+        RxActivityResult.result()
+            .subscribe { data, error ->
 
+            }.addTo(compositeDisposable)
+
+        RxActivityResult.startActivityForResult(VoiceDetailActivity::class.java)
     }
 
     private fun addSTT() {

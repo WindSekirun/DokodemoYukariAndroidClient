@@ -68,8 +68,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun loadData() {
-        yukariOperator.generateTestData()
-
         val disposable = yukariOperator.firstRunSetup()
             .flatMap { yukariOperator.getStoryList() }
             .compose(EnsureMainThreadComposer())

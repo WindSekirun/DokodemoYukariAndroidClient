@@ -75,7 +75,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun clickEnter(view: View) {
-        val list = itemData.value!!
+        val list: MutableList<PhonomeItem> = if (itemData.value != null) itemData.value!! else mutableListOf()
         if (selectedPhonomesIndex != -1) {
             val phonomeItem = list[selectedPhonomesIndex].apply {
                 this.origin = selectedText.get()
@@ -94,13 +94,13 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     fun clickRemove(view: View) {
         if (selectedPhonomesIndex == -1) return
-        val list = itemData.value!!
+        val list: MutableList<PhonomeItem> = if (itemData.value != null) itemData.value!! else mutableListOf()
         list.removeAt(selectedPhonomesIndex)
         itemData.value = list
     }
 
     fun clickHistory(view: View) {
-        val list = itemData.value!!
+        val list: MutableList<PhonomeItem> = if (itemData.value != null) itemData.value!! else mutableListOf()
         val event = ShowPhonomeHistoryEvent {
             list.add(it)
             itemData.value = list
@@ -116,6 +116,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun loadData() {
+        if (voiceId == 0L) return
+
         val disposable = yukariOperator.getVoiceItem(voiceId)
             .flatMap {
                 Observables.combineLatest(
