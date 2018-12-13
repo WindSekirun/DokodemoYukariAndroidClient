@@ -1,4 +1,5 @@
 # DokodemoYukariAndroidClient
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6ad4565a3d884dc1a61a2d1016823948)](https://www.codacy.com/app/pyxis/DokodemoYukariAndroidClient?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=WindSekirun/DokodemoYukariAndroidClient&amp;utm_campaign=Badge_Grade)
 
 Android application for **synthesize text to voice** with **結月ゆかり** (Yuzuki Yukari) and **弦巻マキ** (Tsurumaki Maki) 
 
