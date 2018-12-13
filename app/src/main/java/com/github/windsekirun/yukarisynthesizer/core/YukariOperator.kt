@@ -112,6 +112,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
                 return@create
             }
 
+            preferenceRepository.newUser = false
             val yukariPreset = getInternalPresetItem(VoiceEngine.Yukari)
             val makiPreset = getInternalPresetItem(VoiceEngine.Maki)
 
@@ -212,7 +213,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     ): Observable<List<PresetItem>> {
         return Observable.create {
             val equalPair = if (voiceEngine != null) voiceEngine.id to PresetItem_.engine else null
-            val list = nativeQuerySearch(presetBox, page, limit, searchTitle to PresetItem_.title, orderBy, equalPair)
+            val list = nativeQuerySearch(presetBox, page, limit, searchTitle to PresetItem_.title, orderBy, equal = equalPair)
             it.onNext(list)
         }
     }
@@ -479,6 +480,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             this.rate = 1.0
             this.volume = 1.0
             this.default = true
+            this.title = "Default"
         }
     }
 

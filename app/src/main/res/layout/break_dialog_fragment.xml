@@ -12,7 +12,28 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:background="@color/primaryColor">
+
+        <TextView
+            android:id="@+id/title2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@string/main_details_voice_add_break"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
@@ -20,10 +41,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_marginTop="8dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/cardBackground"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title2"
             tools:layout_editor_absoluteX="8dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,7 +61,7 @@
                     android:includeFontPadding="false"
                     android:maxLines="1"
                     android:text="@{fragment.convertTimeText(fragment.progress)}"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +82,7 @@
                     android:maxLines="1"
                     android:text="@string/break_time"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -77,12 +98,15 @@
                     android:layout_marginEnd="16dp"
                     android:max="19"
                     android:progress="@={fragment.progress}"
-                    android:progressBackgroundTint="@color/status_color"
+                    android:progressBackgroundTint="@color/divider"
+                    android:progressTint="@color/darkPurple"
+                    android:thumbTint="@color/darkPurple"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/title"
-                    app:tickMarkTint="@color/colorAccent"
+                    app:tickMarkTint="@color/darkPurple"
                     tools:progress="8" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -97,22 +121,21 @@
             android:layout_marginEnd="16dp"
             android:lineSpacingMultiplier="1.2"
             android:text="@string/break_time_help"
-            android:textColor="@color/black"
+            android:textColor="@color/textSecondary"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardView" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
+        <Button
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:background="@null"
             android:onClick="@{fragment::clickSave}"
             android:text="@string/save"
-            android:textColor="@color/black"
-            app:backgroundTint="@color/title_color"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

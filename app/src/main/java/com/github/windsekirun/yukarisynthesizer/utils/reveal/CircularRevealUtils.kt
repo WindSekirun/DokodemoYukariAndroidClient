@@ -15,8 +15,6 @@ import androidx.core.view.doOnLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.yukarisynthesizer.R
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.leinardi.android.speeddial.SpeedDialView
 
 /**
  * Animation utils for circular reveal animation
@@ -45,7 +43,7 @@ object CircularRevealUtils {
         startEnterAnimation(
             view,
             revealSettings,
-            getColor(R.color.title_color),
+            getColor(R.color.brightPurple),
             getColor(R.color.white),
             finished
         )
@@ -68,7 +66,7 @@ object CircularRevealUtils {
             view,
             revealSettings,
             getColor(R.color.white),
-            getColor(R.color.title_color),
+            getColor(R.color.brightPurple),
             finished
         )
     }

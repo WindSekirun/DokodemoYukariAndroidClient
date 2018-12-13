@@ -10,7 +10,7 @@ dependencies {
 apply plugin: 'io.objectbox'
 
 def systemToken = System.getenv('docomo_api')
-ext.api_token = systemToken != null ? systemToken : "\"\""
+ext.api_token = systemToken != null ? "\"$systemToken\"" : "\"\""
 
 android {
     compileSdkVersion 28

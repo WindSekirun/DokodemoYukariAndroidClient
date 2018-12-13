@@ -32,12 +32,6 @@ class VoiceDetailActivity : BaseActivity<VoiceDetailActivityBinding>() {
         mBinding.viewModel = viewModel
         mBinding.setLifecycleOwner(this)
 
-        // make darker if available.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            window.statusBarColor = ContextCompat.getColor(this, R.color.status_color)
-        }
-
         mBinding.toolBar.setNavigationOnClickListener { viewModel.onBackPressed() }
 
         init()
@@ -87,12 +81,10 @@ class VoiceDetailActivity : BaseActivity<VoiceDetailActivityBinding>() {
             val binding = PhonomeItemBinding.inflate(LayoutInflater.from(this@VoiceDetailActivity))
             binding.item = item
             binding.selected = viewModel.selectedPhonomeItem == item
-            binding.root
-        }
+            binding.imgDelete.setOnClickListener { viewModel.clickRemove(item) }
+            binding.root.setOnClickListener { viewModel.clickItem(item) }
 
-        mBinding.predicateLayout.setOnItemClickListener {
-            val item = it as PhonomeItem
-            viewModel.selectItem(item)
+            binding.root
         }
     }
 

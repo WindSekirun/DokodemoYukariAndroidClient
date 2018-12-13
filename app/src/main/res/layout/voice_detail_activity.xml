@@ -14,12 +14,14 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
             <TextView
@@ -39,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_constraintTop_toTopOf="parent"
-                app:navigationIcon="@drawable/ic_arrow_left_black_24dp" />
+                app:navigationIcon="@drawable/ic_arrow_left_white_24dp" />
 
             <TextView
                 android:id="@+id/textView1"
@@ -86,6 +88,7 @@
                 android:gravity="center_vertical"
                 android:onClick="@{viewModel::clickPresetSelect}"
                 android:paddingLeft="10dp"
+                android:textColor="@color/black"
                 android:paddingRight="10dp"
                 android:text="@{viewModel.selectedPreset}"
                 android:textSize="15sp"
@@ -97,10 +100,11 @@
             <com.github.windsekirun.yukarisynthesizer.widget.PredicateLayout
                 android:id="@+id/predicateLayout"
                 android:layout_width="0dp"
-                android:layout_height="180dp"
+                android:layout_height="190dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_preset_round"
+                android:padding="5dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -166,6 +170,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:singleLine="true"
+                    app:onEditorAction="@{viewModel::handleEditorAction}"
                     android:text="@={viewModel.selectedText}"
                     android:textSize="15sp" />
 
@@ -180,41 +185,25 @@
                 android:onClick="@{viewModel::clickEnter}"
                 android:text="@string/enter"
                 android:textColor="@color/black"
-                app:backgroundTint="@color/title_color"
+                app:backgroundTint="@color/brightPurple"
                 app:icon="@drawable/ic_plus_black_24dp"
                 app:iconTint="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/materialButton3"
-                style="@style/Widget.MaterialComponents.Button.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:onClick="@{viewModel::clickHistory}"
-                android:text="@string/history"
-                android:textColor="@color/black"
-                app:backgroundTint="@color/title_color"
-                app:icon="@drawable/ic_history_black_24dp"
-                app:iconTint="@color/colorAccent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/materialButton"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:id="@+id/history"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:onClick="@{viewModel::clickRemove}"
-                android:text="@string/remove"
-                android:textColor="@color/black"
-                app:icon="@drawable/ic_delete_black_24dp"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+                android:layout_marginEnd="8dp"
+                android:onClick="@{viewModel::clickHistory}"
+                android:text="@string/history"
+                app:backgroundTint="@color/white"
+                app:layout_constraintEnd_toStartOf="@+id/materialButton2"
+                app:layout_constraintTop_toTopOf="@+id/materialButton2" />
+
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"

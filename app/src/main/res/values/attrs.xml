@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TitleView">
-        <attr name="titleName" format="string"/>
+        <attr name="titleName" format="string" />
     </declare-styleable>
 
     <dimen name="predicate_default_spacing">4dp</dimen>
     <dimen name="predicate_default_size">14sp</dimen>
     <color name="predicate_default_color">@android:color/white</color>
+
+    <!-- From: file:/Users/fyu/Workplace/android-ripple-background/library/src/main/res/values/colors.xml -->
+    <eat-comment />
+    <color name="rippelColor">#0099CC</color>
+    <declare-styleable name="RippleBackground">
+        <attr name="rb_color" format="color" />
+        <attr name="rb_strokeWidth" format="dimension" />
+        <attr name="rb_radius" format="dimension" />
+        <attr name="rb_duration" format="integer" />
+        <attr name="rb_rippleAmount" format="integer" />
+        <attr name="rb_scale" format="float" />
+        <attr name="rb_type" format="enum">
+            <enum name="fillRipple" value="0" />
+            <enum name="strokeRipple" value="1" />
+        </attr>
+    </declare-styleable>
+    <!-- From: file:/Users/fyu/Workplace/android-ripple-background/library/src/main/res/values/dimensions.xml -->
+    <eat-comment />
+    <dimen name="rippleRadius">64dp</dimen>
+    <dimen name="rippleStrokeWidth">2dp</dimen>
 </resources>

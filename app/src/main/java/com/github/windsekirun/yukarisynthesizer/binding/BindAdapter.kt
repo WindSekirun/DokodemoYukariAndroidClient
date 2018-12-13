@@ -8,6 +8,9 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.leinardi.android.speeddial.SpeedDialView
+import android.widget.EditText
+import android.widget.TextView
+
 
 object BindAdapter {
 
@@ -39,5 +42,11 @@ object BindAdapter {
     @BindingAdapter("navigationItemClicked")
     fun bindNavigationItemClick(view: Toolbar, listener: View.OnClickListener) {
         view.setNavigationOnClickListener(listener)
+    }
+
+    @BindingAdapter("onEditorAction")
+    @JvmStatic
+    fun bindEditorAction(editText: EditText, onEditActionListener: TextView.OnEditorActionListener) {
+        editText.setOnEditorActionListener(onEditActionListener)
     }
 }

@@ -12,6 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/primaryColor"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
@@ -19,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_arrow_left_black_24dp" />
+            app:navigationIcon="@drawable/ic_arrow_left_white_24dp" />
 
         <com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView
             android:id="@+id/recyclerView"

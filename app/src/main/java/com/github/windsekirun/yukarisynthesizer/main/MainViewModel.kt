@@ -3,12 +3,9 @@ package com.github.windsekirun.yukarisynthesizer.main
 import android.view.MenuItem
 import android.view.View
 import com.github.windsekirun.baseapp.base.BaseViewModel
-import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.R
-import com.github.windsekirun.yukarisynthesizer.dialog.PresetDialog
-import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import javax.inject.Inject

@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/title_color</color>
-    <color name="colorPrimaryDark">@color/status_color</color>
-    <color name="colorAccent">@color/accent_color</color>
+    <color name="colorPrimary">@color/primaryColor</color>
+    <color name="colorPrimaryDark">@color/statusColor</color>
+    <color name="colorAccent">@color/brightPurple</color>
 
-    <color name="title_color">#EACFF8</color>
-    <color name="status_color">#f5f5f5</color>
-    <color name="accent_color">#7A4DCE</color>
+    <!-- dark theme -->
+    <color name="primaryColor">#1d2a3a</color>
+    <color name="primaryDarkColor">#161F2B</color>
+    <color name="accentPrimaryColor">#1B2836</color>
 
     <color name="white">#ffffff</color>
+
     <color name="black">#000000</color>
+    <color name="textSecondary">#ababab</color>
+    <color name="brightPurple">#EACFF8</color>
+    <color name="darkPurple">#7A4DCE</color>
+    <color name="cardBackground">#1B2836</color>
 
-    <color name="text_point">#7a4dce</color>
+    <color name="divider">#141D26</color>
+    <color name="statusColor">@color/primaryDarkColor</color>
     <color name="text_disable">#737373</color>
-
     <color name="transparent">#00ffffff</color>
-    <color name="divider">#e5e5e5</color>
-    <color name="modal_sheet_icon_color">#616161</color>
+    <color name="primaryDarkDim60">#99161f2b</color>
 </resources>

@@ -1,38 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="item"
-            type="com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem"/>
+            type="com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem" />
 
         <variable
             name="selected"
-            type="java.lang.Boolean"/>
+            type="java.lang.Boolean" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@{selected ? @drawable/bg_preset_round_title : @drawable/bg_preset_round}"
         android:gravity="center"
         android:orientation="vertical"
-        android:background="@{selected ? @drawable/bg_preset_round_title : @drawable/bg_preset_round}"
+        android:paddingLeft="10dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        tools:background="@drawable/bg_preset_round">
 
         <TextView
+            android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="11sp"
+            android:layout_marginEnd="8dp"
             android:text="@{item.phoneme}"
-            tools:text="D-" />
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:visibility="@{!item.phoneme.isEmpty()}"
+            app:layout_constraintEnd_toStartOf="@+id/imgDelete"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ディー" />
 
         <TextView
+            android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:text="@{item.origin}"
-            tools:text="あとハカーじゃなくてハッカーね" />
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@+id/imgDelete"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10"
+            tools:text="D" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/imgDelete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_delete_black_18dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

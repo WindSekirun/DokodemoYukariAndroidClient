@@ -12,7 +12,6 @@ import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.MainActivityBinding
-import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.main.impl.OnBackPressedListener
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryFragment
@@ -45,12 +44,6 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         setContentView(R.layout.main_activity)
         viewModel = getViewModel(MainViewModel::class.java)
         mBinding.viewModel = viewModel
-
-        // make darker if available.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            window.statusBarColor = ContextCompat.getColor(this, R.color.status_color)
-        }
 
         init()
     }
@@ -142,7 +135,7 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         val speedDialRes = if (exitDetail) R.menu.menu_main_speed_dial else R.menu.menu_details_speed_dial
         val titleRes = R.string.story_title
 
-        mBinding.toolbar.navigationIcon = if (exitDetail) null else getDrawable(R.drawable.ic_arrow_left_black_24dp)
+        mBinding.toolbar.navigationIcon = if (exitDetail) null else getDrawable(R.drawable.ic_arrow_left_white_24dp)
         switchToolbarMenu(toolbarRes)
         switchSpeedDialMenu(speedDialRes)
         switchToolbarTitle(titleRes)

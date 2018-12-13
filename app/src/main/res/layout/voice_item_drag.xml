@@ -24,7 +24,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/txtDesc"
         app:layout_constraintEnd_toStartOf="@+id/imgDrag"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:textColor="@color/text_disable"
+        android:textColor="@color/textSecondary"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imgDrag"
@@ -57,10 +57,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="@color/divider"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txtTitle" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

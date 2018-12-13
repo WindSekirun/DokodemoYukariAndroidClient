@@ -1,6 +1,7 @@
 package com.github.windsekirun.yukarisynthesizer.voice
 
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -23,6 +24,10 @@ import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import javax.inject.Inject
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+
+
 
 @InjectViewModel
 class VoiceDetailViewModel @Inject
@@ -83,6 +88,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun clickEnter(view: View) {
+        if (selectedText.get().isEmpty()) return
+
         val list: MutableList<PhonomeItem> = if (itemData.value != null) itemData.value!! else mutableListOf()
         if (selectedPhonomesIndex != -1) {
             val phonomeItem = list[selectedPhonomesIndex].apply {
@@ -96,16 +103,12 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             list.add(phonomeItem)
         }
 
-        itemData.value = list
+        selectedText.set("")
+        selectedDeceptions.set("")
 
-    }
-
-    fun clickRemove(view: View) {
-        if (selectedPhonomesIndex == -1) return
-        val list: MutableList<PhonomeItem> = if (itemData.value != null) itemData.value!! else mutableListOf()
-        list.removeAt(selectedPhonomesIndex)
         itemData.value = list
     }
+
 
     fun clickHistory(view: View) {
         val list: MutableList<PhonomeItem> = if (itemData.value != null) itemData.value!! else mutableListOf()
@@ -117,10 +120,35 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         postEvent(event)
     }
 
-    fun selectItem(item: PhonomeItem) {
+    fun clickItem(item: PhonomeItem) {
         selectedPhonomeItem = item
         selectedPhonomesIndex = itemData.value!!.indexOf(item)
+
+        selectedText.set(item.origin)
+        selectedDeceptions.set(item.phoneme)
+
         refreshFlexBox()
+    }
+
+    fun clickRemove(item: PhonomeItem) {
+        selectedPhonomeItem = null
+        selectedPhonomesIndex = -1
+        selectedText.set("")
+        selectedDeceptions.set("")
+
+        val list = itemData.value!!
+        list.remove(item)
+        itemData.value = list
+
+        refreshFlexBox()
+    }
+
+    fun handleEditorAction(view: TextView, actionId: Int?, event: KeyEvent?): Boolean {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            clickEnter(view)
+            return true
+        }
+        return false
     }
 
     private fun loadData() {

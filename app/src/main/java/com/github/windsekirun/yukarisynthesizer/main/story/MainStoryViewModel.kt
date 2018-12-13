@@ -13,6 +13,7 @@ import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.main.details.MainDetailsFragment
 import com.github.windsekirun.yukarisynthesizer.main.event.AddFragmentEvent
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
+import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
 /**
@@ -31,6 +32,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     @Inject
     lateinit var yukariOperator: YukariOperator
+
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+        yukariOperator.firstRunSetup().subscribe { _, _ -> }.addTo(compositeDisposable)
+    }
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
@@ -68,8 +74,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun loadData() {
-        val disposable = yukariOperator.firstRunSetup()
-            .flatMap { yukariOperator.getStoryList() }
+        val disposable = yukariOperator.getStoryList()
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
                 if (error != null) {

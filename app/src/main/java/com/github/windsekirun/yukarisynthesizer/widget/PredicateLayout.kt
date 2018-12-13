@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.github.windsekirun.yukarisynthesizer.R
 import com.google.android.flexbox.*
+import pyxis.uzuki.live.richutilskt.utils.dip2px
 import java.util.*
 
 
@@ -126,6 +127,9 @@ class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = nu
 
     private fun init(attrs: AttributeSet?) {
         inflate(context, R.layout.predicate_layout, this)
+
+        mHorizontalSpacing = context.dip2px(5)
+        mVerticalSpacing = context.dip2px(5)
 
         flexWrap = FlexWrap.WRAP
         flexDirection = FlexDirection.ROW

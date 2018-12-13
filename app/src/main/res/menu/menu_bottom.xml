@@ -4,13 +4,13 @@
     <item
         android:id="@+id/menu_page_story"
         android:title="Story"
-        android:icon="@drawable/ic_heart_black_24dp"
+        android:icon="@drawable/ic_heart_white_24dp"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menu_page_preset"
         android:title="Preset"
-        android:icon="@drawable/ic_toolbox_black_24dp"
+        android:icon="@drawable/ic_toolbox_white_24dp"
         app:showAsAction="ifRoom"/>
 
     <item

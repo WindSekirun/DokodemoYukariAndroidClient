@@ -4,25 +4,25 @@
     <item
         android:id="@+id/menu_dial_voice"
         android:title="Add Voice"
-        android:icon="@drawable/ic_plus_black_24dp"
+        android:icon="@drawable/ic_plus_white_24dp"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menu_dial_break"
         android:title="Add Break"
-        android:icon="@drawable/baseline_free_breakfast_black_24"
+        android:icon="@drawable/ic_coffee_white_24dp"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menu_dial_history"
         android:title="From History"
-        android:icon="@drawable/ic_history_black_24dp"
+        android:icon="@drawable/ic_history_white_24dp"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menu_dial_stt"
         android:title="From Voice"
-        android:icon="@drawable/baseline_mic_black_24"
+        android:icon="@drawable/ic_microphone_white_24dp"
         app:showAsAction="ifRoom"/>
 
 </menu>

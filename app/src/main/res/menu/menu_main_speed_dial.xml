@@ -4,12 +4,12 @@
     <item
         android:id="@+id/menu_dial_story"
         android:title="Add Story"
-        android:icon="@drawable/ic_heart_black_24dp"
+        android:icon="@drawable/ic_heart_white_24dp"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menu_dial_preset"
         android:title="Add Preset"
-        android:icon="@drawable/ic_toolbox_black_24dp"
+        android:icon="@drawable/ic_toolbox_white_24dp"
         app:showAsAction="ifRoom"/>
 </menu>

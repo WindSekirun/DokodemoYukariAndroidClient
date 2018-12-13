@@ -11,10 +11,16 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.TextView
+import androidx.appcompat.view.ContextThemeWrapper
+import com.github.windsekirun.baseapp.utils.propertyChanges
+import com.github.windsekirun.baseapp.utils.subscribe
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.VoiceRecognitionFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.module.sheet.RoundedBottomSheetDialogFragment
+import io.reactivex.rxkotlin.addTo
 import pyxis.uzuki.live.richutilskt.utils.selector
 
 

@@ -11,7 +11,6 @@ import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
-import com.github.windsekirun.yukarisynthesizer.dialog.PresetDialog
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryViewModel
 import javax.inject.Inject
 
@@ -49,8 +48,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun clickPreset() {
-        val presetDialog = PresetDialog(ActivityReference.getActivtyReference()!!)
-        presetDialog.show()
+
     }
 
 }

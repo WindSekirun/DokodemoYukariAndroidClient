@@ -25,7 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".swipe.SwipeOrderActivity" />
-        <activity android:name=".voice.VoiceDetailActivity" />
+        <activity android:name=".voice.VoiceDetailActivity"
+            android:windowSoftInputMode="adjustResize"/>
 
     </application>
 
