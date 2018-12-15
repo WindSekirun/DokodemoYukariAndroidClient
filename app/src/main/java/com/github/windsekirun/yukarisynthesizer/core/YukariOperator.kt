@@ -7,7 +7,6 @@ import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.*
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepository
 import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepositoryImpl
-import com.github.windsekirun.yukarisynthesizer.core.test.sm30193805Test
 import com.github.windsekirun.yukarisynthesizer.core.utils.YukariUtils
 import io.objectbox.Box
 import io.objectbox.Property
@@ -124,11 +123,6 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
 
             emitter.onNext(true)
         }
-    }
-
-    fun generateTestData() {
-        val data1 = sm30193805Test(phonomeBox, voiceBox)
-        storyBox.put(data1)
     }
 
     /**
@@ -277,6 +271,46 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     }
 
     /**
+     * get [StoryItem] with searched all associated ids in [VoiceItem], [PhonomeItem]
+     *
+     * @param storyItemId search data with [StoryItem.id]
+     * @return [StoryItem] with assign all associated transit data.
+     */
+    fun getSynthesisData(storyItemId: Long): Observable<StoryItem> {
+        return Observable.create { emitter ->
+            // get Latest version of 'StoryItem'
+            val storyItem = storyBox.query {
+                this.equal(StoryItem_.id, storyItemId)
+            }.findFirst()
+
+            if (storyItem == null) {
+                emitter.onError(NullPointerException())
+                return@create
+            }
+
+            storyItem.apply { this.findMetadata() }
+
+            // Find all associated 'VoiceItem' with voiceIds.
+            val voiceItemIds = storyItem.voicesIds.toLongArray()
+            val voiceItems = voiceBox.query {
+                this.`in`(VoiceItem_.id, voiceItemIds)
+            }.find()
+
+            // Find all associated 'PhonomeItem' with phonomeIds and assign that.
+            voiceItems.map {
+                it.apply { it.findMetaData() }
+            }
+
+            // apply final result
+            storyItem.apply {
+                this.voiceEntries = voiceItems
+            }
+
+            emitter.onNext(storyItem)
+        }
+    }
+
+    /**
      * get [VoiceItem] with given [id]
      *
      * @param id [VoiceItem_.id] to find
@@ -376,7 +410,6 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     /**
      * remove [VoiceItem] with given [VoiceItem.id]
      *
-     * TBD.
      * @param voiceItemId remove to id
      * @param autoRemove optional, remove [VoiceItem], [PhonomeItem] which not used any voices and remove associated
      * [StoryItem.voicesIds] which hold given [VoiceItem.id]
@@ -399,15 +432,6 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
 
             emitter.onNext(true)
         }
-    }
-
-    fun removeUnusedPhonomes() {
-        val usedPhonomeIds = voiceBox.all.flatMap { it.phonomeIds }.distinctBy { it }.toLongArray()
-        val phonomeQuery = phonomeBox.query {
-            this.notIn(PhonomeItem_.id, usedPhonomeIds)
-        }.find()
-
-        phonomeBox.remove(phonomeQuery)
     }
 
     /**
@@ -531,6 +555,15 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         } else {
             query.find()
         }
+    }
+
+    private fun removeUnusedPhonomes() {
+        val usedPhonomeIds = voiceBox.all.flatMap { it.phonomeIds }.distinctBy { it }.toLongArray()
+        val phonomeQuery = phonomeBox.query {
+            this.notIn(PhonomeItem_.id, usedPhonomeIds)
+        }.find()
+
+        phonomeBox.remove(phonomeQuery)
     }
 
     private fun updateStoryItemPath(): Observable<Int> {

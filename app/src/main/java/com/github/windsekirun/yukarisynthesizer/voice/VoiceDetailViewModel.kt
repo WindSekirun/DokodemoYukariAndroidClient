@@ -90,10 +90,14 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     fun clickYukari(view: View) {
         selectedEngine.set(VoiceEngine.Yukari)
+        selectedPresetItem = PresetItem()
+        selectedPreset.set("")
     }
 
     fun clickMaki(view: View) {
         selectedEngine.set(VoiceEngine.Maki)
+        selectedPresetItem = PresetItem()
+        selectedPreset.set("")
     }
 
     fun clickEnter(view: View) {
@@ -111,13 +115,17 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             itemData.add(phonomeItem)
         }
 
+        refreshFlexBox()
         selectedText.set("")
         selectedDeceptions.set("")
     }
 
 
     fun clickHistory(view: View) {
-        val event = ShowPhonomeHistoryEvent { itemData.add(it) }
+        val event = ShowPhonomeHistoryEvent {
+            itemData.add(it)
+            refreshFlexBox()
+        }
         postEvent(event)
     }
 
@@ -172,6 +180,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 selectedEngine.set(data.second.engine)
                 selectedPresetItem = data.second.preset
                 selectedPreset.set(data.second.preset.title)
+
+                refreshFlexBox()
             }
 
         addDisposable(disposable)

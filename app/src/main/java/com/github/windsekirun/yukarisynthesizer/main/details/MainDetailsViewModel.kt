@@ -183,6 +183,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             // if itemData and voiceIds is equal and localPath is valid, we don't need to synthesis this timing.
             // just play sounds.
             playVoices()
+            return
         }
 
         storyItem.apply {
@@ -193,7 +194,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         ProgressDialogManager.instance.show()
 
         val disposable = yukariOperator.addStoryItem(storyItem)
-            .flatMapSingle { yukariOperator.requestSynthesis(storyItem) }
+            .flatMap { yukariOperator.getSynthesisData(it) }
+            .flatMapSingle {
+                storyItem = it
+                yukariOperator.requestSynthesis(it)
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data, error ->

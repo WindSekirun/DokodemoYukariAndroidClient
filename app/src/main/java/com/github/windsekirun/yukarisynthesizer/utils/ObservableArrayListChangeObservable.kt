@@ -38,24 +38,28 @@ class ObservableArrayListChangeObservable<T>(private val observableArrayList: Ob
                     observableArrayList: ObservableArrayList<T>,
                     positionStart: Int, itemCount: Int
                 ) {
+                    observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
                 }
 
                 override fun onItemRangeInserted(
                     observableArrayList: ObservableArrayList<T>,
                     positionStart: Int, itemCount: Int
                 ) {
+                    observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
                 }
 
                 override fun onItemRangeMoved(
                     observableArrayList: ObservableArrayList<T>,
                     positionStart: Int, positionEnd: Int, itemCount: Int
                 ) {
+                    observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
                 }
 
                 override fun onItemRangeRemoved(
                     observableArrayList: ObservableArrayList<T>,
                     positionStart: Int, itemCount: Int
                 ) {
+                    observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
                 }
             }
         }

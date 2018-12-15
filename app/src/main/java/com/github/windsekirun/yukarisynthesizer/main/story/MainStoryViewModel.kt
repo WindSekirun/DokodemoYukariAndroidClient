@@ -82,6 +82,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                     Log.e(MainStoryViewModel::class.java.simpleName, "onResume: ", error)
                     return@subscribe
                 }
+                itemData.clear()
                 itemData.addAll(data)
             }
 

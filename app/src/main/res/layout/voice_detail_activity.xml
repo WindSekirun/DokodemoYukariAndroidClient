@@ -90,12 +90,12 @@
                 android:paddingLeft="10dp"
                 android:textColor="@color/white"
                 android:paddingRight="10dp"
+                android:hint="@string/voice_detail_hint"
                 android:text="@{viewModel.selectedPreset}"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3"
-                tools:text="Selected Preset" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
             <com.github.windsekirun.yukarisynthesizer.widget.PredicateLayout
                 android:id="@+id/predicateLayout"
