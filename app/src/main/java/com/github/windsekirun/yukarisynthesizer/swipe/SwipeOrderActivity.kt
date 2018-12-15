@@ -94,7 +94,7 @@ class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
             val title = if (item.engine == VoiceEngine.Break) {
                 context.getString(R.string.break_time)
             } else {
-                context.getString(R.string.preset_details_format).format(item.engine.id, item.preset.title)
+                context.getString(R.string.preset_details_format).format(item.preset.title)
             }
 
             val desc = if (item.engine == VoiceEngine.Break) {

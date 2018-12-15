@@ -73,7 +73,7 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
 
     @Subscribe
     fun onClickVoiceItem(event: ClickVoiceItem) {
-        viewModel.clickVoiceItem(event.item)
+        viewModel.clickVoiceItem(event.item, event.position)
     }
 
     @Subscribe

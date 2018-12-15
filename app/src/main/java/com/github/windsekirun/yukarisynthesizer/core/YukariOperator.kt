@@ -73,7 +73,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
 
                 storyItem.apply {
                     this.voicesIds = ids
-                    this.majorEngine = YukariUtils.findMajorEngine(storyItem)
+                    this.majorEngine = YukariUtils.findMajorEngine(this)
                 }
             }
 

@@ -14,8 +14,8 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:background="@color/primaryColor"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/primaryColor">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -40,8 +40,10 @@
                 android:id="@+id/toolBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:actionSelected="@{viewModel::clickToolbarMenuItem}"
                 app:layout_constraintTop_toTopOf="parent"
-                app:navigationIcon="@drawable/ic_arrow_left_white_24dp" />
+                app:navigationIcon="@drawable/ic_arrow_left_white_24dp"
+                app:navigationItemClicked="@{viewModel::clickToolbarNavigation}" />
 
             <TextView
                 android:id="@+id/textView1"
@@ -86,12 +88,12 @@
                 android:background="@drawable/bg_preset_round_5"
                 android:drawableRight="@drawable/ic_arrow_both"
                 android:gravity="center_vertical"
+                android:hint="@string/voice_detail_hint"
                 android:onClick="@{viewModel::clickPresetSelect}"
                 android:paddingLeft="10dp"
-                android:textColor="@color/white"
                 android:paddingRight="10dp"
-                android:hint="@string/voice_detail_hint"
                 android:text="@{viewModel.selectedPreset}"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -134,9 +136,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textColor="@color/textSecondary"
                     android:singleLine="true"
                     android:text="@={viewModel.selectedDeceptions}"
+                    android:textColor="@color/textSecondary"
                     android:textSize="13sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -149,8 +151,8 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/voice_detail_jeita"
-                android:textSize="11sp"
                 android:textColor="@color/textSecondary"
+                android:textSize="11sp"
                 app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/textInputLayout"
@@ -171,11 +173,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textColor="@color/textSecondary"
                     android:singleLine="true"
-                    app:onEditorAction="@{viewModel::handleEditorAction}"
                     android:text="@={viewModel.selectedText}"
-                    android:textSize="15sp" />
+                    android:textColor="@color/textSecondary"
+                    android:textSize="15sp"
+                    app:onEditorAction="@{viewModel::handleEditorAction}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

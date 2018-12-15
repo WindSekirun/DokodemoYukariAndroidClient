@@ -34,7 +34,6 @@ import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.RPermission
-import pyxis.uzuki.live.richutilskt.utils.toFile
 import java.io.IOException
 import javax.inject.Inject
 
@@ -90,7 +89,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         }
     }
 
-    fun clickVoiceItem(item: VoiceItem) {
+    fun clickVoiceItem(item: VoiceItem, position: Int) {
         val originId = item.id
         val bundle = Bundle().apply {
             putLong(VoiceDetailViewModel.EXTRA_VOICE_ID, originId)
@@ -102,8 +101,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 val requestDelete = it.data?.getBooleanExtra(VoiceDetailViewModel.EXTRA_REQUEST_DELETE, false) ?: false
 
                 if (requestDelete) {
-                    // TODO: implement delete feature in YukariOperator, and handle this properly
-                    Observable.error(IOException())
+                    yukariOperator.removeVoiceItem(id, true)
+                        .map { VoiceItem() }
                 } else {
                     if (id != 0L) {
                         yukariOperator.getVoiceItem(id)
@@ -118,7 +117,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                     return@subscribe
                 }
 
-                itemData.add(data)
+                if (data.id != 0L) {
+                    itemData[position] = data
+                } else {
+                    itemData.removeAt(position)
+                }
             }.addTo(compositeDisposable)
 
         RxActivityResult.startActivityForResult(VoiceDetailActivity::class.java, bundle)
@@ -176,15 +179,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun requestSynthesis() {
         if (itemData.isEmpty()) return
-
-        val ids = itemData.map { it.id }
-        val contentEqual = checkEqualContent(ids, storyItem.voicesIds)
-        if (contentEqual && (storyItem.localPath.isNotEmpty() && storyItem.localPath.toFile().canRead())) {
-            // if itemData and voiceIds is equal and localPath is valid, we don't need to synthesis this timing.
-            // just play sounds.
-            playVoices()
-            return
-        }
 
         storyItem.apply {
             this.title = this@MainDetailsViewModel.title.get()

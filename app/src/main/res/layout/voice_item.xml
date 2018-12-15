@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text='@{item.engine == VoiceEngine.Break ? @string/break_time : @string/preset_details_format(item.engine.id, item.preset.title)}'
+            android:text='@{item.engine == VoiceEngine.Break ? @string/break_time : @string/preset_details_format(item.preset.title)}'
             android:textColor="@color/white"
             android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/textView3"

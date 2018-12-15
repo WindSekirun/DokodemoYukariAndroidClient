@@ -15,6 +15,7 @@ import com.github.windsekirun.yukarisynthesizer.databinding.PhonomeItemBinding
 import com.github.windsekirun.yukarisynthesizer.databinding.VoiceDetailActivityBinding
 import com.github.windsekirun.yukarisynthesizer.dialog.PhonomeHistoryFragment
 import com.github.windsekirun.yukarisynthesizer.dialog.VoicePresetFragment
+import com.github.windsekirun.yukarisynthesizer.main.event.InvokeBackEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPhonomeHistoryEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
@@ -39,13 +40,18 @@ class VoiceDetailActivity : BaseActivity<VoiceDetailActivityBinding>() {
         mBinding.viewModel = viewModel
         mBinding.setLifecycleOwner(this)
 
-        mBinding.toolBar.setNavigationOnClickListener { viewModel.onBackPressed() }
+        mBinding.toolBar.inflateMenu(R.menu.menu_voice_detail)
 
         init()
     }
 
     override fun onBackPressed() {
         viewModel.onBackPressed()
+    }
+
+    @Subscribe
+    fun onInvokeBackEvent(event: InvokeBackEvent) {
+        onBackPressed()
     }
 
     @Subscribe

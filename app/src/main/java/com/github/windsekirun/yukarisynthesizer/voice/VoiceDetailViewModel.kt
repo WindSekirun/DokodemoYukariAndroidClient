@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -16,11 +17,13 @@ import com.github.windsekirun.baseapp.module.argsinjector.Extra
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
+import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
+import com.github.windsekirun.yukarisynthesizer.main.event.InvokeBackEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPhonomeHistoryEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
 import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
@@ -69,6 +72,19 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 changed = true
                 refreshFlexBox()
             }.addTo(compositeDisposable)
+    }
+
+    fun clickToolbarMenuItem(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_voice_copy -> copyVoice()
+            R.id.menu_voice_remove -> removeVoice()
+        }
+
+        return true
+    }
+
+    fun clickToolbarNavigation(view: View) {
+        postEvent(InvokeBackEvent())
     }
 
     fun onBackPressed() {
@@ -234,6 +250,22 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         }
 
         return true
+    }
+
+    private fun copyVoice() {
+        if (validateSaveCondition()) {
+            originalVoiceItem.apply { id = 0L }
+            save()
+        }
+    }
+
+    private fun removeVoice() {
+        val bundle = Bundle().apply {
+            putBoolean(EXTRA_REQUEST_DELETE, true)
+        }
+
+        setResult(Activity.RESULT_OK, bundle)
+        finishActivity(VoiceDetailActivity::class.java)
     }
 
     companion object {
