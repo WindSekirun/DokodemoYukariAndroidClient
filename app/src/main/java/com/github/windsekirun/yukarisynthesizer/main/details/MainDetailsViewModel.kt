@@ -2,6 +2,7 @@ package com.github.windsekirun.yukarisynthesizer.main.details
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -25,14 +26,18 @@ import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderViewModel
+import com.github.windsekirun.yukarisynthesizer.utils.getList
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import com.github.windsekirun.yukarisynthesizer.voice.VoiceDetailActivity
+import com.github.windsekirun.yukarisynthesizer.voice.VoiceDetailViewModel
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.RPermission
 import pyxis.uzuki.live.richutilskt.utils.toFile
+import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -75,7 +80,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun onBackPressed() {
-        if (!changed || (title.isEmpty && itemData.value!!.isEmpty())) {
+        if (!changed || (title.isEmpty && itemData.getList().isEmpty())) {
             postEvent(CloseFragmentEvent())
         } else {
             save(autoClose = true)
@@ -110,9 +115,9 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         val disposable = yukariOperator.getVoiceListAssociatedStoryItem(storyItem)
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
-                if (error != null) return@subscribe
+                if (error != null || data == null) return@subscribe
                 title.set(storyItem.title)
-                itemData.value = data!!.toMutableList()
+                itemData.value = data.toMutableList()
 
                 observeEvent()
             }
@@ -121,14 +126,14 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun save(autoClose: Boolean = false, swipeOrder: Boolean = false) {
-        if (itemData.value!!.isEmpty()) {
+        if (itemData.getList().isEmpty()) {
             postEvent(CloseFragmentEvent())
             return
         }
 
         storyItem.apply {
             this.title = this@MainDetailsViewModel.title.get()
-            this.voiceEntries = itemData.value!!
+            this.voiceEntries = itemData.getList()
         }
 
         val disposable = yukariOperator.addStoryItem(storyItem)
@@ -151,9 +156,9 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun requestSynthesis() {
-        if (itemData.value!!.isEmpty()) return
+        if (itemData.getList().isEmpty()) return
 
-        val ids = itemData.value!!.map { it.id }
+        val ids = itemData.getList().map { it.id }
         val contentEqual = checkEqualContent(ids, storyItem.voicesIds)
         if (contentEqual && (storyItem.localPath.isNotEmpty() && storyItem.localPath.toFile().canRead())) {
             // if itemData and voiceIds is equal and localPath is valid, we don't need to synthesis this timing.
@@ -163,7 +168,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         storyItem.apply {
             this.title = this@MainDetailsViewModel.title.get()
-            this.voiceEntries = itemData.value!!
+            this.voiceEntries = itemData.getList()
         }
 
         ProgressDialogManager.instance.show()
@@ -174,12 +179,12 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data, error ->
                 ProgressDialogManager.instance.clear()
-                if (error != null) {
-                    showAlertDialog(error.message ?: "unknown error")
+                if (error != null || data == null) {
+                    showAlertDialog(error?.message ?: "unknown error")
                     return@subscribe
                 }
 
-                storyItem = data!!
+                storyItem = data
                 playVoices()
             }
 
@@ -187,7 +192,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun playVoices() {
-        val playDialog = PlayDialog(ActivityReference.getActivtyReference()!!)
+        val playDialog = PlayDialog(requireNotNull(ActivityReference.getActivtyReference()))
         playDialog.show(listOf(storyItem))
     }
 
@@ -214,9 +219,9 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             val disposable = yukariOperator.addVoiceItem(it)
                 .compose(EnsureMainThreadComposer())
                 .subscribe { data, error ->
-                    if (error != null) return@subscribe
-                    val list = itemData.value!!
-                    list.add(data!!)
+                    if (error != null || data == null) return@subscribe
+                    val list = itemData.getList()
+                    list.add(data)
                     itemData.value = list
                 }
 
@@ -228,8 +233,23 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun addVoice() {
         RxActivityResult.result()
+            .flatMapObservable {
+                val id = it.data?.getLongExtra(VoiceDetailViewModel.EXTRA_EDIT_VOICE_ID, 0) ?: 0L
+                if (id != 0L) {
+                    yukariOperator.getVoiceItem(id)
+                } else {
+                    Observable.error(IOException("Unexpected error"))
+                }
+            }
             .subscribe { data, error ->
+                if (error != null || data == null) {
+                    Log.e(TAG, "addVoice", error)
+                    return@subscribe
+                }
 
+                val list = itemData.getList()
+                list.add(data)
+                itemData.value = list
             }.addTo(compositeDisposable)
 
         RxActivityResult.startActivityForResult(VoiceDetailActivity::class.java)
@@ -247,8 +267,12 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                         yukariOperator.addPhonomeItems(phonomes)
                     )
                 }
-                .subscribe { data, _ ->
-                    val preset = data!!.first
+                .subscribe { data, error ->
+                    if (error != null || data == null) {
+                        return@subscribe
+                    }
+
+                    val preset = data.first
                     val phonomeIds = data.second
 
                     val voiceItem = VoiceItem().apply {
@@ -260,7 +284,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                         bindContentOrigin()
                     }
 
-                    val list = itemData.value!!
+                    val list = itemData.getList()
                     list.add(voiceItem)
                     itemData.value = list
                 }
@@ -279,7 +303,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun addVoiceHistory() {
         val event = ShowHistoryDialogEvent {
-            val list = itemData.value!!
+            val list = itemData.getList()
             list.add(it)
             itemData.value = list
         }
@@ -311,5 +335,9 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     private fun checkEqualContent(target: List<Long?>?, original: List<Long>): Boolean {
         val ids = target?.toTypedArray() ?: arrayOfNulls(storyItem.voicesIds.size)
         return ids contentEquals original.toTypedArray()
+    }
+
+    companion object {
+        private val TAG = MainDetailsViewModel::class.java.simpleName
     }
 }
