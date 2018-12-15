@@ -18,7 +18,7 @@ import com.github.windsekirun.yukarisynthesizer.main.event.ClickVoiceItem
  * Description:
  */
 class VoiceItemAdapter : BaseRecyclerAdapter<VoiceItem, VoiceItemBinding>() {
-    var voiceItemClickListener: OnVoiceItemClickListener? = null
+    var voiceItemClickListener: ((VoiceItem) -> Unit)? = null
 
     override fun bind(binding: VoiceItemBinding, item: VoiceItem, position: Int) {
         binding.item = item
@@ -27,7 +27,7 @@ class VoiceItemAdapter : BaseRecyclerAdapter<VoiceItem, VoiceItemBinding>() {
 
     override fun onClickedItem(binding: VoiceItemBinding, item: VoiceItem, position: Int) {
         if (voiceItemClickListener != null) {
-            voiceItemClickListener?.onClick(item)
+            voiceItemClickListener?.invoke(item)
         } else {
             postEvent(ClickVoiceItem(item, position))
         }
@@ -42,8 +42,4 @@ class VoiceItemAdapter : BaseRecyclerAdapter<VoiceItem, VoiceItemBinding>() {
     }
 
     fun convertBreakTimeFormat(breakTime: Long): String = "${breakTime.toDouble() / 1000.0}s"
-
-    interface OnVoiceItemClickListener {
-        fun onClick(voiceItem: VoiceItem)
-    }
 }

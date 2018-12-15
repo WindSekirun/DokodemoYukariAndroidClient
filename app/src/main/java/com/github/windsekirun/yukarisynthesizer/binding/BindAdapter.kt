@@ -11,7 +11,9 @@ import com.leinardi.android.speeddial.SpeedDialView
 import android.widget.EditText
 import android.widget.TextView
 
-
+/**
+ * set of [BindingAdapter] in DataBinding
+ */
 object BindAdapter {
 
     @JvmStatic

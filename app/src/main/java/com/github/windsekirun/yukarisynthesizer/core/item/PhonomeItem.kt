@@ -6,6 +6,9 @@ import org.redundent.kotlin.xml.xml
 import java.io.Serializable
 import java.util.*
 
+/**
+ * Entity class for hold Phonome(Word) in ObjectBox
+ */
 @Entity
 class PhonomeItem() : Serializable {
 

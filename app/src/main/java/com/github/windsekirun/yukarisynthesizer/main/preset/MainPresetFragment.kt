@@ -22,9 +22,8 @@ import javax.inject.Inject
  *
  * Description:
  */
-
 @InjectFragment
-class MainPresetFragment() : BaseFragment<MainPresetFragmentBinding>() {
+class MainPresetFragment : BaseFragment<MainPresetFragmentBinding>() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: MainPresetViewModel

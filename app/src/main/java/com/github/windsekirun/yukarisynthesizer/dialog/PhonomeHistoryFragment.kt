@@ -25,6 +25,9 @@ import io.reactivex.rxkotlin.addTo
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+/**
+ * DialogFragment to add phonome from history
+ */
 class PhonomeHistoryFragment : RoundedBottomSheetDialogFragment<PhonomeHistoryFragmentBinding>() {
     val searchTitle = ObservableString()
     val itemData = ObservableArrayList<PhonomeItem>()
@@ -44,11 +47,9 @@ class PhonomeHistoryFragment : RoundedBottomSheetDialogFragment<PhonomeHistoryFr
 
         MainApplication.appComponent.inject(this)
         val phonomeListAdapter = initRecyclerView(binding.recyclerView, PhonomeListAdapter::class.java)
-        phonomeListAdapter.phonomeClickAdapter = object : PhonomeListAdapter.OnPhonomeClickAdapter {
-            override fun onClick(phonomeItem: PhonomeItem) {
-                callback.invoke(phonomeItem)
-                dismiss()
-            }
+        phonomeListAdapter.phonomeClickAdapter = {
+            callback.invoke(it)
+            dismiss()
         }
 
         searchTitle.propertyChanges()

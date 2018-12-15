@@ -5,6 +5,9 @@ import com.github.windsekirun.yukarisynthesizer.MainApplication
 import dagger.Binds
 import dagger.Module
 
+/**
+ * Dagger module for provide project-specific class
+ */
 @Module
 abstract class AppBindsModule {
 

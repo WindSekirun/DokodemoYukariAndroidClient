@@ -2,6 +2,9 @@ package com.github.windsekirun.yukarisynthesizer.core.annotation
 
 import androidx.annotation.IntDef
 
+/**
+ * IntDef for ordering in ObjectBox, restrict compiler to allow specific value.
+ */
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 @IntDef(
     OrderType.OrderFlags.ASCENDING,
@@ -11,8 +14,11 @@ import androidx.annotation.IntDef
     OrderType.OrderFlags.NULLS_ZERO,
     OrderType.OrderFlags.UNSIGNED
 )
-annotation class OrderType() {
+annotation class OrderType {
 
+    /**
+     * Internal type for ordering in objectbox
+     */
     object OrderFlags {
 
         /**

@@ -8,6 +8,9 @@ import io.objectbox.annotation.Id
 import java.io.Serializable
 import java.util.*
 
+/**
+ * Entity class for hold Voices (sentences) in ObjectBox
+ */
 @Entity
 class VoiceItem() : Serializable {
     @Id

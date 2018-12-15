@@ -24,6 +24,9 @@ import io.reactivex.rxkotlin.addTo
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+/**
+ * DialogFragment to add VoiceItem for history
+ */
 class VoiceHistoryFragment : RoundedBottomSheetDialogFragment<VoiceHistoryFragmentBinding>() {
     val searchTitle = ObservableString()
     val itemData = ObservableArrayList<VoiceItem>()
@@ -43,11 +46,9 @@ class VoiceHistoryFragment : RoundedBottomSheetDialogFragment<VoiceHistoryFragme
 
         MainApplication.appComponent.inject(this)
         val voiceItemAdapter = initRecyclerView(binding.recyclerView, VoiceItemAdapter::class.java)
-        voiceItemAdapter.voiceItemClickListener = object : VoiceItemAdapter.OnVoiceItemClickListener {
-            override fun onClick(voiceItem: VoiceItem) {
-                callback.invoke(voiceItem)
-                dismiss()
-            }
+        voiceItemAdapter.voiceItemClickListener = {
+            callback.invoke(it)
+            dismiss()
         }
 
         searchTitle.propertyChanges()

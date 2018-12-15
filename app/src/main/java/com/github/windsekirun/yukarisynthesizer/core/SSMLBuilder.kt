@@ -5,6 +5,9 @@ import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import org.apache.commons.text.StringEscapeUtils
 import org.redundent.kotlin.xml.xml
 
+/**
+ * Class for handle SSML document
+ */
 object SSMLBuilder {
 
     /**

@@ -29,6 +29,9 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Operator class for handle business logic which used in ViewModel
+ */
 @Suppress("UNUSED_EXPRESSION")
 @Singleton
 class YukariOperator @Inject constructor(val application: MainApplication) {
@@ -469,9 +472,6 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             }
     }
 
-    /**
-     * generate [StoryItem.localPath] if [StoryItem.localPath] isn't available
-     */
     private fun StoryItem.addStoryLocalPath(): StoryItem {
         if (localPath.isNotEmpty()) return this
 

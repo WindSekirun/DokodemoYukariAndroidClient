@@ -14,7 +14,14 @@ import com.github.windsekirun.yukarisynthesizer.swipe.event.ReadyDisplayViewEven
 import pyxis.uzuki.live.richutilskt.utils.toFile
 import javax.inject.Inject
 
-
+/**
+ * DokodemoYukariAndroidClient
+ * Class: SwipeOrderViewModel
+ * Created by Pyxis on 2018-11-26.
+ *
+ *
+ * Description:
+ */
 @InjectViewModel
 class SwipeOrderViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
@@ -71,8 +78,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         addDisposable(disposable)
     }
 
-    fun changeOrder(finalPosition: Int, item: VoiceItem) {
-        itemData.remove(item)
+    fun changeOrder(finalPosition: Int, item: VoiceItem) {        itemData.remove(item)
         itemData.add(finalPosition, item)
     }
 

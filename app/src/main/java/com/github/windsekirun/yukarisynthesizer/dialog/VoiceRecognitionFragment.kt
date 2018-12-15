@@ -23,7 +23,9 @@ import com.github.windsekirun.yukarisynthesizer.module.sheet.RoundedBottomSheetD
 import io.reactivex.rxkotlin.addTo
 import pyxis.uzuki.live.richutilskt.utils.selector
 
-
+/**
+ * DialogFragment to recognition voice and convert them to VoiceItem
+ */
 class VoiceRecognitionFragment : RoundedBottomSheetDialogFragment<VoiceRecognitionFragmentBinding>(),
     RecognitionListener {
     val partialResultText = ObservableString()
@@ -46,7 +48,6 @@ class VoiceRecognitionFragment : RoundedBottomSheetDialogFragment<VoiceRecogniti
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
                     stopRecognize()
-
                 }
 
                 MotionEvent.ACTION_DOWN -> {

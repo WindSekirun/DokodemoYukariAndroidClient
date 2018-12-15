@@ -14,7 +14,9 @@ import com.google.android.flexbox.*
 import pyxis.uzuki.live.richutilskt.utils.dip2px
 import java.util.*
 
-
+/**
+ * CustomView with [FlexboxLayout] with spacing, holding transformer
+ */
 class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = null) : FlexboxLayout(context, attrs),
     View.OnClickListener {
     private val mItems = ArrayList<T>()
@@ -185,7 +187,6 @@ class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = nu
         }
 
         if (mSelectedList.contains(text))
-
             if (mSelectedList.contains(text)) {
                 mSelectedList.remove(text)
             } else {

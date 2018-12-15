@@ -25,9 +25,8 @@ import javax.inject.Inject
  *
  * Description:
  */
-
 @InjectFragment
-class MainStoryFragment() : BaseFragment<MainStoryFragmentBinding>() {
+class MainStoryFragment : BaseFragment<MainStoryFragmentBinding>() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: MainStoryViewModel

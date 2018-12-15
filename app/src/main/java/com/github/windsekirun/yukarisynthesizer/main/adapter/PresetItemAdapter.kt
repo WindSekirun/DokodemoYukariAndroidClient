@@ -19,7 +19,7 @@ import com.github.windsekirun.yukarisynthesizer.main.event.ClickPresetItem
  * Description:
  */
 class PresetItemAdapter : BaseRecyclerAdapter<PresetItem, MainPresetItemBinding>() {
-    var presetItemClickListener: OnPresetItemClickListener? = null
+    var presetItemClickListener: ((PresetItem) -> Unit)? = null
 
     override fun bind(binding: MainPresetItemBinding, item: PresetItem, position: Int) {
         binding.item = item
@@ -27,7 +27,7 @@ class PresetItemAdapter : BaseRecyclerAdapter<PresetItem, MainPresetItemBinding>
 
     override fun onClickedItem(binding: MainPresetItemBinding, item: PresetItem, position: Int) {
         if (presetItemClickListener != null) {
-            presetItemClickListener?.onClick(item)
+            presetItemClickListener?.invoke(item)
         } else {
             postEvent(ClickPresetItem(item))
         }
@@ -39,9 +39,5 @@ class PresetItemAdapter : BaseRecyclerAdapter<PresetItem, MainPresetItemBinding>
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup): MainPresetItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_preset_item, parent, false)
-    }
-
-    interface OnPresetItemClickListener {
-        fun onClick(voiceItem: PresetItem)
     }
 }

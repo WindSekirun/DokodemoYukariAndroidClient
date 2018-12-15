@@ -14,6 +14,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.reactivex.disposables.CompositeDisposable
 
+/**
+ * Base class for generate BottomSheetDialogFragment
+ */
 abstract class RoundedBottomSheetDialogFragment<T : ViewDataBinding> : BottomSheetDialogFragment(), BaseInterface {
     lateinit var binding: T
     protected val compositeDisposable = CompositeDisposable()
