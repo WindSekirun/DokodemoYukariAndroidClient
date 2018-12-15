@@ -75,6 +75,11 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
     }
 
     @Subscribe
+    fun onClickVoiceItem(event: ClickVoiceItem) {
+        viewModel.clickVoiceItem(event.item)
+    }
+
+    @Subscribe
     fun onCloseFragmentEvent(event: CloseFragmentEvent) {
         if (revealSetting != null) {
             val revealSetting = RevealSettingHolder.revealSetting

@@ -374,6 +374,26 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     }
 
     /**
+     * remove [VoiceItem] with given [VoiceItem.id]
+     *
+     * TBD.
+     * @param voiceItemId remove to id
+     * @param autoRemove optional, remove [VoiceItem], [PhonomeItem] which not used any voices and remove associated
+     * [StoryItem.voicesIds] which hold given [VoiceItem.id]
+     */
+    fun removeVoiceItem(voiceItemId: Long, autoRemove: Boolean = false): Observable<Boolean> {
+        return Observable.create {emitter ->
+            voiceBox.remove(voiceItemId)
+
+            if (autoRemove) {
+                // TODO: TBD.
+            }
+
+            emitter.onNext(true)
+        }
+    }
+
+    /**
      * request Synthesis with given [storyItem]
      *
      * @param storyItem [StoryItem] to synthesis

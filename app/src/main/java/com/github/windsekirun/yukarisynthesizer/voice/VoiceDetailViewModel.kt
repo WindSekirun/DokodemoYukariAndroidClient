@@ -245,6 +245,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     companion object {
         const val EXTRA_VOICE_ID = "45c57318-1d67-4ace-800e-7e3257a79b8b"
         const val EXTRA_EDIT_VOICE_ID = "03c005ff-415a-4ed8-a5f0-a3cddc78c3c9"
+        const val EXTRA_REQUEST_DELETE = "1f6cf925-1bc7-42b7-a17d-b8cc6db1140b"
         private val TAG: String = VoiceDetailViewModel::class.java.simpleName
     }
 }

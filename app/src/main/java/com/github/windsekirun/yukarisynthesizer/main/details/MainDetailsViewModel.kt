@@ -105,6 +105,42 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         }
     }
 
+    fun clickVoiceItem(item: VoiceItem) {
+        val originId = item.id
+        val bundle = Bundle().apply {
+            putLong(VoiceDetailViewModel.EXTRA_VOICE_ID, originId)
+        }
+
+        RxActivityResult.result()
+            .flatMapObservable {
+                val id = it.data?.getLongExtra(VoiceDetailViewModel.EXTRA_EDIT_VOICE_ID, 0) ?: 0L
+                val requestDelete = it.data?.getBooleanExtra(VoiceDetailViewModel.EXTRA_REQUEST_DELETE, false) ?: false
+
+                if (requestDelete) {
+                    // TODO: implement delete feature in YukariOperator, and handle this properly
+                    Observable.error(IOException("Unexpected error"))
+                } else {
+                    if (id != 0L) {
+                        yukariOperator.getVoiceItem(id)
+                    } else {
+                        Observable.error(IOException("Unexpected error"))
+                    }
+                }
+            }
+            .subscribe { data, error ->
+                if (error != null || data == null) {
+                    Log.e(TAG, "addVoice", error)
+                    return@subscribe
+                }
+
+                val list = itemData.getList()
+                list.add(data)
+                itemData.value = list
+            }.addTo(compositeDisposable)
+
+        RxActivityResult.startActivityForResult(VoiceDetailActivity::class.java, bundle)
+    }
+
     private fun bindItems(initial: Boolean) {
         if (initial) {
             itemData.value = mutableListOf()
