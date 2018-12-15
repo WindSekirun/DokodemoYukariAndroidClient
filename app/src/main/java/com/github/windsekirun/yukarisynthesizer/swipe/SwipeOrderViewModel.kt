@@ -78,8 +78,15 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         addDisposable(disposable)
     }
 
-    fun changeOrder(finalPosition: Int, item: VoiceItem) {        itemData.remove(item)
+    fun changeOrder(finalPosition: Int, item: VoiceItem) {
+        itemData.remove(item)
         itemData.add(finalPosition, item)
+        changed = true
+    }
+
+    fun removeItem(item: VoiceItem) {
+        itemData.remove(item)
+        changed = true
     }
 
     companion object {

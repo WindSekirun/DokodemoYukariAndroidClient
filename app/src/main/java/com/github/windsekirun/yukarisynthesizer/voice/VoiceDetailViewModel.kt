@@ -78,6 +78,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         when (item.itemId) {
             R.id.menu_voice_copy -> copyVoice()
             R.id.menu_voice_remove -> removeVoice()
+            R.id.menu_voice_origin -> backToOrigin()
         }
 
         return true
@@ -191,8 +192,12 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                     return@subscribe
                 }
 
-                originalVoiceItem = data.second
+                changed = false
+
+                itemData.clear()
                 itemData.addAll(data.first)
+
+                originalVoiceItem = data.second
                 selectedEngine.set(data.second.engine)
                 selectedPresetItem = data.second.preset
                 selectedPreset.set(data.second.preset.title)
@@ -266,6 +271,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         setResult(Activity.RESULT_OK, bundle)
         finishActivity(VoiceDetailActivity::class.java)
+    }
+
+    private fun backToOrigin() {
+        loadData()
     }
 
     companion object {

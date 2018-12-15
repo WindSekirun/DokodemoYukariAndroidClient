@@ -213,6 +213,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             val equalPair = if (voiceEngine != null) voiceEngine.id to PresetItem_.engine else null
             val list =
                 nativeQuerySearch(presetBox, page, limit, searchTitle to PresetItem_.title, orderBy, equal = equalPair)
+
             it.onNext(list)
         }
     }
@@ -257,7 +258,8 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         limit: Long = 20L,
         searchTitle: String = "",
         orderBy: Pair<@OrderType Int, Property<StoryItem>> = OrderType.OrderFlags.ASCENDING to StoryItem_.regDate,
-        localPlayable: Boolean = false
+        localPlayable: Boolean = false,
+        orderFavorite: Boolean = false
     ): Observable<List<StoryItem>> {
         return updateStoryItemPath()
             .flatMap {
@@ -266,7 +268,20 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
                 val list = nativeQuerySearch(storyBox, page, limit, searchTitle to StoryItem_.title, orderBy, notEqual)
                     .map { item -> item.findMetadata() }
 
-                Observable.just(list)
+                if (orderFavorite) {
+                    val nonFavorite = list.filter { item -> item.favoriteFlag.not() }
+                        .sortedBy { item -> item.regDate }
+                    val favorite = list.minus(nonFavorite).sortedBy { item -> item.regDate }
+
+                    val result = mutableListOf<StoryItem>().apply {
+                        addAll(favorite)
+                        addAll(nonFavorite)
+                    }
+
+                    Observable.just(result)
+                } else {
+                    Observable.just(list)
+                }
             }
     }
 

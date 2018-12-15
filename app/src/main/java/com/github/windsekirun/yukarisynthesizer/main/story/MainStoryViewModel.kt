@@ -75,7 +75,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun loadData() {
-        val disposable = yukariOperator.getStoryList()
+        val disposable = yukariOperator.getStoryList(orderFavorite = true)
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
                 if (error != null || data == null) {

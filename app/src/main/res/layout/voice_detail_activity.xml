@@ -89,6 +89,7 @@
                 android:drawableRight="@drawable/ic_arrow_both"
                 android:gravity="center_vertical"
                 android:hint="@string/voice_detail_hint"
+                android:drawableTint="@color/white"
                 android:onClick="@{viewModel::clickPresetSelect}"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"

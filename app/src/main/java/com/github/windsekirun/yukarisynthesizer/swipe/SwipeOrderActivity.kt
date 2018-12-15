@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeAdapter
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView
 import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemDragListener
+import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemSwipeListener
 import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.daggerautoinject.InjectActivity
@@ -56,7 +57,6 @@ class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
 
         // disable any swipe function (we don't need it)
         mBinding.recyclerView.orientation?.removeSwipeDirectionFlag(Direction.RIGHT)
-        mBinding.recyclerView.orientation?.removeSwipeDirectionFlag(Direction.LEFT)
 
         mBinding.recyclerView.dragListener = object : OnItemDragListener<VoiceItem> {
             override fun onItemDragged(previousPosition: Int, newPosition: Int, item: VoiceItem) {
@@ -69,6 +69,18 @@ class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
                     viewModel.changeOrder(finalPosition, item)
                 }
             }
+        }
+
+        mBinding.recyclerView.swipeListener = object : OnItemSwipeListener<VoiceItem> {
+            override fun onItemSwiped(
+                position: Int,
+                direction: OnItemSwipeListener.SwipeDirection,
+                item: VoiceItem
+            ): Boolean {
+                viewModel.removeItem(item)
+                return false
+            }
+
         }
     }
 

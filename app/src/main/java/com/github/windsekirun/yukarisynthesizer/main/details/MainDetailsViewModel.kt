@@ -138,8 +138,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .subscribe { data, error ->
                 if (error != null || data == null) return@subscribe
                 title.set(storyItem.title)
+                itemData.clear()
                 itemData.addAll(data)
-
                 observeEvent()
             }
 
