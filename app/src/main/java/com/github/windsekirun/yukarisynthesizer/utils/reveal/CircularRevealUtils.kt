@@ -153,6 +153,9 @@ object CircularRevealUtils {
         anim.start()
     }
 
+    /**
+     * Data class for display option for Reveal animatopn
+     */
     data class RevealSetting(var centerX: Int, var centerY: Int, var width: Int, var height: Int) {
         companion object {
             fun with(fab: View, container: View): RevealSetting =
