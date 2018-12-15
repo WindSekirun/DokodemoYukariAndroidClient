@@ -8,6 +8,9 @@ import io.objectbox.annotation.Id
 import java.io.Serializable
 import java.util.*
 
+/**
+ * Entity class for hold [StoryItem] within ObjectBox
+ */
 @Entity
 class StoryItem() : Serializable {
     @Id

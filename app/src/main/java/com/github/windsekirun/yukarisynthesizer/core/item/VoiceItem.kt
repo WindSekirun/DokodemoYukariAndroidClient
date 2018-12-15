@@ -45,6 +45,9 @@ class VoiceItem() : Serializable {
         this.breakTime = breakTime
     }
 
+    /**
+     * Convert phonomes to [contentOrigin] to view-binding
+     */
     fun bindContentOrigin() {
         contentOrigin = phonomes.asSequence().map { it.origin }.joinToString(separator = "") { it }
     }
@@ -54,6 +57,9 @@ class VoiceItem() : Serializable {
     }
 
     companion object {
+        /**
+         * help methods to generate [VoiceItem] with given [breakTime]
+         */
         fun addBreak(timeMs: Long) = VoiceItem(timeMs)
     }
 }

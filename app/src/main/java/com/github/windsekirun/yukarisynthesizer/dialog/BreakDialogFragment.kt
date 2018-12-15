@@ -10,6 +10,9 @@ import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.databinding.BreakDialogFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.module.sheet.RoundedBottomSheetDialogFragment
 
+/**
+ * DialogFragment for add break time
+ */
 class BreakDialogFragment : RoundedBottomSheetDialogFragment<BreakDialogFragmentBinding>() {
     val progress: ObservableInt = ObservableInt(0)
     lateinit var voiceItem: VoiceItem

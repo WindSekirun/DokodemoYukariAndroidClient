@@ -1,11 +1,9 @@
 package com.github.windsekirun.yukarisynthesizer.swipe
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeAdapter
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView
@@ -21,7 +19,9 @@ import com.github.windsekirun.yukarisynthesizer.swipe.event.ReadyDisplayViewEven
 import com.github.windsekirun.yukarisynthesizer.utils.CharacterBindUtils
 import org.greenrobot.eventbus.Subscribe
 
-
+/**
+ * Swap order / remove feature of List of [VoiceItem]
+ */
 @InjectActivity
 class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
     private lateinit var viewModel: SwipeOrderViewModel
@@ -72,10 +72,10 @@ class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
         }
     }
 
-    class SwipeOrderAdapter(dataSet: List<VoiceItem> = emptyList()) :
+    private class SwipeOrderAdapter(dataSet: List<VoiceItem> = emptyList()) :
         DragDropSwipeAdapter<VoiceItem, SwipeOrderAdapter.ViewHolder>(dataSet) {
 
-        class ViewHolder(itemView: View) : DragDropSwipeAdapter.ViewHolder(itemView) {
+        private class ViewHolder(itemView: View) : DragDropSwipeAdapter.ViewHolder(itemView) {
             val imgCharacter: ImageView = itemView.findViewById(R.id.imgCharacter)
             val txtTitle: TextView = itemView.findViewById(R.id.txtTitle)
             val txtDesc: TextView = itemView.findViewById(R.id.txtDesc)

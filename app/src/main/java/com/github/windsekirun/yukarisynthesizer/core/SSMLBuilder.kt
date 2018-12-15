@@ -7,6 +7,9 @@ import org.redundent.kotlin.xml.xml
 
 object SSMLBuilder {
 
+    /**
+     * process [StoryItem] to generate SSML document
+     */
     fun process(item: StoryItem, minify: Boolean = false): String {
         val ssml = xml("speak") {
             attribute("version", item.version)

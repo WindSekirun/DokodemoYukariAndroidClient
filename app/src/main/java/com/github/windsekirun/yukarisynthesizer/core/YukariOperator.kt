@@ -484,16 +484,10 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         return this
     }
 
-    /**
-     * find and apply 'transient metadata' with given [StoryItem]
-     */
     private fun StoryItem.findMetadata() = this.apply {
         this.regDateFormat = this.regDate.asDateString("yyyy. MM. dd.")
     }
 
-    /**
-     * find and apply `transient metadata` with given [VoiceItem]
-     */
     private fun VoiceItem.findMetaData() = this.apply {
         val ids = this.phonomeIds.toLongArray()
         val query = phonomeBox.query {
@@ -503,9 +497,6 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         this.phonomes = query
     }
 
-    /**
-     * get Default settings of [PresetItem]
-     */
     private fun getInternalPresetItem(voiceEngine: VoiceEngine): PresetItem {
         return PresetItem().apply {
             this.engine = voiceEngine
@@ -518,9 +509,6 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         }
     }
 
-    /**
-     * Run native query search by given options.
-     */
     private fun <ENTITY> nativeQuerySearch(
         box: Box<ENTITY>,
         page: Int,
@@ -545,9 +533,6 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         }
     }
 
-    /**
-     * update unreadable [StoryItem_.localPath] to empty in all value of [storyBox]
-     */
     private fun updateStoryItemPath(): Observable<Int> {
         return Observable.create { emitter ->
             val notEqual = "" to StoryItem_.localPath

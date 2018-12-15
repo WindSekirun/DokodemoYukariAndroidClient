@@ -103,12 +103,12 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
                 if (requestDelete) {
                     // TODO: implement delete feature in YukariOperator, and handle this properly
-                    Observable.error(IOException("Unexpected error"))
+                    Observable.error(IOException())
                 } else {
                     if (id != 0L) {
                         yukariOperator.getVoiceItem(id)
                     } else {
-                        Observable.error(IOException("Unexpected error"))
+                        Observable.error(IOException())
                     }
                 }
             }
