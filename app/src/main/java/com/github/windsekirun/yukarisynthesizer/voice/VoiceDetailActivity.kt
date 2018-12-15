@@ -89,7 +89,7 @@ class VoiceDetailActivity : BaseActivity<VoiceDetailActivityBinding>() {
     }
 
     private fun addPredicateKeywords() {
-        val list = viewModel.itemData.value!!
+        val list = viewModel.itemData
 
         mBinding.predicateLayout.clear()
         mBinding.predicateLayout.setItems(list)

@@ -38,7 +38,7 @@ class VoicePresetFragment : RoundedBottomSheetDialogFragment<VoicePresetFragment
         super.onViewCreated(view, savedInstanceState)
         binding.fragment = this
 
-        MainApplication.appComponent!!.inject(this)
+        MainApplication.appComponent.inject(this)
         val presetItemAdapter = initRecyclerView(binding.recyclerView, PresetItemAdapter::class.java)
         presetItemAdapter.presetItemClickListener = object : PresetItemAdapter.OnPresetItemClickListener {
             override fun onClick(presetItem: PresetItem) {
@@ -64,9 +64,9 @@ class VoicePresetFragment : RoundedBottomSheetDialogFragment<VoicePresetFragment
         )
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
-                if (error != null) return@subscribe
+                if (error != null || data == null) return@subscribe
                 itemData.clear()
-                itemData.addAll(data!!)
+                itemData.addAll(data)
             }
     }
 }

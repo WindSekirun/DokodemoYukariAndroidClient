@@ -33,7 +33,7 @@ class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInject
     lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
     @Inject
     lateinit var serviceDispatchingAndroidInjector: DispatchingAndroidInjector<Service>
-    private var mBoxStore: BoxStore? = null
+    private lateinit var mBoxStore: BoxStore
 
     override val configFilePath: String
         get() = "config.json"
@@ -45,17 +45,12 @@ class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInject
             .application(this)
             .build()
 
-        DaggerAutoInject.init(this, appComponent!!)
-
+        DaggerAutoInject.init(this, appComponent)
         mBoxStore = MyObjectBox.builder().androidContext(this).build()
-
-        if (BuildConfig.DEBUG) {
-//            AndroidObjectBrowser(mBoxStore).start(this)
-        }
     }
 
     fun <T> getBox(cls: Class<T>): Box<T> {
-        return mBoxStore!!.boxFor(cls)
+        return mBoxStore.boxFor(cls)
     }
 
     override fun activityInjector(): DispatchingAndroidInjector<Activity>? {
@@ -70,7 +65,7 @@ class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInject
         /**
          * @return [DaggerAppComponent] to inject
          */
-        var appComponent: AppComponent? = null
+        lateinit var appComponent: AppComponent
             private set
 
         fun getApplication(context: Context): MainApplication {

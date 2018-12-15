@@ -1,8 +1,8 @@
 package com.github.windsekirun.yukarisynthesizer.main.story
 
 import android.util.Log
+import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
 import com.github.windsekirun.daggerautoinject.InjectViewModel
@@ -28,7 +28,7 @@ import javax.inject.Inject
 @InjectViewModel
 class MainStoryViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
-    val itemData: MutableLiveData<List<StoryItem>> = MutableLiveData()
+    val itemData = ObservableArrayList<StoryItem>()
 
     @Inject
     lateinit var yukariOperator: YukariOperator
@@ -36,6 +36,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         yukariOperator.firstRunSetup().subscribe { _, _ -> }.addTo(compositeDisposable)
+//        yukariOperator.generateTestData()
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -77,11 +78,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         val disposable = yukariOperator.getStoryList()
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
-                if (error != null) {
+                if (error != null || data == null) {
                     Log.e(MainStoryViewModel::class.java.simpleName, "onResume: ", error)
                     return@subscribe
                 }
-                itemData.value = data
+                itemData.addAll(data)
             }
 
         addDisposable(disposable)

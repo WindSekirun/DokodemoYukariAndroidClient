@@ -14,7 +14,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:background="@color/white"
+        android:background="@color/primaryColor"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/voice_detail_write"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/voice_select"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -83,12 +83,12 @@
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/bg_preset_round"
+                android:background="@drawable/bg_preset_round_5"
                 android:drawableRight="@drawable/ic_arrow_both"
                 android:gravity="center_vertical"
                 android:onClick="@{viewModel::clickPresetSelect}"
                 android:paddingLeft="10dp"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:paddingRight="10dp"
                 android:text="@{viewModel.selectedPreset}"
                 android:textSize="15sp"
@@ -103,7 +103,7 @@
                 android:layout_height="190dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/bg_preset_round"
+                android:background="@drawable/bg_preset_round_5"
                 android:padding="5dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -134,6 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
+                    android:textColor="@color/textSecondary"
                     android:singleLine="true"
                     android:text="@={viewModel.selectedDeceptions}"
                     android:textSize="13sp" />
@@ -149,6 +150,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="@string/voice_detail_jeita"
                 android:textSize="11sp"
+                android:textColor="@color/textSecondary"
                 app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/textInputLayout"
@@ -169,6 +171,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
+                    android:textColor="@color/textSecondary"
                     android:singleLine="true"
                     app:onEditorAction="@{viewModel::handleEditorAction}"
                     android:text="@={viewModel.selectedText}"
@@ -186,8 +189,8 @@
                 android:text="@string/enter"
                 android:textColor="@color/black"
                 app:backgroundTint="@color/brightPurple"
-                app:icon="@drawable/ic_plus_black_24dp"
-                app:iconTint="@color/colorAccent"
+                app:icon="@drawable/ic_plus_white_24dp"
+                app:iconTint="@color/darkPurple"
                 app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
@@ -200,7 +203,8 @@
                 android:layout_marginEnd="8dp"
                 android:onClick="@{viewModel::clickHistory}"
                 android:text="@string/history"
-                app:backgroundTint="@color/white"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/primaryColor"
                 app:layout_constraintEnd_toStartOf="@+id/materialButton2"
                 app:layout_constraintTop_toTopOf="@+id/materialButton2" />
 

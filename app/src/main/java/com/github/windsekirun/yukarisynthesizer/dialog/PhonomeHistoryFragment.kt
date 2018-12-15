@@ -42,7 +42,7 @@ class PhonomeHistoryFragment : RoundedBottomSheetDialogFragment<PhonomeHistoryFr
         super.onViewCreated(view, savedInstanceState)
         binding.fragment = this
 
-        MainApplication.appComponent!!.inject(this)
+        MainApplication.appComponent.inject(this)
         val phonomeListAdapter = initRecyclerView(binding.recyclerView, PhonomeListAdapter::class.java)
         phonomeListAdapter.phonomeClickAdapter = object : PhonomeListAdapter.OnPhonomeClickAdapter {
             override fun onClick(phonomeItem: PhonomeItem) {
@@ -71,9 +71,9 @@ class PhonomeHistoryFragment : RoundedBottomSheetDialogFragment<PhonomeHistoryFr
         disposable = yukariOperator.getPhonomeList(searchTitle = searchTitle.get())
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
-                if (error != null) return@subscribe
+                if (error != null || data == null) return@subscribe
                 itemData.clear()
-                itemData.addAll(data!!)
+                itemData.addAll(data)
             }
     }
 }

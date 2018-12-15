@@ -49,7 +49,7 @@ class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
     }
 
     private fun initSwipeOrder() {
-        swipeOrderAdapter = SwipeOrderAdapter(viewModel.itemData.value!!)
+        swipeOrderAdapter = SwipeOrderAdapter(viewModel.itemData)
         mBinding.recyclerView.layoutManager = LinearLayoutManager(this)
         mBinding.recyclerView.adapter = swipeOrderAdapter
         mBinding.recyclerView.orientation = Orientation.VERTICAL_LIST_WITH_VERTICAL_DRAGGING

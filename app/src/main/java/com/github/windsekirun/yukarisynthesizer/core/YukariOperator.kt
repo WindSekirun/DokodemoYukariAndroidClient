@@ -20,6 +20,7 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okio.BufferedSource
 import okio.Okio
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.toFile
@@ -213,7 +214,8 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     ): Observable<List<PresetItem>> {
         return Observable.create {
             val equalPair = if (voiceEngine != null) voiceEngine.id to PresetItem_.engine else null
-            val list = nativeQuerySearch(presetBox, page, limit, searchTitle to PresetItem_.title, orderBy, equal = equalPair)
+            val list =
+                nativeQuerySearch(presetBox, page, limit, searchTitle to PresetItem_.title, orderBy, equal = equalPair)
             it.onNext(list)
         }
     }
@@ -361,12 +363,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
                 voiceBox.remove(voiceQuery)
 
                 // remove unused phonomes with doesn't used in any voices
-                val usedPhonomeIds = voiceBox.all.flatMap { it.phonomeIds }.distinctBy { it }.toLongArray()
-                val phonomeQuery = phonomeBox.query {
-                    this.notIn(PhonomeItem_.id, usedPhonomeIds)
-                }.find()
-
-                phonomeBox.remove(phonomeQuery)
+                removeUnusedPhonomes()
             }
 
             emitter.onNext(true)
@@ -382,15 +379,32 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      * [StoryItem.voicesIds] which hold given [VoiceItem.id]
      */
     fun removeVoiceItem(voiceItemId: Long, autoRemove: Boolean = false): Observable<Boolean> {
-        return Observable.create {emitter ->
+        return Observable.create { emitter ->
             voiceBox.remove(voiceItemId)
 
             if (autoRemove) {
-                // TODO: TBD.
+                // remove unused phonomes
+                removeUnusedPhonomes()
+
+                // remove associated [StoryItem.voiceIds] which hold given [VoiceItem.id]
+                val storyItemUsed = storyBox.all.filter { it.voicesIds.contains(voiceItemId) }
+                    .map { it.apply { it.voicesIds = it.voicesIds.minusElement(voiceItemId) } }
+                    .toList()
+
+                storyBox.put(storyItemUsed)
             }
 
             emitter.onNext(true)
         }
+    }
+
+    fun removeUnusedPhonomes() {
+        val usedPhonomeIds = voiceBox.all.flatMap { it.phonomeIds }.distinctBy { it }.toLongArray()
+        val phonomeQuery = phonomeBox.query {
+            this.notIn(PhonomeItem_.id, usedPhonomeIds)
+        }.find()
+
+        phonomeBox.remove(phonomeQuery)
     }
 
     /**
@@ -434,7 +448,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
                 }
             }.flatMap {
                 Single.just(Okio.buffer(Okio.sink(pcmFile)).use { sink ->
-                    sink.writeAll(it.body()!!.source())
+                    sink.writeAll(it.body()?.source() as BufferedSource)
                     return@use pcmFile
                 })
             }.flatMap {

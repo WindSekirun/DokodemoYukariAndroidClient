@@ -104,7 +104,7 @@ class VoiceRecognitionFragment : RoundedBottomSheetDialogFragment<VoiceRecogniti
     }
 
     fun clickSave(view: View) {
-        context!!.selector(results, { _, item, _ ->
+        context?.selector(results, { _, item, _ ->
             callback.invoke(item)
             dismiss()
         }, getString(R.string.select_nearest_result))

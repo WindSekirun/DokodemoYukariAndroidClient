@@ -7,11 +7,10 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.argsinjector.Extra
 import com.github.windsekirun.bindadapters.observable.ObservableString
@@ -24,7 +23,7 @@ import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPhonomeHistoryEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
-import com.github.windsekirun.yukarisynthesizer.utils.getList
+import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
 import io.reactivex.Observable
@@ -42,14 +41,13 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     val selectedDeceptions = ObservableString()
     val selectedText = ObservableString()
     val voiceOriginLength = ObservableInt()
-
-    val itemData: MutableLiveData<MutableList<PhonomeItem>> = MutableLiveData()
-    var selectedPhonomesIndex = -1
+    val itemData = ObservableArrayList<PhonomeItem>()
     var selectedPhonomeItem: PhonomeItem? = null
 
-    private val changeObserver = Observer<List<PhonomeItem>> { refreshFlexBox() }
     private var selectedPresetItem: PresetItem = PresetItem()
+    private var selectedPhonomeIndex = -1
     private var originalVoiceItem: VoiceItem = VoiceItem()
+    private var changed: Boolean = false
 
     @Inject
     lateinit var yukariOperator: YukariOperator
@@ -59,26 +57,19 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         loadData()
-        itemData.observeForever(changeObserver)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        itemData.removeObserver(changeObserver)
-    }
-
-    override fun onDestroy(owner: LifecycleOwner) {
-        super.onDestroy(owner)
-        itemData.removeObserver(changeObserver)
+        itemData.propertyChanges()
+            .subscribe { _, _ ->
+                changed = true
+                refreshFlexBox()
+            }.addTo(compositeDisposable)
     }
 
     fun onBackPressed() {
-        if (itemData.getList().isNotEmpty()) {
+        if (changed || itemData.isNotEmpty()) {
             save()
         } else {
             finishActivity(VoiceDetailActivity::class.java)
         }
-        // TODO: implement this
     }
 
     fun clickPresetSelect(view: View) {
@@ -101,40 +92,31 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     fun clickEnter(view: View) {
         if (selectedText.get().isEmpty()) return
 
-        val list = itemData.getList()
-        if (selectedPhonomesIndex != -1) {
-            val phonomeItem = list[selectedPhonomesIndex].apply {
+        if (selectedPhonomeIndex != -1) {
+            val phonomeItem = itemData[selectedPhonomeIndex].apply {
                 this.origin = selectedText.get()
                 this.phoneme = selectedDeceptions.get()
             }
 
-            list[selectedPhonomesIndex] = phonomeItem
+            itemData[selectedPhonomeIndex] = phonomeItem
         } else {
             val phonomeItem = PhonomeItem(selectedText.get(), selectedDeceptions.get())
-            list.add(phonomeItem)
+            itemData.add(phonomeItem)
         }
 
         selectedText.set("")
         selectedDeceptions.set("")
-
-        itemData.value = list
     }
 
 
     fun clickHistory(view: View) {
-        val list: MutableList<PhonomeItem> = itemData.value.orEmpty().toMutableList()
-        val event = ShowPhonomeHistoryEvent {
-            list.add(it)
-            itemData.value = list
-        }
-
+        val event = ShowPhonomeHistoryEvent { itemData.add(it) }
         postEvent(event)
     }
 
     fun clickItem(item: PhonomeItem) {
         selectedPhonomeItem = item
-        selectedPhonomesIndex = itemData.getList().indexOf(item)
-
+        selectedPhonomeIndex = itemData.indexOf(item)
         selectedText.set(item.origin)
         selectedDeceptions.set(item.phoneme)
 
@@ -143,14 +125,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     fun clickRemove(item: PhonomeItem) {
         selectedPhonomeItem = null
-        selectedPhonomesIndex = -1
+        selectedPhonomeIndex = -1
         selectedText.set("")
         selectedDeceptions.set("")
 
-        val list = itemData.value.orEmpty().toMutableList()
-        list.remove(item)
-        itemData.value = list
-
+        itemData.remove(item)
         refreshFlexBox()
     }
 
@@ -182,7 +161,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 }
 
                 originalVoiceItem = data.second
-                itemData.value = data.first.toMutableList()
+                itemData.addAll(data.first)
                 selectedEngine.set(data.second.engine)
                 selectedPresetItem = data.second.preset
                 selectedPreset.set(data.second.preset.title)
@@ -192,7 +171,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun refreshFlexBox() {
-        val sum = itemData.getList().asSequence().map { it.origin.length }.sum()
+        val sum = itemData.asSequence().map { it.origin.length }.sum()
 
         voiceOriginLength.set(sum)
         postEvent(RefreshLayoutEvent())
@@ -201,9 +180,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     private fun save() {
         if (!validateSaveCondition()) return
 
-        val list = itemData.getList()
-
-        yukariOperator.addPhonomeItems(list)
+        yukariOperator.addPhonomeItems(itemData)
             .flatMap {
                 originalVoiceItem.apply {
                     engine = selectedEngine.get() ?: VoiceEngine.Yukari
@@ -211,7 +188,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                     breakTime = 0
                     regDate = Date() // modified to current time
                     phonomeIds = it
-                    phonomes = list
+                    phonomes = itemData
                     bindContentOrigin()
                 }
 

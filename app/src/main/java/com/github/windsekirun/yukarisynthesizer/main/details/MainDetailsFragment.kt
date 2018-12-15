@@ -45,12 +45,9 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
     private lateinit var voiceItemAdapter: VoiceItemAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
+        val view = super.onCreateView(inflater, container, savedInstanceState) as View
 
-        if (revealSetting != null) {
-            CircularRevealUtils.revealEnter(view!!, revealSetting!!)
-        }
-
+        revealSetting?.let { CircularRevealUtils.revealEnter(view, it) }
         postEvent(SwapDetailEvent(false))
 
         return view
@@ -82,9 +79,8 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
     @Subscribe
     fun onCloseFragmentEvent(event: CloseFragmentEvent) {
         if (revealSetting != null) {
-            val revealSetting = RevealSettingHolder.revealSetting
-            CircularRevealUtils.revealExit(mBinding.root, revealSetting!!) {
-                exitDetails()
+            RevealSettingHolder.revealSetting?.let {
+                CircularRevealUtils.revealExit(mBinding.root, it) { exitDetails() }
             }
         } else {
             exitDetails()

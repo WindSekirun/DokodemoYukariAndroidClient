@@ -4,9 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import androidx.databinding.ObservableArrayList
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.activityresult.RxActivityResult
 import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
@@ -26,7 +24,7 @@ import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderViewModel
-import com.github.windsekirun.yukarisynthesizer.utils.getList
+import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import com.github.windsekirun.yukarisynthesizer.voice.VoiceDetailActivity
 import com.github.windsekirun.yukarisynthesizer.voice.VoiceDetailViewModel
@@ -52,7 +50,7 @@ import javax.inject.Inject
 @InjectViewModel
 class MainDetailsViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
-    val itemData: MutableLiveData<MutableList<VoiceItem>> = MutableLiveData()
+    val itemData = ObservableArrayList<VoiceItem>()
     val title = ObservableString()
 
     @Inject
@@ -60,19 +58,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private var changed: Boolean = false
     private lateinit var storyItem: StoryItem
-    private val changeObserver = Observer<List<VoiceItem>> {
-        changed = true
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        itemData.removeObserver(changeObserver)
-    }
-
-    override fun onDestroy(owner: LifecycleOwner) {
-        super.onDestroy(owner)
-        itemData.removeObserver(changeObserver)
-    }
 
     fun loadData(storyItem: StoryItem?) {
         this.storyItem = storyItem ?: StoryItem()
@@ -80,7 +65,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun onBackPressed() {
-        if (!changed || (title.isEmpty && itemData.getList().isEmpty())) {
+        if (!changed || (title.isEmpty && itemData.isEmpty())) {
             postEvent(CloseFragmentEvent())
         } else {
             save(autoClose = true)
@@ -133,9 +118,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                     return@subscribe
                 }
 
-                val list = itemData.getList()
-                list.add(data)
-                itemData.value = list
+                itemData.add(data)
             }.addTo(compositeDisposable)
 
         RxActivityResult.startActivityForResult(VoiceDetailActivity::class.java, bundle)
@@ -143,7 +126,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun bindItems(initial: Boolean) {
         if (initial) {
-            itemData.value = mutableListOf()
             observeEvent()
             return
         }
@@ -153,7 +135,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .subscribe { data, error ->
                 if (error != null || data == null) return@subscribe
                 title.set(storyItem.title)
-                itemData.value = data.toMutableList()
+                itemData.addAll(data)
 
                 observeEvent()
             }
@@ -162,14 +144,14 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun save(autoClose: Boolean = false, swipeOrder: Boolean = false) {
-        if (itemData.getList().isEmpty()) {
+        if (itemData.isEmpty()) {
             postEvent(CloseFragmentEvent())
             return
         }
 
         storyItem.apply {
             this.title = this@MainDetailsViewModel.title.get()
-            this.voiceEntries = itemData.getList()
+            this.voiceEntries = itemData
         }
 
         val disposable = yukariOperator.addStoryItem(storyItem)
@@ -183,18 +165,19 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun observeEvent() {
-        itemData.observeForever(changeObserver)
+        title.propertyChanges()
+            .subscribe { _, _ -> changed = true }
+            .addTo(compositeDisposable)
 
-        val disposable =
-            title.propertyChanges()
-                .subscribe { _, _ -> changed = true }
-        addDisposable(disposable)
+        itemData.propertyChanges()
+            .subscribe { _, _ -> changed = true }
+            .addTo(compositeDisposable)
     }
 
     private fun requestSynthesis() {
-        if (itemData.getList().isEmpty()) return
+        if (itemData.isEmpty()) return
 
-        val ids = itemData.getList().map { it.id }
+        val ids = itemData.map { it.id }
         val contentEqual = checkEqualContent(ids, storyItem.voicesIds)
         if (contentEqual && (storyItem.localPath.isNotEmpty() && storyItem.localPath.toFile().canRead())) {
             // if itemData and voiceIds is equal and localPath is valid, we don't need to synthesis this timing.
@@ -204,7 +187,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         storyItem.apply {
             this.title = this@MainDetailsViewModel.title.get()
-            this.voiceEntries = itemData.getList()
+            this.voiceEntries = itemData
         }
 
         ProgressDialogManager.instance.show()
@@ -256,9 +239,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 .compose(EnsureMainThreadComposer())
                 .subscribe { data, error ->
                     if (error != null || data == null) return@subscribe
-                    val list = itemData.getList()
-                    list.add(data)
-                    itemData.value = list
+                    itemData.add(data)
                 }
 
             addDisposable(disposable)
@@ -283,9 +264,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                     return@subscribe
                 }
 
-                val list = itemData.getList()
-                list.add(data)
-                itemData.value = list
+                itemData.add(data)
             }.addTo(compositeDisposable)
 
         RxActivityResult.startActivityForResult(VoiceDetailActivity::class.java)
@@ -320,9 +299,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                         bindContentOrigin()
                     }
 
-                    val list = itemData.getList()
-                    list.add(voiceItem)
-                    itemData.value = list
+                    itemData.add(voiceItem)
                 }
 
             addDisposable(disposable)
@@ -338,12 +315,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun addVoiceHistory() {
-        val event = ShowHistoryDialogEvent {
-            val list = itemData.getList()
-            list.add(it)
-            itemData.value = list
-        }
-
+        val event = ShowHistoryDialogEvent { itemData.add(it) }
         postEvent(event)
     }
 

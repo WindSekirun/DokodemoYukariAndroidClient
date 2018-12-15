@@ -41,7 +41,7 @@ class VoiceHistoryFragment : RoundedBottomSheetDialogFragment<VoiceHistoryFragme
         super.onViewCreated(view, savedInstanceState)
         binding.fragment = this
 
-        MainApplication.appComponent!!.inject(this)
+        MainApplication.appComponent.inject(this)
         val voiceItemAdapter = initRecyclerView(binding.recyclerView, VoiceItemAdapter::class.java)
         voiceItemAdapter.voiceItemClickListener = object : VoiceItemAdapter.OnVoiceItemClickListener {
             override fun onClick(voiceItem: VoiceItem) {
@@ -73,9 +73,9 @@ class VoiceHistoryFragment : RoundedBottomSheetDialogFragment<VoiceHistoryFragme
         )
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
-                if (error != null) return@subscribe
+                if (error != null || data == null) return@subscribe
                 itemData.clear()
-                itemData.addAll(data!!)
+                itemData.addAll(data)
             }
     }
 }

@@ -1,7 +1,7 @@
 package com.github.windsekirun.yukarisynthesizer.swipe
 
 import android.app.Activity
-import androidx.lifecycle.MutableLiveData
+import androidx.databinding.ObservableArrayList
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.argsinjector.Extra
 import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @InjectViewModel
 class SwipeOrderViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
-    val itemData: MutableLiveData<MutableList<VoiceItem>> = MutableLiveData()
+    val itemData = ObservableArrayList<VoiceItem>()
     var changed: Boolean = false
 
     @Extra(EXTRA_STORY_ITEM_ID)
@@ -32,8 +32,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .flatMap { yukariOperator.getVoiceListAssociatedStoryItem(it) }
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
-                if (error != null) return@subscribe
-                itemData.value = data!!.toMutableList()
+                if (error != null || data == null) return@subscribe
+                itemData.addAll(data)
                 postEvent(ReadyDisplayViewEvent())
             }
 
@@ -55,7 +55,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 }
 
                 it.apply {
-                    this.voiceEntries = itemData.value!!
+                    this.voiceEntries = itemData
                     this.localPath = ""
                 }
                 yukariOperator.addStoryItem(it)
@@ -72,11 +72,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun changeOrder(finalPosition: Int, item: VoiceItem) {
-        val list = itemData.value!!
-        list.remove(item)
-        list.add(finalPosition, item)
-
-        itemData.value = list
+        itemData.remove(item)
+        itemData.add(finalPosition, item)
     }
 
     companion object {
