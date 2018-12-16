@@ -1,19 +1,20 @@
 package com.github.windsekirun.yukarisynthesizer.dialog
 
-import android.content.Context
+import android.content.DialogInterface
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
-import com.github.windsekirun.baseapp.base.BaseDialog
+import com.github.windsekirun.baseapp.utils.subscribe
 import com.github.windsekirun.bindadapters.observable.ObservableString
-import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
-import com.github.windsekirun.yukarisynthesizer.databinding.PlayDialogBinding
-import com.github.windsekirun.yukarisynthesizer.utils.subscribe
+import com.github.windsekirun.yukarisynthesizer.databinding.PlayDialogFragmentBinding
+import com.github.windsekirun.yukarisynthesizer.module.sheet.RoundedBottomSheetDialogFragment
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -21,17 +22,10 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.toFile
 import java.util.concurrent.TimeUnit
 
-
 /**
- * DokodemoYukariAndroidClient
- * Class: PlayDialog
- * Created by Pyxis on 12/1/18.
- *
- *
- * Description:
+ * DialogFragment to select preset
  */
-
-class PlayDialog(context: Context) : BaseDialog<PlayDialogBinding>(context) {
+class PlayDialogFragment : RoundedBottomSheetDialogFragment<PlayDialogFragmentBinding>() {
     val title = ObservableString()
     val max = ObservableInt()
     val progress = ObservableInt()
@@ -40,27 +34,25 @@ class PlayDialog(context: Context) : BaseDialog<PlayDialogBinding>(context) {
     val playTimeText = ObservableString()
 
     lateinit var disposable: Disposable
+    var targetList = mutableListOf<StoryItem>()
 
     private var playIndex: Int = 0
-    private val targetList = mutableListOf<StoryItem>()
     private val mediaPlayer: MediaPlayer = MediaPlayer()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.play_dialog)
-        mBinding.dialog = this
+    override fun createView(inflater: LayoutInflater, container: ViewGroup?) =
+        PlayDialogFragmentBinding.inflate(inflater, container, false)
 
-        setOnDismissListener { stopTimer() }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.fragment = this
+
+        singleMode.set(targetList.size == 1)
+        play(0)
     }
 
-    fun show(list: List<StoryItem>) {
-        super.show()
-
-        targetList.clear()
-        targetList.addAll(list)
-        singleMode.set(targetList.size == 1)
-
-        play(0)
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        stopTimer()
     }
 
     fun clickSkipPrevious(view: View) {

@@ -20,7 +20,6 @@ import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
-import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialog
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderViewModel
@@ -210,8 +209,8 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun playVoices() {
-        val playDialog = PlayDialog(requireNotNull(ActivityReference.getActivtyReference()))
-        playDialog.show(listOf(storyItem))
+        val event = ShowPlayDialogEvent(listOf(storyItem))
+        postEvent(event)
     }
 
     private fun removeStoryItem() {

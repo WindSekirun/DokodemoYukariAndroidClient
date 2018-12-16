@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="fragment"
+            type="com.github.windsekirun.yukarisynthesizer.dialog.PlayDialogFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@{fragment.title}"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Name Field" />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:max="@{fragment.max}"
+            android:onStopTrackingTouch="@{fragment::onStopTrackingTouch}"
+            android:progress="@={fragment.progress}"
+            android:progressTint="@color/darkPurple"
+            android:thumbTint="@color/darkPurple"
+            app:layout_constraintTop_toBottomOf="@+id/textView7"
+            tools:layout_editor_absoluteX="36dp"
+            tools:max="100"
+            tools:progress="50" />
+
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{fragment.playTimeText}"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seekBar"
+            tools:text="00:00/00:00" />
+
+        <ImageView
+            android:id="@+id/image1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:onClick="@{fragment::clickSkipPrevious}"
+            android:src="@drawable/ic_skip_previous_white_24dp"
+            android:visibility="@{fragment.singleMode ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintEnd_toStartOf="@+id/image2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image3" />
+
+        <ImageView
+            android:id="@+id/image2"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:onClick="@{fragment::clickRewind}"
+            android:src="@drawable/ic_replay_5_black_24"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/image3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/image1"
+            app:layout_constraintTop_toTopOf="@+id/image3" />
+
+        <ImageView
+            android:id="@+id/image3"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="16dp"
+            android:onClick="@{fragment::clickPlay}"
+            android:src="@{fragment.playState ? @drawable/ic_pause_black_24dp : @drawable/ic_play_white_24dp}"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/image4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/image2"
+            app:layout_constraintTop_toBottomOf="@+id/txtTime"
+            tools:layout_editor_absoluteY="127dp"
+            tools:src="@drawable/ic_pause_black_24dp" />
+
+        <ImageView
+            android:id="@+id/image4"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:onClick="@{fragment::clickForward}"
+            android:src="@drawable/ic_forward_5_black_24"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/image5"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/image3"
+            app:layout_constraintTop_toTopOf="@+id/image3" />
+
+        <ImageView
+            android:id="@+id/image5"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:onClick="@{fragment::clickSkipNext}"
+            android:src="@drawable/ic_skip_next_white_24dp"
+            android:visibility="@{fragment.singleMode ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/image4"
+            app:layout_constraintTop_toTopOf="@+id/image3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:onClick="@{fragment::clickClose}"
+            android:text="@string/close"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image3" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

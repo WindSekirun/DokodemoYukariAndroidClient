@@ -13,6 +13,7 @@ import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainDetailsFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.dialog.BreakDialogFragment
+import com.github.windsekirun.yukarisynthesizer.dialog.PlayDialogFragment
 import com.github.windsekirun.yukarisynthesizer.dialog.VoiceHistoryFragment
 import com.github.windsekirun.yukarisynthesizer.dialog.VoiceRecognitionFragment
 import com.github.windsekirun.yukarisynthesizer.main.adapter.VoiceItemAdapter
@@ -116,6 +117,11 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         showVoiceRecognitionDialog(event.callback)
     }
 
+    @Subscribe
+    fun onShowPlayDialogEvent(event: ShowPlayDialogEvent) {
+        showPlayDialog(event.param)
+    }
+
     private fun exitDetails() {
         requireActivity().supportFragmentManager.popBackStackImmediate()
         postEvent(SwapDetailEvent(true))
@@ -147,5 +153,14 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
 
         requireActivity().supportFragmentManager.beginTransaction()
             .add(fragment, "voice").commit()
+    }
+
+    private fun showPlayDialog(param: List<StoryItem>) {
+        val fragment = PlayDialogFragment().apply {
+            this.targetList = param.toMutableList()
+        }
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .add(fragment, "play").commit()
     }
 }

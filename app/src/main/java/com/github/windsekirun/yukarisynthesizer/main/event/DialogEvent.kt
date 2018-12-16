@@ -3,6 +3,7 @@ package com.github.windsekirun.yukarisynthesizer.main.event
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
+import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 
 /**
@@ -29,3 +30,8 @@ class ShowPresetDialogEvent(val param: VoiceEngine, val callback: (PresetItem) -
  * Event for show PhonomeHistoryFragment
  */
 class ShowPhonomeHistoryEvent( val callback: (PhonomeItem) -> Unit)
+
+/**
+ * Event for show PlayDialogFragment
+ */
+class ShowPlayDialogEvent(val param: List<StoryItem>)
