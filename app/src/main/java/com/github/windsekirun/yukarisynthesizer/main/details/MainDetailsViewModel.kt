@@ -35,6 +35,7 @@ import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.RPermission
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import pyxis.uzuki.live.richutilskt.utils.toFile
 import java.io.File
 import java.io.IOException
@@ -226,6 +227,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                     val origin = storyItem.localPath.toFile()
                     val newPath = File(folder.absolutePath, "${storyItem.title}.mp3")
                     origin.copyTo(newPath, true)
+
+                    runOnUiThread {
+                        showToast(context.getString(R.string.main_detail_saved_other_path).format(newPath.absolutePath))
+                    }
                 }
             }
         }

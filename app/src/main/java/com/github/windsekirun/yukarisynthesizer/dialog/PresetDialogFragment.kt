@@ -55,10 +55,10 @@ class PresetDialogFragment : RoundedBottomSheetDialogFragment<PresetDialogFragme
         presetItem.apply {
             this.engine = selectedEngine.get() ?: VoiceEngine.Yukari
             this.title = this@PresetDialogFragment.title.get()
-            this.volume = volumeProgress.get() * 0.5
-            this.rate = (rateProgress.get() * 0.1) + 0.5
-            this.pitch = ((pitchProgress.get() + 1) * 0.1) + 0.5
-            this.range = rateProgress.get() * 0.1
+            this.volume = convertVolumeText(volumeProgress.get()).toDouble()
+            this.rate = convertRateText(rateProgress.get()).toDouble()
+            this.pitch = convertRateText(pitchProgress.get()).toDouble()
+            this.range = convertRangeText(rangeProgress.get()).toDouble()
         }
 
         callback.invoke(presetItem)

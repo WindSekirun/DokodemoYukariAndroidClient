@@ -39,8 +39,14 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
         clickSpeedDialEvent(
             when (actionItem.id) {
-                R.id.menu_dial_story -> SpeedDialClickEvent.Mode.Story
-                R.id.menu_dial_preset -> SpeedDialClickEvent.Mode.Preset
+                R.id.menu_dial_story -> {
+                    replaceMain()
+                    SpeedDialClickEvent.Mode.Story
+                }
+                R.id.menu_dial_preset -> {
+                    replacePreset()
+                    SpeedDialClickEvent.Mode.Preset
+                }
                 R.id.menu_dial_voice -> SpeedDialClickEvent.Mode.Voice
                 R.id.menu_dial_break -> SpeedDialClickEvent.Mode.Break
                 R.id.menu_dial_history -> SpeedDialClickEvent.Mode.History
@@ -97,7 +103,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         postEvent(ToolbarMenuClickEvent(mode))
     }
 
-    fun replaceMain() {
+    private fun replaceMain() {
         if (shownDetail) {
             postEvent(SwapDetailEvent(true))
         }
