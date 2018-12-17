@@ -17,10 +17,10 @@ import com.github.windsekirun.yukarisynthesizer.module.sheet.RoundedBottomSheetD
  */
 class PresetDialogFragment : RoundedBottomSheetDialogFragment<PresetDialogFragmentBinding>() {
     val selectedEngine = ObservableField<VoiceEngine>()
-    val rangeProgress: ObservableInt = ObservableInt(10)
-    val pitchProgress: ObservableInt = ObservableInt(5)
-    val rateProgress: ObservableInt = ObservableInt(5)
-    val volumeProgress: ObservableInt = ObservableInt(2)
+    val rangeProgress: ObservableInt = ObservableInt()
+    val pitchProgress: ObservableInt = ObservableInt()
+    val rateProgress: ObservableInt = ObservableInt()
+    val volumeProgress: ObservableInt = ObservableInt()
     val title: ObservableString = ObservableString()
 
     lateinit var presetItem: PresetItem
@@ -37,15 +37,15 @@ class PresetDialogFragment : RoundedBottomSheetDialogFragment<PresetDialogFragme
             selectedEngine.set(presetItem.engine)
             title.set(presetItem.title)
             volumeProgress.set((presetItem.volume * 2).toInt())
-            rateProgress.set(((presetItem.rate * 10) - 5).toInt())
-            pitchProgress.set(((presetItem.pitch * 10) - 5).toInt())
+            rateProgress.set(((presetItem.rate * 10) - 6).toInt())
+            pitchProgress.set(((presetItem.pitch * 10) - 6).toInt())
             rangeProgress.set((presetItem.range * 10).toInt())
         } else {
             selectedEngine.set(VoiceEngine.Yukari)
             title.set("")
             volumeProgress.set(2)
-            rateProgress.set(5)
-            pitchProgress.set(5)
+            rateProgress.set(4)
+            pitchProgress.set(4)
             rangeProgress.set(10)
 
         }
