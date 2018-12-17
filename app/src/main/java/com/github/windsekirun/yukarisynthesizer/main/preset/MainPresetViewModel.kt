@@ -10,7 +10,9 @@ import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.core.YukariOperator
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
+import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryViewModel
+import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
 /**
@@ -32,7 +34,30 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
+        loadData()
+    }
 
+    fun clickPreset() {
+        clickPresetItem(PresetItem())
+    }
+
+    fun clickPresetItem(item: PresetItem) {
+        val event = ShowPresetDialogEvent(item) {
+            yukariOperator.addPresetItem(it)
+                .subscribe { data, error ->
+                    if (error != null || data == null) {
+                        Log.e(MainStoryViewModel::class.java.simpleName, "onResume: ", error)
+                        return@subscribe
+                    }
+
+                    loadData()
+                }.addTo(compositeDisposable)
+        }
+
+        postEvent(event)
+    }
+
+    private fun loadData() {
         val disposable = yukariOperator.getPresetList()
             .compose(EnsureMainThreadComposer())
             .subscribe { data, error ->
@@ -40,14 +65,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                     Log.e(MainStoryViewModel::class.java.simpleName, "onResume: ", error)
                     return@subscribe
                 }
+                itemData.clear()
                 itemData.addAll(data)
             }
 
         addDisposable(disposable)
     }
-
-    fun clickPreset() {
-
-    }
-
 }

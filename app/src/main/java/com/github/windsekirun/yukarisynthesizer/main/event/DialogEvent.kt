@@ -24,14 +24,19 @@ class ShowVoiceRecognitionEvent(val callback: (String) -> Unit)
 /**
  * Event for show VoicePresetFragment
  */
-class ShowPresetDialogEvent(val param: VoiceEngine, val callback: (PresetItem) -> Unit)
+class ShowVoicePresetEvent(val param: VoiceEngine, val callback: (PresetItem) -> Unit)
 
 /**
  * Event for show PhonomeHistoryFragment
  */
-class ShowPhonomeHistoryEvent( val callback: (PhonomeItem) -> Unit)
+class ShowPhonomeHistoryEvent(val callback: (PhonomeItem) -> Unit)
 
 /**
  * Event for show PlayDialogFragment
  */
 class ShowPlayDialogEvent(val param: List<StoryItem>)
+
+/**
+ * Event for show PresetDialogFragment
+ */
+class ShowPresetDialogEvent(val param: PresetItem, val callback: (PresetItem) -> Unit)

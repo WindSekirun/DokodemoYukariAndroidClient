@@ -94,6 +94,8 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         switchToolbarMenu(R.menu.menu_main)
 
         replaceFragment(MainStoryFragment(), true, false, false)
+
+        mBinding.bottomNavigationView.selectedItemId = R.id.menu_page_story
     }
 
     private fun switchToolbarMenu(@MenuRes menuRes: Int) {
@@ -103,10 +105,6 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
 
     private fun switchSpeedDialMenu(@MenuRes menuRes: Int) {
         mBinding.speedDial.inflate(menuRes)
-    }
-
-    private fun switchToolbarTitle(@StringRes title: Int) {
-        mBinding.toolbar.title = getString(title)
     }
 
     private fun <T : Fragment> replaceFragment(fragment: T, animated: Boolean, backStack: Boolean, reveal: Boolean) {
@@ -138,7 +136,7 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         mBinding.toolbar.navigationIcon = if (exitDetail) null else getDrawable(R.drawable.ic_arrow_left_white_24dp)
         switchToolbarMenu(toolbarRes)
         switchSpeedDialMenu(speedDialRes)
-        switchToolbarTitle(titleRes)
+        viewModel.toolbarTitle.set(getString(titleRes))
 
         viewModel.shownDetail = !exitDetail
 

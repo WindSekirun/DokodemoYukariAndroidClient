@@ -1,10 +1,7 @@
 package com.github.windsekirun.yukarisynthesizer.voice
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import androidx.core.content.ContextCompat
 import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
@@ -17,7 +14,7 @@ import com.github.windsekirun.yukarisynthesizer.dialog.PhonomeHistoryFragment
 import com.github.windsekirun.yukarisynthesizer.dialog.VoicePresetFragment
 import com.github.windsekirun.yukarisynthesizer.main.event.InvokeBackEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPhonomeHistoryEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.ShowVoicePresetEvent
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
 import org.greenrobot.eventbus.Subscribe
 
@@ -60,7 +57,7 @@ class VoiceDetailActivity : BaseActivity<VoiceDetailActivityBinding>() {
     }
 
     @Subscribe
-    fun onShowPresetDialogEvent(event: ShowPresetDialogEvent) {
+    fun onShowPresetDialogEvent(event: ShowVoicePresetEvent) {
         showVoicePresetDialog(event.param, event.callback)
     }
 

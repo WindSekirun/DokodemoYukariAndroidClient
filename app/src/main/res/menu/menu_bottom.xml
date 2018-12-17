@@ -13,9 +13,9 @@
         android:icon="@drawable/ic_toolbox_white_24dp"
         app:showAsAction="ifRoom"/>
 
-    <item
-        android:id="@+id/menu_page_play"
-        android:title="Play"
-        android:icon="@drawable/ic_play_black_24dp"
-        app:showAsAction="ifRoom"/>
+    <!--<item--> <!-- in future, i'll implement this -->
+        <!--android:id="@+id/menu_page_play"-->
+        <!--android:title="Play"-->
+        <!--android:icon="@drawable/ic_play_black_24dp"-->
+        <!--app:showAsAction="ifRoom"/>-->
 </menu>

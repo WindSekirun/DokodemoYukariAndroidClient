@@ -8,8 +8,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.windsekirun.baseapp.base.BaseFragment
 import com.github.windsekirun.daggerautoinject.InjectFragment
 import com.github.windsekirun.yukarisynthesizer.R
+import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainPresetFragmentBinding
+import com.github.windsekirun.yukarisynthesizer.dialog.PresetDialogFragment
 import com.github.windsekirun.yukarisynthesizer.main.adapter.PresetItemAdapter
+import com.github.windsekirun.yukarisynthesizer.main.event.ClickPresetItem
+import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.SpeedDialClickEvent
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
@@ -46,5 +50,25 @@ class MainPresetFragment : BaseFragment<MainPresetFragmentBinding>() {
         if (SpeedDialClickEvent.checkAvailable(this.javaClass, event.mode)) {
             viewModel.clickPreset()
         }
+    }
+
+    @Subscribe
+    fun onClickPresetItem(event: ClickPresetItem) {
+        viewModel.clickPresetItem(event.item)
+    }
+
+    @Subscribe
+    fun onShowPresetDialogEvent(event: ShowPresetDialogEvent) {
+        showPresetDialog(event.param, event.callback)
+    }
+
+    private fun showPresetDialog(param: PresetItem, callback: (PresetItem) -> Unit) {
+        val fragment = PresetDialogFragment().apply {
+            this.presetItem = param
+            this.callback = callback
+        }
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .add(fragment, "preset").commit()
     }
 }

@@ -56,6 +56,19 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     }
 
     /**
+     * add [PresetItem] into box
+     *
+     * @param presetItem [PresetItem] to add
+     * @return id of added row
+     */
+    fun addPresetItem(presetItem: PresetItem): Observable<Long> {
+        return Observable.create { emitter ->
+            presetBox.put(presetItem)
+            emitter.onNext(presetItem.id)
+        }
+    }
+
+    /**
      * add [StoryItem] to box with update associated [StoryItem.voiceEntries]
      *
      * @param storyItem [StoryItem] to add
@@ -455,7 +468,7 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      * @param storyItem [StoryItem] to synthesis
      * @return updated [StoryItem]
      */
-    fun requestSynthesis(storyItem: StoryItem): Single<StoryItem> {
+    fun requestSynthesis(storyItem: StoryItem, path: String = ""): Single<StoryItem> {
         val target = storyItem.addStoryLocalPath()
         val client = OkHttpClient()
         val ffmpeg = FFmpeg.getInstance(application)

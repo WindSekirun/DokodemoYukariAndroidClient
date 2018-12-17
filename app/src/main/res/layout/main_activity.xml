@@ -21,7 +21,7 @@
             app:actionSelected="@{viewModel::clickToolbarMenuItem}"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationItemClicked="@{viewModel::clickToolbarNavigation}"
-            app:title="Story"
+            app:title="@{viewModel.toolbarTitle}"
             app:titleTextColor="@color/white" />
 
         <FrameLayout
@@ -59,6 +59,7 @@
             android:background="@color/primaryDarkColor"
             app:itemIconTint="@color/white"
             app:itemTextColor="@color/white"
+            app:navigationItemClicked="@{viewModel::clickNavigationBottomView}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_bottom" />
     </androidx.constraintlayout.widget.ConstraintLayout>

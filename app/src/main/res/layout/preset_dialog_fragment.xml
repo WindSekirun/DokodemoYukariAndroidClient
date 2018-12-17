@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="fragment"
+            type="com.github.windsekirun.yukarisynthesizer.dialog.PresetDialogFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:background="@color/primaryColor">
+
+        <TextView
+            android:id="@+id/mainTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="Adjust Preset"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/main_details_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mainTitle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={fragment.title}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+      <androidx.core.widget.NestedScrollView
+          android:layout_width="match_parent"
+          app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+          android:layout_height="wrap_content">
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+              <com.google.android.material.card.MaterialCardView
+                  android:id="@+id/cardView"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_margin="8dp"
+                  android:layout_marginTop="16dp"
+                  app:cardBackgroundColor="@color/cardBackground"
+                  app:cardCornerRadius="16dp"
+                  app:cardElevation="0dp"
+                  app:layout_constraintTop_toTopOf="parent"
+                  tools:layout_editor_absoluteX="8dp">
+
+                  <androidx.constraintlayout.widget.ConstraintLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                      <TextView
+                          android:id="@+id/progress"
+                          android:layout_width="wrap_content"
+                          android:layout_height="23dp"
+                          android:layout_marginTop="8dp"
+                          android:layout_marginBottom="16dp"
+                          android:fontFamily="sans-serif-medium"
+                          android:includeFontPadding="false"
+                          android:maxLines="1"
+                          android:textColor="@color/white"
+                          android:text="@{fragment.convertRangeText(fragment.rangeProgress)}"
+                          android:textSize="22sp"
+                          app:layout_constraintBottom_toBottomOf="parent"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toBottomOf="@+id/seekBar"
+                          tools:text="0.2" />
+
+                      <TextView
+                          android:id="@+id/title"
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_marginStart="16dp"
+                          android:layout_marginTop="16dp"
+                          android:layout_marginEnd="16dp"
+                          android:ellipsize="end"
+                          android:fontFamily="sans-serif-medium"
+                          android:includeFontPadding="false"
+                          android:maxLines="1"
+                          android:text="Range"
+                          android:textAlignment="center"
+                          android:textColor="@color/white"
+                          android:textSize="18sp"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toTopOf="parent" />
+
+                      <androidx.appcompat.widget.AppCompatSeekBar
+                          android:id="@+id/seekBar"
+                          style="@style/Widget.AppCompat.SeekBar.Discrete"
+                          android:layout_width="0dp"
+                          android:layout_height="30dp"
+                          android:layout_marginStart="16dp"
+                          android:layout_marginTop="8dp"
+                          android:layout_marginEnd="16dp"
+                          android:max="20"
+                          android:progress="@={fragment.rangeProgress}"
+                          android:progressBackgroundTint="@color/divider"
+                          android:progressTint="@color/darkPurple"
+                          android:thumbTint="@color/darkPurple"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toBottomOf="@+id/title"
+                          app:tickMarkTint="@color/darkPurple"
+                          tools:progress="10" />
+
+
+                  </androidx.constraintlayout.widget.ConstraintLayout>
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <com.google.android.material.card.MaterialCardView
+                  android:id="@+id/cardView2"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_margin="8dp"
+                  android:layout_marginTop="16dp"
+                  app:cardBackgroundColor="@color/cardBackground"
+                  app:cardCornerRadius="16dp"
+                  app:cardElevation="0dp"
+                  app:layout_constraintTop_toBottomOf="@+id/cardView"
+                  tools:layout_editor_absoluteX="8dp">
+
+                  <androidx.constraintlayout.widget.ConstraintLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                      <TextView
+                          android:id="@+id/progress2"
+                          android:layout_width="wrap_content"
+                          android:layout_height="23dp"
+                          android:layout_marginTop="8dp"
+                          android:layout_marginBottom="16dp"
+                          android:fontFamily="sans-serif-medium"
+                          android:includeFontPadding="false"
+                          android:maxLines="1"
+                          android:text="@{fragment.convertRateText(fragment.pitchProgress)}"
+                          android:textColor="@color/white"
+                          android:textSize="22sp"
+                          app:layout_constraintBottom_toBottomOf="parent"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toBottomOf="@+id/seekBar2"
+                          tools:text="0.2" />
+
+                      <TextView
+                          android:id="@+id/title2"
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_marginStart="16dp"
+                          android:layout_marginTop="16dp"
+                          android:layout_marginEnd="16dp"
+                          android:ellipsize="end"
+                          android:fontFamily="sans-serif-medium"
+                          android:includeFontPadding="false"
+                          android:maxLines="1"
+                          android:text="Pitch"
+                          android:textAlignment="center"
+                          android:textColor="@color/white"
+                          android:textSize="18sp"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toTopOf="parent" />
+
+                      <androidx.appcompat.widget.AppCompatSeekBar
+                          android:id="@+id/seekBar2"
+                          style="@style/Widget.AppCompat.SeekBar.Discrete"
+                          android:layout_width="0dp"
+                          android:layout_height="30dp"
+                          android:layout_marginStart="16dp"
+                          android:layout_marginTop="8dp"
+                          android:layout_marginEnd="16dp"
+                          android:progress="@={fragment.pitchProgress}"
+                          android:max="14"
+                          android:progressBackgroundTint="@color/divider"
+                          android:progressTint="@color/darkPurple"
+                          android:thumbTint="@color/darkPurple"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toBottomOf="@+id/title2"
+                          app:tickMarkTint="@color/darkPurple"
+                          tools:progress="4" />
+
+
+                  </androidx.constraintlayout.widget.ConstraintLayout>
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <com.google.android.material.card.MaterialCardView
+                  android:id="@+id/cardView3"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_margin="8dp"
+                  android:layout_marginTop="16dp"
+                  app:cardBackgroundColor="@color/cardBackground"
+                  app:cardCornerRadius="16dp"
+                  app:cardElevation="0dp"
+                  app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                  tools:layout_editor_absoluteX="8dp">
+
+                  <androidx.constraintlayout.widget.ConstraintLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                      <TextView
+                          android:id="@+id/progress3"
+                          android:layout_width="wrap_content"
+                          android:layout_height="23dp"
+                          android:layout_marginTop="8dp"
+                          android:layout_marginBottom="16dp"
+                          android:fontFamily="sans-serif-medium"
+                          android:includeFontPadding="false"
+                          android:maxLines="1"
+                          android:text="@{fragment.convertRateText(fragment.rateProgress)}"
+                          android:textColor="@color/white"
+                          android:textSize="22sp"
+                          app:layout_constraintBottom_toBottomOf="parent"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toBottomOf="@+id/seekBar3"
+                          tools:text="0.2" />
+
+                      <TextView
+                          android:id="@+id/title3"
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_marginStart="16dp"
+                          android:layout_marginTop="16dp"
+                          android:layout_marginEnd="16dp"
+                          android:ellipsize="end"
+                          android:fontFamily="sans-serif-medium"
+                          android:includeFontPadding="false"
+                          android:maxLines="1"
+                          android:text="Rate"
+                          android:textAlignment="center"
+                          android:textColor="@color/white"
+                          android:textSize="18sp"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toTopOf="parent" />
+
+                      <androidx.appcompat.widget.AppCompatSeekBar
+                          android:id="@+id/seekBar3"
+                          style="@style/Widget.AppCompat.SeekBar.Discrete"
+                          android:layout_width="0dp"
+                          android:layout_height="30dp"
+                          android:layout_marginStart="16dp"
+                          android:layout_marginTop="8dp"
+                          android:layout_marginEnd="16dp"
+                          android:progress="@={fragment.rateProgress}"
+                          android:max="34"
+                          android:progressBackgroundTint="@color/divider"
+                          android:progressTint="@color/darkPurple"
+                          android:thumbTint="@color/darkPurple"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toBottomOf="@+id/title3"
+                          app:tickMarkTint="@color/darkPurple"
+                          tools:progress="4" />
+
+
+                  </androidx.constraintlayout.widget.ConstraintLayout>
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <com.google.android.material.card.MaterialCardView
+                  android:id="@+id/cardView4"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_margin="8dp"
+                  android:layout_marginTop="16dp"
+                  app:cardBackgroundColor="@color/cardBackground"
+                  app:cardCornerRadius="16dp"
+                  app:cardElevation="0dp"
+                  app:layout_constraintTop_toBottomOf="@+id/cardView3"
+                  tools:layout_editor_absoluteX="8dp">
+
+                  <androidx.constraintlayout.widget.ConstraintLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                      <TextView
+                          android:id="@+id/progress4"
+                          android:layout_width="wrap_content"
+                          android:layout_height="23dp"
+                          android:layout_marginTop="8dp"
+                          android:layout_marginBottom="16dp"
+                          android:fontFamily="sans-serif-medium"
+                          android:includeFontPadding="false"
+                          android:maxLines="1"
+                          android:text="@{fragment.convertVolumeText(fragment.volumeProgress)}"
+                          android:textColor="@color/white"
+                          android:textSize="22sp"
+                          app:layout_constraintBottom_toBottomOf="parent"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toBottomOf="@+id/seekBar4"
+                          tools:text="0.2" />
+
+                      <TextView
+                          android:id="@+id/title4"
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_marginStart="16dp"
+                          android:layout_marginTop="16dp"
+                          android:layout_marginEnd="16dp"
+                          android:ellipsize="end"
+                          android:fontFamily="sans-serif-medium"
+                          android:includeFontPadding="false"
+                          android:maxLines="1"
+                          android:text="Volume"
+                          android:textAlignment="center"
+                          android:textColor="@color/white"
+                          android:textSize="18sp"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toTopOf="parent" />
+
+                      <androidx.appcompat.widget.AppCompatSeekBar
+                          android:id="@+id/seekBar4"
+                          style="@style/Widget.AppCompat.SeekBar.Discrete"
+                          android:layout_width="0dp"
+                          android:layout_height="30dp"
+                          android:layout_marginStart="16dp"
+                          android:layout_marginTop="8dp"
+                          android:layout_marginEnd="16dp"
+                          android:progress="@={fragment.volumeProgress}"
+                          android:max="4"
+                          android:progressBackgroundTint="@color/divider"
+                          android:progressTint="@color/darkPurple"
+                          android:thumbTint="@color/darkPurple"
+                          app:layout_constraintEnd_toEndOf="parent"
+                          app:layout_constraintStart_toStartOf="parent"
+                          app:layout_constraintTop_toBottomOf="@+id/title4"
+                          app:tickMarkTint="@color/darkPurple"
+                          tools:progress="2" />
+
+
+                  </androidx.constraintlayout.widget.ConstraintLayout>
+
+              </com.google.android.material.card.MaterialCardView>
+
+
+              <Button
+                  style="@style/Widget.MaterialComponents.Button.TextButton"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:background="@null"
+                  android:onClick="@{fragment::clickSave}"
+                  android:text="@string/save"
+                  android:layout_marginTop="8dp"
+                  android:textColor="@color/white"
+                  app:layout_constraintBottom_toBottomOf="parent"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintHorizontal_bias="0.5"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toBottomOf="@+id/cardView4" />
+          </androidx.constraintlayout.widget.ConstraintLayout>
+      </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

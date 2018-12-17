@@ -25,7 +25,7 @@ import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.main.event.InvokeBackEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPhonomeHistoryEvent
-import com.github.windsekirun.yukarisynthesizer.main.event.ShowPresetDialogEvent
+import com.github.windsekirun.yukarisynthesizer.main.event.ShowVoicePresetEvent
 import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
@@ -97,7 +97,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     fun clickPresetSelect(view: View) {
-        val event = ShowPresetDialogEvent(selectedEngine.get() ?: VoiceEngine.Yukari) {
+        val event = ShowVoicePresetEvent(selectedEngine.get() ?: VoiceEngine.Yukari) {
             selectedPresetItem = it
             selectedPreset.set(it.title)
         }

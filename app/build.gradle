@@ -180,5 +180,9 @@ dependencies {
 
     // flexbox
     implementation 'com.google.android:flexbox:1.1.0'
+
+    // materialdialog
+    implementation 'com.afollestad.material-dialogs:core:2.0.0-rc3'
+    implementation 'com.afollestad.material-dialogs:files:2.0.0-rc3'
 }
 

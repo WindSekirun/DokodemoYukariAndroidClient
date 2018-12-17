@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ObservableArrayList
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.files.folderChooser
 import com.github.windsekirun.baseapp.base.BaseViewModel
 import com.github.windsekirun.baseapp.module.activityresult.RxActivityResult
 import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
@@ -33,6 +35,8 @@ import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.RPermission
+import pyxis.uzuki.live.richutilskt.utils.toFile
+import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
@@ -73,6 +77,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     fun clickMenuItem(mode: ToolbarMenuClickEvent.Mode) {
         when (mode) {
             ToolbarMenuClickEvent.Mode.Play -> requestSynthesis()
+            ToolbarMenuClickEvent.Mode.Save -> requestSynthesisOtherPath()
             ToolbarMenuClickEvent.Mode.TopOrder -> save(swipeOrder = true)
             ToolbarMenuClickEvent.Mode.Remove -> removeStoryItem()
 
@@ -177,6 +182,12 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun requestSynthesis() {
+        requestSynthesis {
+            playVoices()
+        }
+    }
+
+    private fun requestSynthesis(callback: () -> Unit) {
         if (itemData.isEmpty()) return
 
         storyItem.apply {
@@ -202,10 +213,22 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                 }
 
                 storyItem = data
-                playVoices()
+                callback()
             }
 
         addDisposable(disposable)
+    }
+
+    private fun requestSynthesisOtherPath() {
+        MaterialDialog(checkNotNull(ActivityReference.getActivtyReference())).show {
+            folderChooser { _, folder ->
+                requestSynthesis {
+                    val origin = storyItem.localPath.toFile()
+                    val newPath = File(folder.absolutePath, "${storyItem.title}.mp3")
+                    origin.copyTo(newPath, true)
+                }
+            }
+        }
     }
 
     private fun playVoices() {

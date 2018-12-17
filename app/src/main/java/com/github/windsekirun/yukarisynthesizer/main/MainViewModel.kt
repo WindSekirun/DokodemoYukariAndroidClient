@@ -2,11 +2,15 @@ package com.github.windsekirun.yukarisynthesizer.main
 
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.LifecycleOwner
 import com.github.windsekirun.baseapp.base.BaseViewModel
+import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.main.event.*
+import com.github.windsekirun.yukarisynthesizer.main.preset.MainPresetFragment
+import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryFragment
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import javax.inject.Inject
 
@@ -23,6 +27,12 @@ import javax.inject.Inject
 class MainViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
     var shownDetail: Boolean = false
+    val toolbarTitle = ObservableString()
+
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+        toolbarTitle.set(getString(R.string.story_title))
+    }
 
     fun clickSpeedDial(actionItem: SpeedDialActionItem): Boolean {
         postEvent(CloseSpeedDialEvent())
@@ -55,6 +65,16 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         return true
     }
 
+    fun clickNavigationBottomView(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_page_story -> replaceMain()
+            R.id.menu_page_preset -> replacePreset()
+//            R.id.menu_page_play -> postEvent(AddFragmentEvent(MainStoryFragment(), true, false, false))
+        }
+
+        return true
+    }
+
     fun clickToolbarNavigation(view: View) {
         if (shownDetail) {
             postEvent(InvokeBackEvent())
@@ -75,5 +95,23 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun clickToolbarEvent(mode: ToolbarMenuClickEvent.Mode) {
         postEvent(ToolbarMenuClickEvent(mode))
+    }
+
+    fun replaceMain() {
+        if (shownDetail) {
+            postEvent(SwapDetailEvent(true))
+        }
+
+        toolbarTitle.set(getString(R.string.story_title))
+        postEvent(AddFragmentEvent(MainStoryFragment(), true, false, false))
+    }
+
+    private fun replacePreset() {
+        if (shownDetail) {
+            postEvent(SwapDetailEvent(true))
+        }
+
+        toolbarTitle.set(getString(R.string.preset_title))
+        postEvent(AddFragmentEvent(MainPresetFragment(), true, false, false))
     }
 }

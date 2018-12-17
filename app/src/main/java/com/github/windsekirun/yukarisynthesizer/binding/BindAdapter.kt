@@ -10,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.leinardi.android.speeddial.SpeedDialView
 import android.widget.EditText
 import android.widget.TextView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
  * set of [BindingAdapter] in DataBinding
@@ -41,9 +42,21 @@ object BindAdapter {
     }
 
     @JvmStatic
+    @BindingAdapter("title")
+    fun setTitle(view: Toolbar, text: String) {
+        view.title = text
+    }
+
+    @JvmStatic
     @BindingAdapter("navigationItemClicked")
     fun bindNavigationItemClick(view: Toolbar, listener: View.OnClickListener) {
         view.setNavigationOnClickListener(listener)
+    }
+
+    @JvmStatic
+    @BindingAdapter("navigationItemClicked")
+    fun bindNavigationItemClick(view: BottomNavigationView, listener: BottomNavigationView.OnNavigationItemSelectedListener) {
+        view.setOnNavigationItemSelectedListener(listener)
     }
 
     @BindingAdapter("onEditorAction")
