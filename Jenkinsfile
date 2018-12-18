@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('assembleDebug') {
       steps {
-        sh './gradlew assembleDebug'
+        sh './gradlew assembleDebug --stacktrace'
       }
     }
   }
