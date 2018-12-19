@@ -44,7 +44,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     fun clickAPI(view: View) {
         MaterialDialog(checkNotNull(ActivityReference.getActivtyReference())).show {
-            input(hintRes = R.string.setting_api_key_hint) { _, text ->
+            input(hintRes = R.string.setting_api_key_hint, prefill = preferenceRepository.apiKey) { _, text ->
                 preferenceRepository.apiKey = text.toString()
                 showToast("Saved.")
             }
