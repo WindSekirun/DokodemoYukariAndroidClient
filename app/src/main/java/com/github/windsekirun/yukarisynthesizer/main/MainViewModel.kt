@@ -11,6 +11,7 @@ import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.main.preset.MainPresetFragment
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryFragment
+import com.github.windsekirun.yukarisynthesizer.setting.SettingActivity
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import javax.inject.Inject
 
@@ -88,7 +89,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun moveSetting() {
-
+        startActivity(SettingActivity::class.java)
     }
 
     private fun moveInfo() {

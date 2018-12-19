@@ -27,6 +27,7 @@
         <activity android:name=".swipe.SwipeOrderActivity" />
         <activity android:name=".voice.VoiceDetailActivity"
             android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".setting.SettingActivity" />
 
     </application>
 

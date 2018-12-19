@@ -49,4 +49,14 @@
     <string name="menu_voice_copy">Copy</string>
     <string name="menu_voice_origin">Revert to Origin</string>
     <string name="main_detail_saved_other_path">Saved in %s</string>
+    <string name="setting_1_1">Enter API Key</string>
+    <string name="setting_1_2">DOCOMO API Key</string>
+    <string name="setting_2_1">Third-party Assets License</string>
+    <string name="setting_2_2">Open License Notice</string>
+    <string name="setting_3_1">Revision History</string>
+    <string name="setting_3_2">Release Log</string>
+    <string name="setting_4_1">View client sources</string>
+    <string name="setting_4_2">Open Source in Github</string>
+    <string name="submit">Submit</string>
+    <string name="setting_api_key_hint">Enter Docomo API Key</string>
 </resources>
