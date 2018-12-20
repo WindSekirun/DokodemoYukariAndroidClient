@@ -37,7 +37,7 @@ class PresetItemAdapter : BaseRecyclerAdapter<PresetItem, MainPresetItemBinding>
         return false
     }
 
-    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup): MainPresetItemBinding {
+    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): MainPresetItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_preset_item, parent, false)
     }
 }
