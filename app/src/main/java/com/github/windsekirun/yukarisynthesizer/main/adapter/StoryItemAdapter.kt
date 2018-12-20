@@ -33,7 +33,7 @@ class StoryItemAdapter : BaseRecyclerAdapter<StoryItem, StoryItemBinding>() {
         return false
     }
 
-    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup): StoryItemBinding {
+    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): StoryItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.story_item, parent, false)
     }
 

@@ -36,7 +36,7 @@ class PhonomeListAdapter : BaseRecyclerAdapter<PhonomeItem, PhonomeListItemBindi
         return false
     }
 
-    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup): PhonomeListItemBinding {
+    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): PhonomeListItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.phonome_list_item, parent, false)
     }
 }

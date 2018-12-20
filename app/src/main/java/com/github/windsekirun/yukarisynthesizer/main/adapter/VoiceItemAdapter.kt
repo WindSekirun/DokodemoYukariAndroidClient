@@ -37,7 +37,7 @@ class VoiceItemAdapter : BaseRecyclerAdapter<VoiceItem, VoiceItemBinding>() {
         return false
     }
 
-    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup): VoiceItemBinding {
+    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): VoiceItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.voice_item, parent, false)
     }
 
