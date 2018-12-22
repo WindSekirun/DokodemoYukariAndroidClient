@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.windsekirun.baseapp.base.BaseFragment
 import com.github.windsekirun.daggerautoinject.InjectFragment
@@ -133,8 +134,10 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
             this.callback = callback
         }
 
-        requireActivity().supportFragmentManager.beginTransaction()
-            .add(fragment, "break").commit()
+        if (fragment.checkFragmentNotOpenState()) {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(fragment, "break").commit()
+        }
     }
 
     private fun showHistoryDialog(callback: (VoiceItem) -> Unit) {
@@ -142,8 +145,10 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
             this.callback = callback
         }
 
-        requireActivity().supportFragmentManager.beginTransaction()
-            .add(fragment, "history").commit()
+        if (fragment.checkFragmentNotOpenState()) {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(fragment, "history").commit()
+        }
     }
 
     private fun showVoiceRecognitionDialog(callback: (String) -> Unit) {
@@ -151,8 +156,10 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
             this.callback = callback
         }
 
-        requireActivity().supportFragmentManager.beginTransaction()
-            .add(fragment, "voice").commit()
+        if (fragment.checkFragmentNotOpenState()) {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(fragment, "voice").commit()
+        }
     }
 
     private fun showPlayDialog(param: List<StoryItem>) {
@@ -160,7 +167,11 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
             this.targetList = param.toMutableList()
         }
 
-        requireActivity().supportFragmentManager.beginTransaction()
-            .add(fragment, "play").commit()
+        if (fragment.checkFragmentNotOpenState()) {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(fragment, "play").commit()
+        }
     }
+
+    private fun DialogFragment.checkFragmentNotOpenState() = this.dialog == null || this.dialog?.isShowing == false
 }

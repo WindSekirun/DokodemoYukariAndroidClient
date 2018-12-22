@@ -8,9 +8,4 @@
         android:icon="@drawable/ic_settings_white_24dp"
         app:showAsAction="ifRoom"/>
 
-    <item
-        android:id="@+id/menu_home_info"
-        android:title="Info"
-        android:icon="@drawable/ic_information_white_24dp"
-        app:showAsAction="ifRoom"/>
 </menu>

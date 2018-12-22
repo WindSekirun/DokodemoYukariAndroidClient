@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dokodemo Yukari</string>
+    <string name="app_name">どこでもゆかり</string>
     <string name="settings_title">Settings</string>
     <string name="story_title">Story</string>
     <string name="preset_title">Preset</string>
@@ -38,7 +38,7 @@
     <string name="main_detail_record_permission">Please allow RECORD permission to use this feature.</string>
     <string name="voice_detail_limit">%s/<font color="#ff0000">100</font></string>
     <string name="voice_detail_jeita">Must be a character defined in <b>JEITA IT-4006</b> (symbol for Japanese text-to-speech synthesis).\n<b>Use only when the synthesized text is strange.</b> (For professionals)</string>
-    <string name="voice_detail_write">Write Sentenses</string>
+    <string name="voice_detail_write">Write Sentences</string>
     <string name="voice_select">Select voice</string>
     <string name="enter">Enter</string>
     <string name="text">Text</string>
@@ -59,4 +59,7 @@
     <string name="setting_4_2">Open Source in Github</string>
     <string name="submit">Submit</string>
     <string name="setting_api_key_hint">Enter Docomo API Key</string>
+    <string name="api_key_unavailable">No API key available. Please enter in the setting screen.</string>
+    <string name="setting_5_1">How to use application</string>
+    <string name="setting_5_2">Open Guide</string>
 </resources>

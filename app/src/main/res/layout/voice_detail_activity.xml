@@ -100,18 +100,25 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
-            <com.github.windsekirun.yukarisynthesizer.widget.PredicateLayout
-                android:id="@+id/predicateLayout"
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="0dp"
                 android:layout_height="190dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:id="@+id/scrollView"
                 android:background="@drawable/bg_preset_round_5"
                 android:padding="5dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                app:layout_constraintTop_toBottomOf="@+id/textView8" >
+
+                <com.github.windsekirun.yukarisynthesizer.widget.PredicateLayout
+                    android:id="@+id/predicateLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp" />
+            </androidx.core.widget.NestedScrollView>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -119,8 +126,10 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="@{@string/voice_detail_limit(viewModel.voiceOriginLength)}"
-                app:layout_constraintBottom_toTopOf="@+id/predicateLayout"
-                app:layout_constraintEnd_toEndOf="@+id/predicateLayout" />
+                app:layout_constraintBottom_toTopOf="@+id/scrollView"
+                android:textColor="@color/white"
+                tools:text="1/100"
+                app:layout_constraintEnd_toEndOf="@+id/scrollView" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
@@ -131,7 +140,7 @@
                 android:hint="@string/deceptions"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/predicateLayout">
+                app:layout_constraintTop_toBottomOf="@+id/scrollView">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"

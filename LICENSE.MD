@@ -8,8 +8,10 @@ If you want use with commerical purpose, please contact [エーアイ](https://d
 ## Assets
  * 結月ゆかり立ち絵: http://seiga.nicovideo.jp/seiga/im8124707 (MtUさん)
  * 弦巻マキ立ち絵: http://seiga.nicovideo.jp/seiga/im8145281 (MtUさん)
+ * Launcher Icon: http://seiga.nicovideo.jp/seiga/im6325959 (七瀬さん)
  * Icon: Material Design Icons https://material.io/tools/icons/
- 
+
+
 ## Code License
 This library contains FFmpeg part in [YukariOperator.kt L471](https://github.com/WindSekirun/DokodemoYukariAndroidClient/blob/master/app/src/main/java/com/github/windsekirun/yukarisynthesizer/core/YukariOperator.kt#L471). So please refer https://www.ffmpeg.org/legal.html to see License of FFmpeg
 

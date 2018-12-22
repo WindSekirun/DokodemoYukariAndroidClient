@@ -48,10 +48,12 @@
             android:layout_marginEnd="8dp"
             android:text="@{item.origin}"
             android:textColor="@color/black"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             app:layout_constraintEnd_toStartOf="@+id/imgDelete"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView10"
-            tools:text="D" />
+            tools:text="このアプリケーションを使用するには、DOCOMO様のAPIキーが必要です。" />
 
         <ImageView
             android:id="@+id/imgDelete"

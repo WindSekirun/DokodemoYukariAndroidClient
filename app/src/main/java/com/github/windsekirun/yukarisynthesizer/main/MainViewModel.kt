@@ -8,6 +8,7 @@ import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
 import com.github.windsekirun.yukarisynthesizer.R
+import com.github.windsekirun.yukarisynthesizer.core.repository.PreferenceRepository
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.main.preset.MainPresetFragment
 import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryFragment
@@ -30,6 +31,9 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     var shownDetail: Boolean = false
     val toolbarTitle = ObservableString()
 
+    @Inject
+    lateinit var preferenceRepository: PreferenceRepository
+
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         toolbarTitle.set(getString(R.string.story_title))
@@ -37,6 +41,15 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     fun clickSpeedDial(actionItem: SpeedDialActionItem): Boolean {
         postEvent(CloseSpeedDialEvent())
+
+        if (preferenceRepository.apiKey.isEmpty()) {
+            showAlertDialog(getString(R.string.api_key_unavailable)) { _, _ ->
+                startActivity(
+                    SettingActivity::class.java
+                )
+            }
+            return true
+        }
 
         clickSpeedDialEvent(
             when (actionItem.id) {
@@ -62,7 +75,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     fun clickToolbarMenuItem(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_home_setting -> moveSetting()
-            R.id.menu_home_info -> moveInfo()
             R.id.menu_details_play -> clickToolbarEvent(ToolbarMenuClickEvent.Mode.Play)
             R.id.menu_details_save -> clickToolbarEvent(ToolbarMenuClickEvent.Mode.Save)
             R.id.menu_details_top_order -> clickToolbarEvent(ToolbarMenuClickEvent.Mode.TopOrder)
@@ -90,10 +102,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     private fun moveSetting() {
         startActivity(SettingActivity::class.java)
-    }
-
-    private fun moveInfo() {
-
     }
 
     private fun clickSpeedDialEvent(mode: SpeedDialClickEvent.Mode) {
