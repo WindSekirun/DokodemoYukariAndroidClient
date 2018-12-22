@@ -34,6 +34,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import pyxis.uzuki.live.richutilskt.impl.F0
 import pyxis.uzuki.live.richutilskt.utils.RPermission
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import pyxis.uzuki.live.richutilskt.utils.toFile
@@ -221,19 +222,21 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     }
 
     private fun requestSynthesisOtherPath() {
-        MaterialDialog(checkNotNull(ActivityReference.getActivtyReference())).show {
-            folderChooser { _, folder ->
-                requestSynthesis {
-                    val origin = storyItem.localPath.toFile()
-                    val newPath = File(folder.absolutePath, "${storyItem.title}.mp3")
-                    origin.copyTo(newPath, true)
+        requestPermission(F0 {
+            MaterialDialog(checkNotNull(ActivityReference.getActivtyReference())).show {
+                folderChooser { _, folder ->
+                    requestSynthesis {
+                        val origin = storyItem.localPath.toFile()
+                        val newPath = File(folder.absolutePath, "${storyItem.title}.mp3")
+                        origin.copyTo(newPath, true)
 
-                    runOnUiThread {
-                        showToast(context.getString(R.string.main_detail_saved_other_path).format(newPath.absolutePath))
+                        runOnUiThread {
+                            showToast(context.getString(R.string.main_detail_saved_other_path).format(newPath.absolutePath))
+                        }
                     }
                 }
             }
-        }
+        }, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
     private fun playVoices() {
