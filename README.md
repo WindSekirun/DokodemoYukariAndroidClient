@@ -11,6 +11,8 @@ Android application for **synthesize text to voice** with **結月ゆかり** (Y
 * Contact Info: Pyxis(WindSekirun), pyxis@uzuki.live
 * Build Environment: Android Studio 3.3 Beta 4 and above.
 
+## [Guide & FAQ](https://github.com/WindSekirun/DokodemoYukariAndroidClient/blob/master/Guide.md)
+
 ## License
 
 * This library contains FFmpeg part :: [FFmpeg License (a.k.a LGPL 2.1)](https://www.ffmpeg.org/legal.html)
