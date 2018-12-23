@@ -91,7 +91,7 @@ dependencies {
     implementation 'androidx.browser:browser:1.0.0'
 
     // base
-    implementation("com.github.WindSekirun:PyxisBaseApp:1.3.2") {
+    implementation("com.github.WindSekirun:PyxisBaseApp:+") {
         exclude group: 'androidx.databinding'
     }
 
