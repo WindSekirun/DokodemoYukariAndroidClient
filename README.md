@@ -18,5 +18,3 @@ Android application for **synthesize text to voice** with **結月ゆかり** (Y
 * This library contains FFmpeg part :: [FFmpeg License (a.k.a LGPL 2.1)](https://www.ffmpeg.org/legal.html)
 * Other source has licensed by [MIT License](https://github.com/WindSekirun/DokodemoYukariAndroidClient/blob/master/LICENSE.MD)
 * Third-library license:  [See here](https://github.com/WindSekirun/DokodemoYukariAndroidClient/blob/master/LICENSE.MD)
-
-This application contains private dependencies, 'PyxisBaseApp'.
