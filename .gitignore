@@ -10,3 +10,5 @@
 /captures
 .externalNativeBuild
 .idea/
+app/release/output.json
+app/release/app-release-20181222-1042.apk
