@@ -20,9 +20,6 @@ import com.github.windsekirun.yukarisynthesizer.swipe.event.ReadyDisplayViewEven
 import com.github.windsekirun.yukarisynthesizer.utils.CharacterBindUtils
 import org.greenrobot.eventbus.Subscribe
 
-/**
- * Swap order / remove feature of List of [VoiceItem]
- */
 @InjectActivity
 class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
     private lateinit var viewModel: SwipeOrderViewModel
@@ -96,7 +93,11 @@ class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
 
         override fun getViewHolder(itemView: View) = SwipeOrderAdapter.ViewHolder(itemView)
 
-        override fun getViewToTouchToStartDraggingItem(item: VoiceItem, viewHolder: ViewHolder, position: Int): View? {
+        override fun getViewToTouchToStartDraggingItem(
+            item: VoiceItem,
+            viewHolder: ViewHolder,
+            position: Int
+        ): View? {
             return viewHolder.imgDrag
         }
 
@@ -120,7 +121,8 @@ class SwipeOrderActivity : BaseActivity<SwipeOrderActivityBinding>() {
             viewHolder.txtDesc.text = desc
         }
 
-        private fun convertBreakTimeFormat(breakTime: Long): String = "${breakTime.toDouble() / 1000.0}s"
+        private fun convertBreakTimeFormat(breakTime: Long): String =
+            "${breakTime.toDouble() / 1000.0}s"
     }
 }
 

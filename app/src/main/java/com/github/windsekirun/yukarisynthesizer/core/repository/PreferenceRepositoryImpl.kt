@@ -6,15 +6,6 @@ import com.github.windsekirun.yukarisynthesizer.BuildConfig
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * PyxisBaseApp
- * Class: PreferenceRepositoryImpl
- * Created by Pyxis on 2018-02-02.
- *
- *
- * Description:
- */
-
 @Singleton
 class PreferenceRepositoryImpl @Inject
 constructor(context: Context) : PreferenceRepository {

@@ -12,7 +12,6 @@ import com.github.windsekirun.baseapp.module.activityresult.RxActivityResult
 import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
 import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.baseapp.utils.ProgressDialogManager
-import com.github.windsekirun.baseapp.utils.propertyChanges
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication
@@ -36,20 +35,10 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.impl.F0
 import pyxis.uzuki.live.richutilskt.utils.RPermission
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import pyxis.uzuki.live.richutilskt.utils.toFile
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
-
-/**
- * DokodemoYukariAndroidClient
- * Class: MainDetailsViewModel
- * Created by Pyxis on 2018-11-27.
- *
- *
- * Description:
- */
 
 @InjectViewModel
 class MainDetailsViewModel @Inject
@@ -104,7 +93,9 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         RxActivityResult.result()
             .flatMapObservable {
                 val id = it.data?.getLongExtra(VoiceDetailViewModel.EXTRA_EDIT_VOICE_ID, 0) ?: 0L
-                val requestDelete = it.data?.getBooleanExtra(VoiceDetailViewModel.EXTRA_REQUEST_DELETE, false) ?: false
+                val requestDelete =
+                    it.data?.getBooleanExtra(VoiceDetailViewModel.EXTRA_REQUEST_DELETE, false)
+                        ?: false
 
                 if (requestDelete) {
                     yukariOperator.removeVoiceItem(id, true)
@@ -231,7 +222,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                         origin.copyTo(newPath, true)
 
                         runOnUiThread {
-                            showToast(context.getString(R.string.main_detail_saved_other_path).format(newPath.absolutePath))
+                            showToast(
+                                context.getString(R.string.main_detail_saved_other_path).format(
+                                    newPath.absolutePath
+                                )
+                            )
                         }
                     }
                 }

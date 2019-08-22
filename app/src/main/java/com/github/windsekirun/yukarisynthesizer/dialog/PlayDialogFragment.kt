@@ -22,9 +22,6 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.toFile
 import java.util.concurrent.TimeUnit
 
-/**
- * DialogFragment to select preset
- */
 class PlayDialogFragment : RoundedBottomSheetDialogFragment<PlayDialogFragmentBinding>() {
     val title = ObservableString()
     val max = ObservableInt()

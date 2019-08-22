@@ -6,14 +6,6 @@ import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.define.VoiceEngine
 
-/**
- * DokodemoYukariAndroidClient
- * Class: CharacterBindUtils
- * Created by Pyxis on 2018-11-27.
- *
- *
- * Description:
- */
 object CharacterBindUtils {
 
     @JvmStatic

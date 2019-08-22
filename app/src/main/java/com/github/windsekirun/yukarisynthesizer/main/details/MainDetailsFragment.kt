@@ -25,16 +25,6 @@ import com.github.windsekirun.yukarisynthesizer.utils.reveal.RevealSettingHolder
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
-
-/**
- * DokodemoYukariAndroidClient
- * Class: ${NAME}
- * Created by Pyxis on 2018-11-29.
- *
- *
- * Description:
- */
-
 @InjectFragment
 class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPressedListener {
     @Inject
@@ -46,7 +36,11 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
     private lateinit var viewModel: MainDetailsViewModel
     private lateinit var voiceItemAdapter: VoiceItemAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState) as View
 
         revealSetting?.let { CircularRevealUtils.revealEnter(view, it) }
@@ -55,7 +49,10 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         return view
     }
 
-    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainDetailsFragmentBinding {
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): MainDetailsFragmentBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_details_fragment, container, false)
     }
 
@@ -173,5 +170,6 @@ class MainDetailsFragment : BaseFragment<MainDetailsFragmentBinding>(), OnBackPr
         }
     }
 
-    private fun DialogFragment.checkFragmentNotOpenState() = this.dialog == null || this.dialog?.isShowing == false
+    private fun DialogFragment.checkFragmentNotOpenState() =
+        this.dialog == null || this.dialog?.isShowing == false
 }

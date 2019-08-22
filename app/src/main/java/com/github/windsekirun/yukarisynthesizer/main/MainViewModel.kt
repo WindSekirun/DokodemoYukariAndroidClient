@@ -16,15 +16,6 @@ import com.github.windsekirun.yukarisynthesizer.setting.SettingActivity
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import javax.inject.Inject
 
-/**
- * DokodemoYukariAndroidClient
- * Class: MainViewModel
- * Created by Pyxis on 2018-11-20.
- *
- *
- * Description:
- */
-
 @InjectViewModel
 class MainViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
@@ -88,7 +79,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         when (item.itemId) {
             R.id.menu_page_story -> replaceMain()
             R.id.menu_page_preset -> replacePreset()
-//            R.id.menu_page_play -> postEvent(AddFragmentEvent(MainStoryFragment(), true, false, false))
         }
 
         return true

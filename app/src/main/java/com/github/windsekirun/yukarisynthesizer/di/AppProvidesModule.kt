@@ -8,9 +8,6 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-/**
- * Dagger module for provide project-specific class
- */
 @Module
 class AppProvidesModule {
 

@@ -18,14 +18,6 @@ import com.github.windsekirun.yukarisynthesizer.main.event.ShowVoicePresetEvent
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
 import org.greenrobot.eventbus.Subscribe
 
-/**
- * DokodemoYukariAndroidClient
- * Class: VoiceDetailActivity
- * Created by Pyxis on 2018-11-26.
- *
- *
- * Description:
- */
 @InjectActivity
 class VoiceDetailActivity : BaseActivity<VoiceDetailActivityBinding>() {
     private lateinit var viewModel: VoiceDetailViewModel

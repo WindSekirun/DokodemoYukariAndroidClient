@@ -16,15 +16,6 @@ import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
-/**
- * DokodemoYukariAndroidClient
- * Class: MainStoryViewModel
- * Created by Pyxis on 2018-11-26.
- *
- *
- * Description:
- */
-
 @InjectViewModel
 class MainStoryViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
@@ -36,7 +27,6 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         yukariOperator.firstRunSetup().subscribe { _, _ -> }.addTo(compositeDisposable)
-//        yukariOperator.generateTestData()
     }
 
     override fun onResume(owner: LifecycleOwner) {

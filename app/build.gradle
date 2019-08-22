@@ -91,7 +91,7 @@ dependencies {
     implementation 'androidx.browser:browser:1.0.0'
 
     // base
-    implementation("com.github.WindSekirun:PyxisBaseApp:+") {
+    implementation("com.github.WindSekirun:PyxisBaseApp:1.5.11") {
         exclude group: 'androidx.databinding'
     }
 
@@ -186,5 +186,12 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:2.0.0-rc3'
     implementation 'com.afollestad.material-dialogs:input:2.0.0-rc3'
     implementation 'com.afollestad.material-dialogs:files:2.0.0-rc3'
+
+    // jackson
+    implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
 }
 
+apply from: 'sonar.gradle'

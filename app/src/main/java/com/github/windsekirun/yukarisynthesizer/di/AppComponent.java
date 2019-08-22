@@ -27,7 +27,6 @@ import dagger.android.support.AndroidSupportInjectionModule;
                 AppBindsModule.class,
                 BaseBindsModule.class,
                 BaseInterceptorModule.class,
-//                AppInterceptorModule.class,
                 ActivityModule.class,
                 FragmentModule.class,
                 ViewModelModule.class,

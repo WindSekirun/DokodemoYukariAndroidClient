@@ -1,11 +1,7 @@
 package com.github.windsekirun.yukarisynthesizer.main
 
-import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.annotation.MenuRes
-import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.github.windsekirun.baseapp.base.BaseActivity
 import com.github.windsekirun.baseapp.module.back.DoubleBackInvoker
@@ -23,15 +19,6 @@ import dagger.android.support.HasSupportFragmentInjector
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
-
-/**
- * DokodemoYukariAndroidClient
- * Class: ${NAME}
- * Created by Pyxis on 2018-11-20.
- *
- *
- * Description:
- */
 
 @InjectActivity
 class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInjector {
@@ -107,7 +94,12 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         mBinding.speedDial.inflate(menuRes)
     }
 
-    private fun <T : Fragment> replaceFragment(fragment: T, animated: Boolean, backStack: Boolean, reveal: Boolean) {
+    private fun <T : Fragment> replaceFragment(
+        fragment: T,
+        animated: Boolean,
+        backStack: Boolean,
+        reveal: Boolean
+    ) {
         val revealSetting = if (reveal) {
             CircularRevealUtils.RevealSetting.with(mBinding.speedDial, mBinding.container)
         } else null
@@ -115,7 +107,10 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
         RevealSettingHolder.revealSetting = revealSetting
 
         val transaction = supportFragmentManager.beginTransaction()
-        if (animated) transaction.setCustomAnimations(R.anim.fadein_fragment, R.anim.fadeout_fragment)
+        if (animated) transaction.setCustomAnimations(
+            R.anim.fadein_fragment,
+            R.anim.fadeout_fragment
+        )
 
         if (backStack) {
             transaction.setReorderingAllowed(true)
@@ -130,10 +125,12 @@ class MainActivity : BaseActivity<MainActivityBinding>(), HasSupportFragmentInje
 
     private fun swapDetail(exitDetail: Boolean) {
         val toolbarRes = if (exitDetail) R.menu.menu_main else R.menu.menu_details_top
-        val speedDialRes = if (exitDetail) R.menu.menu_main_speed_dial else R.menu.menu_details_speed_dial
+        val speedDialRes =
+            if (exitDetail) R.menu.menu_main_speed_dial else R.menu.menu_details_speed_dial
         val titleRes = R.string.story_title
 
-        mBinding.toolbar.navigationIcon = if (exitDetail) null else getDrawable(R.drawable.ic_arrow_left_white_24dp)
+        mBinding.toolbar.navigationIcon =
+            if (exitDetail) null else getDrawable(R.drawable.ic_arrow_left_white_24dp)
         switchToolbarMenu(toolbarRes)
         switchSpeedDialMenu(speedDialRes)
         viewModel.toolbarTitle.set(getString(titleRes))

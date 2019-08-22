@@ -14,10 +14,8 @@ import com.google.android.flexbox.*
 import pyxis.uzuki.live.richutilskt.utils.dip2px
 import java.util.*
 
-/**
- * CustomView with [FlexboxLayout] with spacing, holding transformer
- */
-class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = null) : FlexboxLayout(context, attrs),
+class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = null) :
+    FlexboxLayout(context, attrs),
     View.OnClickListener {
     private val mItems = ArrayList<T>()
     private var mHorizontalSpacing = 1
@@ -36,43 +34,22 @@ class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = nu
         init(attrs)
     }
 
-    /**
-     * add mItems into PredicateLayout
-     *
-     * @param items String...
-     */
     fun addItem(vararg items: T) {
         this.mItems.addAll(items)
     }
 
-    /**
-     * set mItems into PredicateLayout
-     *
-     * @param items list of item
-     */
     fun setItems(items: List<T>) {
         this.mItems.addAll(items)
     }
 
-    /**
-     * remove item in PredicateLayout
-     *
-     * @param item String
-     */
     fun remove(item: T) {
         this.mItems.remove(item)
     }
 
-    /**
-     * Clear all layout
-     */
     fun clear() {
         this.mItems.clear()
     }
 
-    /**
-     * notify when dataset is changed
-     */
     fun notifyDataSetChanged() {
         removeAllViewsInLayout()
         for (item in mItems) {
@@ -84,24 +61,15 @@ class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = nu
         }
     }
 
-    /**
-     * set flag when using customview
-     */
     fun usingCustomView(transformer: (T) -> View?) {
         mUsingCustomView = true
         mTransformer = transformer
     }
 
-    /**
-     * callback when click item
-     */
     fun setOnItemClickListener(listener: OnItemClickListener<T>) {
         this.mClickListener = listener
     }
 
-    /**
-     * callback when click item
-     */
     fun setOnItemClickListener(listener: (T) -> Unit) {
         this.mClickListener = object : OnItemClickListener<T> {
             override fun onClick(item: T) {
@@ -110,17 +78,8 @@ class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = nu
         }
     }
 
-    /**
-     * get selected list
-     */
     fun getSelectedList() = mSelectedList
 
-    /**
-     * set [PredicateTextTransformer] object
-     *
-     * PredicateTextTransformer is a tool to apply specific TextView style in PredicateLayout.
-     * see [PredefindTextTransformer] for example.
-     */
     fun setTextTransformer(transformer: PredicateTextTransformer<T>) {
         this.mTextTransformer = transformer
     }
@@ -153,7 +112,14 @@ class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = nu
     private fun getItemTextView(text: T): TextView {
         val gravity = getGravityValue()
         val textView =
-            mTextTransformer.generateNewText(context, text, mBackgroundDrawableRes, mTextSize, gravity, getColor())
+            mTextTransformer.generateNewText(
+                context,
+                text,
+                mBackgroundDrawableRes,
+                mTextSize,
+                gravity,
+                getColor()
+            )
         textView.text = String.format(" %s ", text)
         textView.tag = text
         textView.setOnClickListener(this)

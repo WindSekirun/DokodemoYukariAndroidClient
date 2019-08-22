@@ -14,10 +14,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.reactivex.disposables.CompositeDisposable
 
-/**
- * Base class for generate BottomSheetDialogFragment
- */
-abstract class RoundedBottomSheetDialogFragment<T : ViewDataBinding> : BottomSheetDialogFragment(), BaseInterface {
+abstract class RoundedBottomSheetDialogFragment<T : ViewDataBinding> : BottomSheetDialogFragment(),
+    BaseInterface {
     lateinit var binding: T
     protected val compositeDisposable = CompositeDisposable()
 
@@ -25,7 +23,8 @@ abstract class RoundedBottomSheetDialogFragment<T : ViewDataBinding> : BottomShe
 
     override fun getTheme(): Int = R.style.BottomSheetDialogThemeLight
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = BottomSheetDialog(requireContext(), theme)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        BottomSheetDialog(requireContext(), theme)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

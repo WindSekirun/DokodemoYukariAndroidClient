@@ -6,18 +6,9 @@ import androidx.databinding.DataBindingUtil
 import com.github.windsekirun.baseapp.module.recycler.BaseRecyclerAdapter
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
-import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.databinding.MainPresetItemBinding
 import com.github.windsekirun.yukarisynthesizer.main.event.ClickPresetItem
 
-/**
- * DokodemoYukariAndroidClient
- * Class: StoryItemAdapter
- * Created by Pyxis on 2018-11-27.
- *
- *
- * Description:
- */
 class PresetItemAdapter : BaseRecyclerAdapter<PresetItem, MainPresetItemBinding>() {
     var presetItemClickListener: ((PresetItem) -> Unit)? = null
 
@@ -33,11 +24,19 @@ class PresetItemAdapter : BaseRecyclerAdapter<PresetItem, MainPresetItemBinding>
         }
     }
 
-    override fun onLongClickedItem(binding: MainPresetItemBinding, item: PresetItem, position: Int): Boolean {
+    override fun onLongClickedItem(
+        binding: MainPresetItemBinding,
+        item: PresetItem,
+        position: Int
+    ): Boolean {
         return false
     }
 
-    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): MainPresetItemBinding {
+    override fun createBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        viewType: Int
+    ): MainPresetItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_preset_item, parent, false)
     }
 }
