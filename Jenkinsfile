@@ -20,7 +20,7 @@ pipeline {
   }
   post {
     always {
-      publishHTML(target: [reportDir:'BaseApp/build/reports/detekt/', reportFiles: 'detekt.html', reportName: 'Detekt report'])
+      publishHTML(target: [reportDir:'app/build/reports/detekt/', reportFiles: 'detekt.html', reportName: 'Detekt report'])
       sendNotifications currentBuild.result
     }
   }
