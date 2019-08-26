@@ -7,6 +7,9 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
 
+/**
+ * [Observable] wrapper of [ObservableArrayList], within [ObservableList.OnListChangedCallback.onChanged]
+ */
 class ObservableArrayListChangeObservable<T>(private val observableArrayList: ObservableArrayList<T>) :
     Observable<ObservableArrayListChangeEvent<T>>() {
 
@@ -26,40 +29,39 @@ class ObservableArrayListChangeObservable<T>(private val observableArrayList: Ob
         internal val onListChangedCallback: ObservableList.OnListChangedCallback<ObservableArrayList<T>>
 
         init {
-            this.onListChangedCallback =
-                object : ObservableList.OnListChangedCallback<ObservableArrayList<T>>() {
-                    override fun onChanged(observableArrayList: ObservableArrayList<T>) {
-                        observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
-                    }
-
-                    override fun onItemRangeChanged(
-                        observableArrayList: ObservableArrayList<T>,
-                        positionStart: Int, itemCount: Int
-                    ) {
-                        observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
-                    }
-
-                    override fun onItemRangeInserted(
-                        observableArrayList: ObservableArrayList<T>,
-                        positionStart: Int, itemCount: Int
-                    ) {
-                        observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
-                    }
-
-                    override fun onItemRangeMoved(
-                        observableArrayList: ObservableArrayList<T>,
-                        positionStart: Int, positionEnd: Int, itemCount: Int
-                    ) {
-                        observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
-                    }
-
-                    override fun onItemRangeRemoved(
-                        observableArrayList: ObservableArrayList<T>,
-                        positionStart: Int, itemCount: Int
-                    ) {
-                        observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
-                    }
+            this.onListChangedCallback = object : ObservableList.OnListChangedCallback<ObservableArrayList<T>>() {
+                override fun onChanged(observableArrayList: ObservableArrayList<T>) {
+                    observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
                 }
+
+                override fun onItemRangeChanged(
+                    observableArrayList: ObservableArrayList<T>,
+                    positionStart: Int, itemCount: Int
+                ) {
+                    observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
+                }
+
+                override fun onItemRangeInserted(
+                    observableArrayList: ObservableArrayList<T>,
+                    positionStart: Int, itemCount: Int
+                ) {
+                    observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
+                }
+
+                override fun onItemRangeMoved(
+                    observableArrayList: ObservableArrayList<T>,
+                    positionStart: Int, positionEnd: Int, itemCount: Int
+                ) {
+                    observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
+                }
+
+                override fun onItemRangeRemoved(
+                    observableArrayList: ObservableArrayList<T>,
+                    positionStart: Int, itemCount: Int
+                ) {
+                    observer.onNext(ObservableArrayListChangeEvent(observableArrayList))
+                }
+            }
         }
 
         override fun onDispose() {
@@ -80,6 +82,12 @@ class ObservableArrayListChangeObservable<T>(private val observableArrayList: Ob
     }
 }
 
+/**
+ * data class for changes event of [ObservableArrayList]
+ */
 data class ObservableArrayListChangeEvent<T>(val list: ObservableArrayList<T>)
 
+/**
+ * Extension methods for returning [ObservableArrayList]
+ */
 fun <T> ObservableArrayList<T>.propertyChanges() = ObservableArrayListChangeObservable(this)

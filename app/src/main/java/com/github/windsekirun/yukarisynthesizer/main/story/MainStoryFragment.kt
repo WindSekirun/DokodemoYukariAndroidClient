@@ -17,6 +17,14 @@ import com.github.windsekirun.yukarisynthesizer.main.event.ToggleFavoriteItem
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
+/**
+ * DokodemoYukariAndroidClient
+ * Class: ${NAME}
+ * Created by Pyxis on 2018-11-26.
+ *
+ *
+ * Description:
+ */
 @InjectFragment
 class MainStoryFragment : BaseFragment<MainStoryFragmentBinding>() {
     @Inject
@@ -24,10 +32,7 @@ class MainStoryFragment : BaseFragment<MainStoryFragmentBinding>() {
     private lateinit var viewModel: MainStoryViewModel
     private lateinit var storyItemAdapter: StoryItemAdapter
 
-    override fun createBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): MainStoryFragmentBinding {
+    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainStoryFragmentBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_story_fragment, container, false)
     }
 

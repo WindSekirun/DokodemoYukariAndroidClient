@@ -13,6 +13,15 @@ import com.github.windsekirun.yukarisynthesizer.ext.CustomTabsExtensions
 
 import javax.inject.Inject
 
+/**
+ * DokodemoYukariAndroidClient
+ * Class: SettingViewModel
+ * Created by Pyxis on 2018-12-19.
+ *
+ *
+ * Description:
+ */
+
 @InjectViewModel
 class SettingViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
@@ -39,10 +48,7 @@ constructor(application: MainApplication) : BaseViewModel(application) {
 
     fun clickAPI(view: View) {
         MaterialDialog(checkNotNull(ActivityReference.getActivtyReference())).show {
-            input(
-                hintRes = R.string.setting_api_key_hint,
-                prefill = preferenceRepository.apiKey
-            ) { _, text ->
+            input(hintRes = R.string.setting_api_key_hint, prefill = preferenceRepository.apiKey) { _, text ->
                 preferenceRepository.apiKey = text.toString()
                 showToast("Saved.")
             }

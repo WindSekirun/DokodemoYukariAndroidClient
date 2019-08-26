@@ -9,6 +9,14 @@ import com.github.windsekirun.yukarisynthesizer.core.item.PhonomeItem
 import com.github.windsekirun.yukarisynthesizer.databinding.PhonomeListItemBinding
 import com.github.windsekirun.yukarisynthesizer.main.event.ClickPhonomeItem
 
+/**
+ * DokodemoYukariAndroidClient
+ * Class: StoryItemAdapter
+ * Created by Pyxis on 2018-11-27.
+ *
+ *
+ * Description:
+ */
 class PhonomeListAdapter : BaseRecyclerAdapter<PhonomeItem, PhonomeListItemBinding>() {
     var phonomeClickAdapter: ((PhonomeItem) -> Unit)? = null
 
@@ -24,19 +32,11 @@ class PhonomeListAdapter : BaseRecyclerAdapter<PhonomeItem, PhonomeListItemBindi
         }
     }
 
-    override fun onLongClickedItem(
-        binding: PhonomeListItemBinding,
-        item: PhonomeItem,
-        position: Int
-    ): Boolean {
+    override fun onLongClickedItem(binding: PhonomeListItemBinding, item: PhonomeItem, position: Int): Boolean {
         return false
     }
 
-    override fun createBinding(
-        inflater: LayoutInflater,
-        parent: ViewGroup,
-        viewType: Int
-    ): PhonomeListItemBinding {
+    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): PhonomeListItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.phonome_list_item, parent, false)
     }
 }

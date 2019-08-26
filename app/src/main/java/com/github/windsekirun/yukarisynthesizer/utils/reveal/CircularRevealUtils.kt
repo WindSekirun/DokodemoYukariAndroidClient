@@ -16,8 +16,24 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.yukarisynthesizer.R
 
+/**
+ * Animation utils for circular reveal animation
+ * Original post: https://medium.com/@gabornovak/circular-reveal-animation-between-fragments-d8ed9011aec
+ *
+ * @FIXME 2018-11-30, WindSekirun
+ *  - Port to Kotlin, AndroidX
+ *  - Use doOnLayout instead View.OnLayoutChangeListener
+ *  - Use ActivityReference instead provided Context object
+ */
 object CircularRevealUtils {
 
+    /**
+     * start Reveal animation when enter to
+     *
+     * @param view target
+     * @param revealSettings [RevealSetting] for hold position of container and fab
+     * @param finished optional, callback when animation is done.
+     */
     @JvmStatic
     fun revealEnter(
         view: View,
@@ -33,6 +49,13 @@ object CircularRevealUtils {
         )
     }
 
+    /**
+     * start Reveal animation when exit from View
+     *
+     * @param view target
+     * @param revealSettings [RevealSetting] for hold position of container and fab
+     * @param finished optional,  callback when animation is done.
+     */
     @JvmStatic
     fun revealExit(
         view: View,
@@ -121,12 +144,7 @@ object CircularRevealUtils {
         )
     }
 
-    private fun startBackgroundColorAnimation(
-        view: View,
-        startColor: Int,
-        endColor: Int,
-        duration: Int
-    ) {
+    private fun startBackgroundColorAnimation(view: View, startColor: Int, endColor: Int, duration: Int) {
         val anim = ValueAnimator()
         anim.setIntValues(startColor, endColor)
         anim.setEvaluator(ArgbEvaluator())
@@ -135,6 +153,9 @@ object CircularRevealUtils {
         anim.start()
     }
 
+    /**
+     * Data class for display option for Reveal animatopn
+     */
     data class RevealSetting(var centerX: Int, var centerY: Int, var width: Int, var height: Int) {
         companion object {
             fun with(fab: View, container: View): RevealSetting =

@@ -12,6 +12,9 @@ import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.databinding.PresetDialogFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.module.sheet.RoundedBottomSheetDialogFragment
 
+/**
+ * DialogFragment for adjust preset
+ */
 class PresetDialogFragment : RoundedBottomSheetDialogFragment<PresetDialogFragmentBinding>() {
     val selectedEngine = ObservableField<VoiceEngine>()
     val rangeProgress: ObservableInt = ObservableInt()

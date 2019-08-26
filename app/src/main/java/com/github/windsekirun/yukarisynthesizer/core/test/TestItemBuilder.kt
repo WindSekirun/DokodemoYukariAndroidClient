@@ -6,6 +6,10 @@ import com.github.windsekirun.yukarisynthesizer.core.item.PresetItem
 import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import io.objectbox.Box
 
+/**
+ * Test Class for generate StoryItem
+ */
+//@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 class TestItemBuilder {
     private val phonomes = mutableListOf<PhonomeItem>()
 

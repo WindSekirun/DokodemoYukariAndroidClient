@@ -13,8 +13,14 @@ import androidx.core.content.ContextCompat
 import com.github.windsekirun.yukarisynthesizer.R
 import java.util.*
 
-class RippleBackground(context: Context, val attrs: AttributeSet?) :
-    RelativeLayout(context, attrs) {
+/**
+ * Created by fyu on 11/3/14.
+ * Original comes from https://github.com/skyfishjy/android-ripple-background
+ * @FIXME 2018-12-13 WindSekirun
+ * - Migrate to kotlin
+ * - hide ripple when stop animation
+ */
+class RippleBackground(context: Context, val attrs: AttributeSet?) : RelativeLayout(context, attrs) {
 
     private var rippleColor: Int = 0
     private var rippleStrokeWidth: Float = 0.toFloat()
@@ -28,12 +34,15 @@ class RippleBackground(context: Context, val attrs: AttributeSet?) :
     private var isRippleAnimationRunning = false
         private set
     private lateinit var animatorSet: AnimatorSet
-    private val rippleViewList = ArrayList<RippleView>()
+    private  val rippleViewList = ArrayList<RippleView>()
 
     init {
         init()
     }
 
+    /**
+     * Start Ripple Animation if isn't running
+     */
     fun startRippleAnimation() {
         if (!isRippleAnimationRunning) {
             for (rippleView in rippleViewList) {
@@ -44,6 +53,9 @@ class RippleBackground(context: Context, val attrs: AttributeSet?) :
         }
     }
 
+    /**
+     * Stop Ripple Animation if is running.
+     */
     fun stopRippleAnimation() {
         if (isRippleAnimationRunning) {
             animatorSet.end()
@@ -64,10 +76,10 @@ class RippleBackground(context: Context, val attrs: AttributeSet?) :
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleBackground)
         rippleColor =
-            typedArray.getColor(
-                R.styleable.RippleBackground_rb_color,
-                ContextCompat.getColor(context, R.color.rippelColor)
-            )
+                typedArray.getColor(
+                    R.styleable.RippleBackground_rb_color,
+                    ContextCompat.getColor(context, R.color.rippelColor)
+                )
 
         rippleStrokeWidth = typedArray.getDimension(
             R.styleable.RippleBackground_rb_strokeWidth,
@@ -79,10 +91,8 @@ class RippleBackground(context: Context, val attrs: AttributeSet?) :
             resources.getDimension(R.dimen.rippleRadius)
         )
 
-        rippleDurationTime =
-            typedArray.getInt(R.styleable.RippleBackground_rb_duration, DEFAULT_DURATION_TIME)
-        rippleAmount =
-            typedArray.getInt(R.styleable.RippleBackground_rb_rippleAmount, DEFAULT_RIPPLE_COUNT)
+        rippleDurationTime = typedArray.getInt(R.styleable.RippleBackground_rb_duration, DEFAULT_DURATION_TIME)
+        rippleAmount = typedArray.getInt(R.styleable.RippleBackground_rb_rippleAmount, DEFAULT_RIPPLE_COUNT)
         rippleScale = typedArray.getFloat(R.styleable.RippleBackground_rb_scale, DEFAULT_SCALE)
         rippleType = typedArray.getInt(R.styleable.RippleBackground_rb_type, DEFAULT_FILL_TYPE)
         typedArray.recycle()

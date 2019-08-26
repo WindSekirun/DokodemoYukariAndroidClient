@@ -21,6 +21,9 @@ import com.github.windsekirun.yukarisynthesizer.utils.safeDispose
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
+/**
+ * DialogFragment to select preset
+ */
 class VoicePresetFragment : RoundedBottomSheetDialogFragment<VoicePresetFragmentBinding>() {
     val itemData = ObservableArrayList<PresetItem>()
 
@@ -39,8 +42,7 @@ class VoicePresetFragment : RoundedBottomSheetDialogFragment<VoicePresetFragment
         binding.fragment = this
 
         MainApplication.appComponent.inject(this)
-        val presetItemAdapter =
-            initRecyclerView<PresetItemAdapter>(binding.recyclerView, PresetItemAdapter::class.java)
+        val presetItemAdapter = initRecyclerView(binding.recyclerView, PresetItemAdapter::class.java)
         presetItemAdapter.presetItemClickListener = {
             callback.invoke(it)
             dismiss()

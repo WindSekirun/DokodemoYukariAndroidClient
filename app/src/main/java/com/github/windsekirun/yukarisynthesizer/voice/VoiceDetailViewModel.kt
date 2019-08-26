@@ -35,6 +35,14 @@ import io.reactivex.rxkotlin.addTo
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * DokodemoYukariAndroidClient
+ * Class: VoiceDetailViewModel
+ * Created by Pyxis on 2018-11-26.
+ *
+ *
+ * Description:
+ */
 @InjectViewModel
 class VoiceDetailViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {

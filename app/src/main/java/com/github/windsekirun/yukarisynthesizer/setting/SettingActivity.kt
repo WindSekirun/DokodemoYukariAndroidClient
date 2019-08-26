@@ -7,6 +7,15 @@ import com.github.windsekirun.daggerautoinject.InjectActivity
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.SettingActivityBinding
 
+/**
+ * DokodemoYukariAndroidClient
+ * Class: ${NAME}
+ * Created by Pyxis on 2018-12-19.
+ *
+ *
+ * Description:
+ */
+
 @InjectActivity
 class SettingActivity : BaseActivity<SettingActivityBinding>() {
     lateinit var mViewModel: SettingViewModel

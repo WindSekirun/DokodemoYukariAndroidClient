@@ -18,7 +18,15 @@ import io.objectbox.BoxStore
 import pyxis.uzuki.live.attribute.parser.annotation.AttributeParser
 import javax.inject.Inject
 
-@AttributeParser("com.github.windsekirun.yukarisynthesizer")
+/**
+ * PyxisBaseApp
+ * Class: MainApplication
+ * Created by Pyxis on 2018-01-22.
+ *
+ *
+ * Description:
+ */
+@AttributeParser("com.appg.baseappset")
 @InjectApplication(component = AppComponent::class)
 class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInjector {
     @Inject
@@ -54,6 +62,9 @@ class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInject
     }
 
     companion object {
+        /**
+         * @return [DaggerAppComponent] to inject
+         */
         lateinit var appComponent: AppComponent
             private set
 

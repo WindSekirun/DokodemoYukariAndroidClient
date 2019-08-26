@@ -16,10 +16,7 @@ object CustomTabsExtensions {
     }
 
     const val GITHUB_URL = "https://github.com/WindSekirun/DokodemoYukariAndroidClient"
-    const val HISTORY_URL =
-        "https://github.com/WindSekirun/DokodemoYukariAndroidClient/blob/master/Release.md"
-    const val LICENSE_URL =
-        "https://github.com/WindSekirun/DokodemoYukariAndroidClient/blob/master/LICENSE.MD"
-    const val GUIDE_URL =
-        "https://github.com/WindSekirun/DokodemoYukariAndroidClient/blob/master/Guide.md"
+    const val HISTORY_URL = "https://github.com/WindSekirun/DokodemoYukariAndroidClient/blob/master/Release.md"
+    const val LICENSE_URL = "https://github.com/WindSekirun/DokodemoYukariAndroidClient/blob/master/LICENSE.MD"
+    const val GUIDE_URL = "https://github.com/WindSekirun/DokodemoYukariAndroidClient/blob/master/Guide.md"
 }

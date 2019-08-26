@@ -8,6 +8,9 @@ import io.objectbox.annotation.Id
 import java.io.Serializable
 import java.util.*
 
+/**
+ * Entity class for hold Voices (sentences) in ObjectBox
+ */
 @Entity
 class VoiceItem() : Serializable {
     @Id
@@ -45,11 +48,21 @@ class VoiceItem() : Serializable {
         this.breakTime = breakTime
     }
 
+    /**
+     * Convert phonomes to [contentOrigin] to view-binding
+     */
     fun bindContentOrigin() {
         contentOrigin = phonomes.asSequence().map { it.origin }.joinToString(separator = "") { it }
     }
 
     override fun toString(): String {
         return "VoiceItem(engine=$engine, content=$phonomes)"
+    }
+
+    companion object {
+        /**
+         * help methods to generate [VoiceItem] with given [breakTime]
+         */
+        fun addBreak(timeMs: Long) = VoiceItem(timeMs)
     }
 }

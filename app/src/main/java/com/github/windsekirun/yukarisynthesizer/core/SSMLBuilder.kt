@@ -5,8 +5,14 @@ import com.github.windsekirun.yukarisynthesizer.core.item.StoryItem
 import org.apache.commons.text.StringEscapeUtils
 import org.redundent.kotlin.xml.xml
 
+/**
+ * Class for handle SSML document
+ */
 object SSMLBuilder {
 
+    /**
+     * process [StoryItem] to generate SSML document
+     */
     fun process(item: StoryItem, minify: Boolean = false): String {
         val ssml = xml("speak") {
             attribute("version", item.version)

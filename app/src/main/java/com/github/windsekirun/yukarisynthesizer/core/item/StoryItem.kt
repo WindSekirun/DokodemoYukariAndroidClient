@@ -8,6 +8,9 @@ import io.objectbox.annotation.Id
 import java.io.Serializable
 import java.util.*
 
+/**
+ * Entity class for hold [StoryItem] within ObjectBox
+ */
 @Entity
 class StoryItem() : Serializable {
     @Id
@@ -30,14 +33,7 @@ class StoryItem() : Serializable {
     @Transient
     var voiceEntries: List<VoiceItem> = mutableListOf()
 
-    constructor(
-        id: Long,
-        version: String,
-        title: String,
-        regDate: Date,
-        localPath: String,
-        favoriteFlag: Boolean
-    )
+    constructor(id: Long, version: String, title: String, regDate: Date, localPath: String, favoriteFlag: Boolean)
             : this() {
         this.id = id
         this.version = version

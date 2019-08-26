@@ -8,6 +8,9 @@ import io.objectbox.annotation.Id
 import java.io.Serializable
 import java.util.*
 
+/**
+ * Entity class for handle Preset in ObjectBox
+ */
 @Entity
 class PresetItem() : Serializable {
     @Id
@@ -50,5 +53,8 @@ class PresetItem() : Serializable {
         this.volume = volume
     }
 
+    /**
+     * Converter class for handle PresetItem with Gson in ObjectBox
+     */
     class PresetItemConverter : PropertyJsonConverter<PresetItem>(PresetItem::class.java)
 }

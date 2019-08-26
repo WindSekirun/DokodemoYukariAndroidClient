@@ -15,6 +15,15 @@ import com.github.windsekirun.yukarisynthesizer.main.story.MainStoryViewModel
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
+/**
+ * DokodemoYukariAndroidClient
+ * Class: MainPresetViewModel
+ * Created by Pyxis on 2018-11-27.
+ *
+ *
+ * Description:
+ */
+
 @InjectViewModel
 class MainPresetViewModel @Inject
 constructor(application: MainApplication) : BaseViewModel(application) {
