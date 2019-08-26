@@ -13,9 +13,9 @@ pipeline {
       }
     }
     stage('Static Analysis') {
-          steps {
+      steps {
             sh './gradlew detekt'
-          }
+      }
     }
   }
   post {
