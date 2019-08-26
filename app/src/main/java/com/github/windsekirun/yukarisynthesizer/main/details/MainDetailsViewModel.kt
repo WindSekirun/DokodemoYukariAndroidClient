@@ -12,7 +12,6 @@ import com.github.windsekirun.baseapp.module.activityresult.RxActivityResult
 import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
 import com.github.windsekirun.baseapp.module.reference.ActivityReference
 import com.github.windsekirun.baseapp.utils.ProgressDialogManager
-import com.github.windsekirun.baseapp.utils.propertyChanges
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.daggerautoinject.InjectViewModel
 import com.github.windsekirun.yukarisynthesizer.MainApplication

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ObservableArrayList
 import com.github.windsekirun.baseapp.module.composer.EnsureMainThreadComposer
-import com.github.windsekirun.baseapp.utils.propertyChanges
 import com.github.windsekirun.baseapp.utils.subscribe
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.yukarisynthesizer.MainApplication
@@ -45,7 +44,7 @@ class VoiceHistoryFragment : RoundedBottomSheetDialogFragment<VoiceHistoryFragme
         binding.fragment = this
 
         MainApplication.appComponent.inject(this)
-        val voiceItemAdapter = initRecyclerView(binding.recyclerView, VoiceItemAdapter::class.java)
+        val voiceItemAdapter = initRecyclerView<VoiceItemAdapter>(binding.recyclerView, VoiceItemAdapter::class.java)
         voiceItemAdapter.voiceItemClickListener = {
             callback.invoke(it)
             dismiss()

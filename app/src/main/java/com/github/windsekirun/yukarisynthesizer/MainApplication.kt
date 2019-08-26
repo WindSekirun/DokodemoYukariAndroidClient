@@ -26,7 +26,7 @@ import javax.inject.Inject
  *
  * Description:
  */
-@AttributeParser("com.appg.baseappset")
+@AttributeParser("com.github.windsekirun.yukarisynthesizer")
 @InjectApplication(component = AppComponent::class)
 class MainApplication : BaseApplication(), HasActivityInjector, HasServiceInjector {
     @Inject

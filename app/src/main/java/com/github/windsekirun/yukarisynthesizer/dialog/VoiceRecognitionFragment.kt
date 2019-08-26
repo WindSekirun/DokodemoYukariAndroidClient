@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
-import com.github.windsekirun.baseapp.utils.propertyChanges
 import com.github.windsekirun.baseapp.utils.subscribe
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.yukarisynthesizer.R
