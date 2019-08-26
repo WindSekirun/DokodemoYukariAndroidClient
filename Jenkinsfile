@@ -15,12 +15,12 @@ pipeline {
     stage('Static Analysis') {
           steps {
             sh './gradlew detekt'
-            publishHTML(target: [reportDir:'BaseApp/build/reports/detekt/', reportFiles: 'detekt.html', reportName: 'Detekt report'])
           }
     }
   }
   post {
     always {
+      publishHTML(target: [reportDir:'BaseApp/build/reports/detekt/', reportFiles: 'detekt.html', reportName: 'Detekt report'])
       sendNotifications currentBuild.result
     }
   }
