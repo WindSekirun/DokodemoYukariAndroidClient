@@ -12,6 +12,12 @@ pipeline {
         sh './gradlew  assembleDebug --stacktrace'
       }
     }
+    stage('Static Analysis') {
+          steps {
+            sh './gradlew detekt'
+            publishHTML(target: [reportDir:'BaseApp/build/reports/detekt/', reportFiles: 'detekt.html', reportName: 'Detekt report'])
+          }
+    }
   }
   post {
     always {
