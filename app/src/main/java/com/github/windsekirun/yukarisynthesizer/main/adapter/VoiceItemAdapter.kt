@@ -33,11 +33,19 @@ class VoiceItemAdapter : BaseRecyclerAdapter<VoiceItem, VoiceItemBinding>() {
         }
     }
 
-    override fun onLongClickedItem(binding: VoiceItemBinding, item: VoiceItem, position: Int): Boolean {
+    override fun onLongClickedItem(
+        binding: VoiceItemBinding,
+        item: VoiceItem,
+        position: Int
+    ): Boolean {
         return false
     }
 
-    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): VoiceItemBinding {
+    override fun createBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        viewType: Int
+    ): VoiceItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.voice_item, parent, false)
     }
 

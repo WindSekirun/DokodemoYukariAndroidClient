@@ -17,7 +17,8 @@ import java.util.*
 /**
  * CustomView with [FlexboxLayout] with spacing, holding transformer
  */
-class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = null) : FlexboxLayout(context, attrs),
+class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = null) :
+    FlexboxLayout(context, attrs),
     View.OnClickListener {
     private val mItems = ArrayList<T>()
     private var mHorizontalSpacing = 1
@@ -153,7 +154,14 @@ class PredicateLayout<T> constructor(context: Context, attrs: AttributeSet? = nu
     private fun getItemTextView(text: T): TextView {
         val gravity = getGravityValue()
         val textView =
-            mTextTransformer.generateNewText(context, text, mBackgroundDrawableRes, mTextSize, gravity, getColor())
+            mTextTransformer.generateNewText(
+                context,
+                text,
+                mBackgroundDrawableRes,
+                mTextSize,
+                gravity,
+                getColor()
+            )
         textView.text = String.format(" %s ", text)
         textView.tag = text
         textView.setOnClickListener(this)

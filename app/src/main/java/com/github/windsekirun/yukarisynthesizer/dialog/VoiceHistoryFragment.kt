@@ -44,7 +44,8 @@ class VoiceHistoryFragment : RoundedBottomSheetDialogFragment<VoiceHistoryFragme
         binding.fragment = this
 
         MainApplication.appComponent.inject(this)
-        val voiceItemAdapter = initRecyclerView<VoiceItemAdapter>(binding.recyclerView, VoiceItemAdapter::class.java)
+        val voiceItemAdapter =
+            initRecyclerView<VoiceItemAdapter>(binding.recyclerView, VoiceItemAdapter::class.java)
         voiceItemAdapter.voiceItemClickListener = {
             callback.invoke(it)
             dismiss()

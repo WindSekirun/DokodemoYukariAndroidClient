@@ -144,7 +144,12 @@ object CircularRevealUtils {
         )
     }
 
-    private fun startBackgroundColorAnimation(view: View, startColor: Int, endColor: Int, duration: Int) {
+    private fun startBackgroundColorAnimation(
+        view: View,
+        startColor: Int,
+        endColor: Int,
+        duration: Int
+    ) {
         val anim = ValueAnimator()
         anim.setIntValues(startColor, endColor)
         anim.setEvaluator(ArgbEvaluator())

@@ -38,7 +38,11 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
     private val presetBox: Box<PresetItem> by lazy { application.getBox(PresetItem::class.java) }
     private val storyBox: Box<StoryItem> by lazy { application.getBox(StoryItem::class.java) }
     private val voiceBox: Box<VoiceItem> by lazy { application.getBox(VoiceItem::class.java) }
-    private val preferenceRepository: PreferenceRepository by lazy { PreferenceRepositoryImpl(application) }
+    private val preferenceRepository: PreferenceRepository by lazy {
+        PreferenceRepositoryImpl(
+            application
+        )
+    }
 
     /**
      * add List of [PhonomeItem] to box
@@ -148,7 +152,9 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         return getPresetList()
             .flatMap { list ->
                 val presetItem: PresetItem = if (list.isNotEmpty()) {
-                    list.firstOrNull { it.default && it.engine == engine } ?: getInternalPresetItem(engine)
+                    list.firstOrNull { it.default && it.engine == engine } ?: getInternalPresetItem(
+                        engine
+                    )
                 } else {
                     getInternalPresetItem(engine)
                 }
@@ -168,11 +174,15 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
      * to [PhonomeItem_.origin]
      * @return searched list by given options.
      */
-    fun getPhonomeList(searchTitle: String = "", recent: Boolean = true): Observable<List<PhonomeItem>> {
+    fun getPhonomeList(
+        searchTitle: String = "",
+        recent: Boolean = true
+    ): Observable<List<PhonomeItem>> {
         return Observable.create {
             val page = if (recent) 1 else -1
             val limit = if (recent) 10L else -1L
-            val orderType = if (recent) OrderType.OrderFlags.DESCENDING else OrderType.OrderFlags.ASCENDING
+            val orderType =
+                if (recent) OrderType.OrderFlags.DESCENDING else OrderType.OrderFlags.ASCENDING
 
             val list = nativeQuerySearch(
                 phonomeBox, page, limit, searchTitle to PhonomeItem_.origin,
@@ -225,7 +235,14 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         return Observable.create {
             val equalPair = if (voiceEngine != null) voiceEngine.id to PresetItem_.engine else null
             val list =
-                nativeQuerySearch(presetBox, page, limit, searchTitle to PresetItem_.title, orderBy, equal = equalPair)
+                nativeQuerySearch(
+                    presetBox,
+                    page,
+                    limit,
+                    searchTitle to PresetItem_.title,
+                    orderBy,
+                    equal = equalPair
+                )
 
             it.onNext(list)
         }
@@ -278,7 +295,14 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
             .flatMap {
                 val notEqual = if (localPlayable) "" to StoryItem_.localPath else null
 
-                val list = nativeQuerySearch(storyBox, page, limit, searchTitle to StoryItem_.title, orderBy, notEqual)
+                val list = nativeQuerySearch(
+                    storyBox,
+                    page,
+                    limit,
+                    searchTitle to StoryItem_.title,
+                    orderBy,
+                    notEqual
+                )
                     .map { item -> item.findMetadata() }
 
                 if (orderFavorite) {
@@ -374,7 +398,13 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
         orderBy: Pair<@OrderType Int, Property<VoiceItem>> = OrderType.OrderFlags.ASCENDING to VoiceItem_.regDate
     ): Observable<List<VoiceItem>> {
         return Observable.create { emitter ->
-            val list = nativeQuerySearch(voiceBox, -1, -1, searchTitle to VoiceItem_.contentOrigin, orderBy)
+            val list = nativeQuerySearch(
+                voiceBox,
+                -1,
+                -1,
+                searchTitle to VoiceItem_.contentOrigin,
+                orderBy
+            )
                 .map { it.findMetaData() }
                 .filter { it.engine != VoiceEngine.Break }
                 .distinctBy { it.contentOrigin }
@@ -420,7 +450,8 @@ class YukariOperator @Inject constructor(val application: MainApplication) {
 
             if (autoRemove) {
                 // remove unused voices which doesn't used in any stories.
-                val usedVoiceIds = storyBox.all.flatMap { it.voicesIds }.distinctBy { it }.toLongArray()
+                val usedVoiceIds =
+                    storyBox.all.flatMap { it.voicesIds }.distinctBy { it }.toLongArray()
                 val voiceQuery = voiceBox.query {
                     this.notIn(VoiceItem_.id, usedVoiceIds)
                 }.find()

@@ -24,7 +24,7 @@ import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.main.event.*
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderActivity
 import com.github.windsekirun.yukarisynthesizer.swipe.SwipeOrderViewModel
-import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
+import com.github.windsekirun.yukarisynthesizer.utils.OnListChangeCallback
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import com.github.windsekirun.yukarisynthesizer.voice.VoiceDetailActivity
 import com.github.windsekirun.yukarisynthesizer.voice.VoiceDetailViewModel
@@ -35,7 +35,6 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.impl.F0
 import pyxis.uzuki.live.richutilskt.utils.RPermission
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import pyxis.uzuki.live.richutilskt.utils.toFile
 import java.io.File
 import java.io.IOException
@@ -103,7 +102,9 @@ constructor(application: MainApplication) : BaseViewModel(application) {
         RxActivityResult.result()
             .flatMapObservable {
                 val id = it.data?.getLongExtra(VoiceDetailViewModel.EXTRA_EDIT_VOICE_ID, 0) ?: 0L
-                val requestDelete = it.data?.getBooleanExtra(VoiceDetailViewModel.EXTRA_REQUEST_DELETE, false) ?: false
+                val requestDelete =
+                    it.data?.getBooleanExtra(VoiceDetailViewModel.EXTRA_REQUEST_DELETE, false)
+                        ?: false
 
                 if (requestDelete) {
                     yukariOperator.removeVoiceItem(id, true)
@@ -177,9 +178,9 @@ constructor(application: MainApplication) : BaseViewModel(application) {
             .subscribe { _, _ -> changed = true }
             .addTo(compositeDisposable)
 
-        itemData.propertyChanges()
-            .subscribe { _, _ -> changed = true }
-            .addTo(compositeDisposable)
+        itemData.addOnListChangedCallback(OnListChangeCallback<PhonomeItem> {
+            changed = true
+        })
     }
 
     private fun requestSynthesis() {
@@ -230,7 +231,11 @@ constructor(application: MainApplication) : BaseViewModel(application) {
                         origin.copyTo(newPath, true)
 
                         runOnUiThread {
-                            showToast(context.getString(R.string.main_detail_saved_other_path).format(newPath.absolutePath))
+                            showToast(
+                                context.getString(R.string.main_detail_saved_other_path).format(
+                                    newPath.absolutePath
+                                )
+                            )
                         }
                     }
                 }

@@ -1,11 +1,10 @@
 package com.github.windsekirun.yukarisynthesizer.widget
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.widget.TextView
-
 import androidx.core.content.ContextCompat
+
 /**
  * PredicateLayout
  * Class: PredefindTextTransformer

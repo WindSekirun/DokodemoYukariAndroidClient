@@ -2,15 +2,15 @@ package com.github.windsekirun.yukarisynthesizer.binding
 
 import android.graphics.drawable.Drawable
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.leinardi.android.speeddial.SpeedDialView
-import android.widget.EditText
-import android.widget.TextView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.leinardi.android.speeddial.SpeedDialView
 
 /**
  * set of [BindingAdapter] in DataBinding
@@ -20,13 +20,15 @@ object BindAdapter {
     @JvmStatic
     @BindingAdapter(value = ["imageUrl", "placeholder"], requireAll = false)
     fun bindImage(imageView: ImageView, url: String, placeholder: Drawable) {
-        Glide.with(imageView.context).load(url).apply(RequestOptions.placeholderOf(placeholder)).into(imageView)
+        Glide.with(imageView.context).load(url).apply(RequestOptions.placeholderOf(placeholder))
+            .into(imageView)
     }
 
     @JvmStatic
     @BindingAdapter(value = ["circleImageUrl"], requireAll = false)
     fun bindCircleImage(imageView: ImageView, url: String) {
-        Glide.with(imageView.context).load(url).apply(RequestOptions.circleCropTransform()).into(imageView)
+        Glide.with(imageView.context).load(url).apply(RequestOptions.circleCropTransform())
+            .into(imageView)
     }
 
     @JvmStatic
@@ -55,13 +57,19 @@ object BindAdapter {
 
     @JvmStatic
     @BindingAdapter("navigationItemClicked")
-    fun bindNavigationItemClick(view: BottomNavigationView, listener: BottomNavigationView.OnNavigationItemSelectedListener) {
+    fun bindNavigationItemClick(
+        view: BottomNavigationView,
+        listener: BottomNavigationView.OnNavigationItemSelectedListener
+    ) {
         view.setOnNavigationItemSelectedListener(listener)
     }
 
     @BindingAdapter("onEditorAction")
     @JvmStatic
-    fun bindEditorAction(editText: EditText, onEditActionListener: TextView.OnEditorActionListener) {
+    fun bindEditorAction(
+        editText: EditText,
+        onEditActionListener: TextView.OnEditorActionListener
+    ) {
         editText.setOnEditorActionListener(onEditActionListener)
     }
 }

@@ -32,11 +32,19 @@ class PhonomeListAdapter : BaseRecyclerAdapter<PhonomeItem, PhonomeListItemBindi
         }
     }
 
-    override fun onLongClickedItem(binding: PhonomeListItemBinding, item: PhonomeItem, position: Int): Boolean {
+    override fun onLongClickedItem(
+        binding: PhonomeListItemBinding,
+        item: PhonomeItem,
+        position: Int
+    ): Boolean {
         return false
     }
 
-    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): PhonomeListItemBinding {
+    override fun createBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        viewType: Int
+    ): PhonomeListItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.phonome_list_item, parent, false)
     }
 }

@@ -20,7 +20,8 @@ import java.util.*
  * - Migrate to kotlin
  * - hide ripple when stop animation
  */
-class RippleBackground(context: Context, val attrs: AttributeSet?) : RelativeLayout(context, attrs) {
+class RippleBackground(context: Context, val attrs: AttributeSet?) :
+    RelativeLayout(context, attrs) {
 
     private var rippleColor: Int = 0
     private var rippleStrokeWidth: Float = 0.toFloat()
@@ -34,7 +35,7 @@ class RippleBackground(context: Context, val attrs: AttributeSet?) : RelativeLay
     private var isRippleAnimationRunning = false
         private set
     private lateinit var animatorSet: AnimatorSet
-    private  val rippleViewList = ArrayList<RippleView>()
+    private val rippleViewList = ArrayList<RippleView>()
 
     init {
         init()
@@ -76,10 +77,10 @@ class RippleBackground(context: Context, val attrs: AttributeSet?) : RelativeLay
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleBackground)
         rippleColor =
-                typedArray.getColor(
-                    R.styleable.RippleBackground_rb_color,
-                    ContextCompat.getColor(context, R.color.rippelColor)
-                )
+            typedArray.getColor(
+                R.styleable.RippleBackground_rb_color,
+                ContextCompat.getColor(context, R.color.rippelColor)
+            )
 
         rippleStrokeWidth = typedArray.getDimension(
             R.styleable.RippleBackground_rb_strokeWidth,
@@ -91,8 +92,10 @@ class RippleBackground(context: Context, val attrs: AttributeSet?) : RelativeLay
             resources.getDimension(R.dimen.rippleRadius)
         )
 
-        rippleDurationTime = typedArray.getInt(R.styleable.RippleBackground_rb_duration, DEFAULT_DURATION_TIME)
-        rippleAmount = typedArray.getInt(R.styleable.RippleBackground_rb_rippleAmount, DEFAULT_RIPPLE_COUNT)
+        rippleDurationTime =
+            typedArray.getInt(R.styleable.RippleBackground_rb_duration, DEFAULT_DURATION_TIME)
+        rippleAmount =
+            typedArray.getInt(R.styleable.RippleBackground_rb_rippleAmount, DEFAULT_RIPPLE_COUNT)
         rippleScale = typedArray.getFloat(R.styleable.RippleBackground_rb_scale, DEFAULT_SCALE)
         rippleType = typedArray.getInt(R.styleable.RippleBackground_rb_type, DEFAULT_FILL_TYPE)
         typedArray.recycle()

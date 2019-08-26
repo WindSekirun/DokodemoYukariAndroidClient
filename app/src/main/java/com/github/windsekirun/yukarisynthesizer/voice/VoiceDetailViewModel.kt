@@ -26,7 +26,7 @@ import com.github.windsekirun.yukarisynthesizer.core.item.VoiceItem
 import com.github.windsekirun.yukarisynthesizer.main.event.InvokeBackEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowPhonomeHistoryEvent
 import com.github.windsekirun.yukarisynthesizer.main.event.ShowVoicePresetEvent
-import com.github.windsekirun.yukarisynthesizer.utils.propertyChanges
+import com.github.windsekirun.yukarisynthesizer.utils.OnListChangeCallback
 import com.github.windsekirun.yukarisynthesizer.utils.subscribe
 import com.github.windsekirun.yukarisynthesizer.voice.event.RefreshLayoutEvent
 import io.reactivex.Observable
@@ -67,11 +67,10 @@ constructor(application: MainApplication) : BaseViewModel(application) {
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         loadData()
-        itemData.propertyChanges()
-            .subscribe { _, _ ->
-                changed = true
-                refreshFlexBox()
-            }.addTo(compositeDisposable)
+        itemData.addOnListChangedCallback(OnListChangeCallback<PhonomeItem> {
+            changed = true
+            refreshFlexBox()
+        })
     }
 
     fun clickToolbarMenuItem(item: MenuItem): Boolean {

@@ -42,7 +42,8 @@ class VoicePresetFragment : RoundedBottomSheetDialogFragment<VoicePresetFragment
         binding.fragment = this
 
         MainApplication.appComponent.inject(this)
-        val presetItemAdapter = initRecyclerView<PresetItemAdapter>(binding.recyclerView, PresetItemAdapter::class.java)
+        val presetItemAdapter =
+            initRecyclerView<PresetItemAdapter>(binding.recyclerView, PresetItemAdapter::class.java)
         presetItemAdapter.presetItemClickListener = {
             callback.invoke(it)
             dismiss()

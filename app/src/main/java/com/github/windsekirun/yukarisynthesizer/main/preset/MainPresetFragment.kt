@@ -33,7 +33,10 @@ class MainPresetFragment : BaseFragment<MainPresetFragmentBinding>() {
     private lateinit var viewModel: MainPresetViewModel
     private lateinit var presetItemAdapter: PresetItemAdapter
 
-    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainPresetFragmentBinding {
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): MainPresetFragmentBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_preset_fragment, container, false)
     }
 

@@ -11,27 +11,27 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.TextView
-import androidx.appcompat.view.ContextThemeWrapper
-import com.github.windsekirun.baseapp.utils.subscribe
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.yukarisynthesizer.R
 import com.github.windsekirun.yukarisynthesizer.databinding.VoiceRecognitionFragmentBinding
 import com.github.windsekirun.yukarisynthesizer.module.sheet.RoundedBottomSheetDialogFragment
-import io.reactivex.rxkotlin.addTo
 import pyxis.uzuki.live.richutilskt.utils.selector
 
 /**
  * DialogFragment to recognition voice and convert them to VoiceItem
  */
-class VoiceRecognitionFragment : RoundedBottomSheetDialogFragment<VoiceRecognitionFragmentBinding>(),
+class VoiceRecognitionFragment :
+    RoundedBottomSheetDialogFragment<VoiceRecognitionFragmentBinding>(),
     RecognitionListener {
     val partialResultText = ObservableString()
 
     lateinit var callback: (String) -> Unit
 
-    private val speechRecognizer: SpeechRecognizer by lazy { SpeechRecognizer.createSpeechRecognizer(context) }
+    private val speechRecognizer: SpeechRecognizer by lazy {
+        SpeechRecognizer.createSpeechRecognizer(
+            context
+        )
+    }
     private val results = mutableListOf<String>()
 
     override fun createView(inflater: LayoutInflater, container: ViewGroup?) =
@@ -72,7 +72,8 @@ class VoiceRecognitionFragment : RoundedBottomSheetDialogFragment<VoiceRecogniti
     }
 
     override fun onPartialResults(partialResults: Bundle?) {
-        val partialResultList = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+        val partialResultList =
+            partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
         if (partialResultList != null && partialResultList.isNotEmpty()) {
             partialResultText.set(partialResultList[0])
         }
@@ -113,7 +114,10 @@ class VoiceRecognitionFragment : RoundedBottomSheetDialogFragment<VoiceRecogniti
     private fun startRecognize() {
         val speechIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             .apply {
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                putExtra(
+                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                )
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, LANGUAGE_PREF)
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, LANGUAGE_PREF)
                 putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, LANGUAGE_PREF)

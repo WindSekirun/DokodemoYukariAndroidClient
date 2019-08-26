@@ -29,11 +29,19 @@ class StoryItemAdapter : BaseRecyclerAdapter<StoryItem, StoryItemBinding>() {
         postEvent(ClickStoryItem(item, position))
     }
 
-    override fun onLongClickedItem(binding: StoryItemBinding, item: StoryItem, position: Int): Boolean {
+    override fun onLongClickedItem(
+        binding: StoryItemBinding,
+        item: StoryItem,
+        position: Int
+    ): Boolean {
         return false
     }
 
-    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): StoryItemBinding {
+    override fun createBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        viewType: Int
+    ): StoryItemBinding {
         return DataBindingUtil.inflate(inflater, R.layout.story_item, parent, false)
     }
 

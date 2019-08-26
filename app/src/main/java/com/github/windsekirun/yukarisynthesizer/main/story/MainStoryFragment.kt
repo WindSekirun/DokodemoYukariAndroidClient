@@ -32,7 +32,10 @@ class MainStoryFragment : BaseFragment<MainStoryFragmentBinding>() {
     private lateinit var viewModel: MainStoryViewModel
     private lateinit var storyItemAdapter: StoryItemAdapter
 
-    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): MainStoryFragmentBinding {
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): MainStoryFragmentBinding {
         return DataBindingUtil.inflate(inflater, R.layout.main_story_fragment, container, false)
     }
 

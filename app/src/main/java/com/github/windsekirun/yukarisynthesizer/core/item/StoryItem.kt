@@ -33,7 +33,14 @@ class StoryItem() : Serializable {
     @Transient
     var voiceEntries: List<VoiceItem> = mutableListOf()
 
-    constructor(id: Long, version: String, title: String, regDate: Date, localPath: String, favoriteFlag: Boolean)
+    constructor(
+        id: Long,
+        version: String,
+        title: String,
+        regDate: Date,
+        localPath: String,
+        favoriteFlag: Boolean
+    )
             : this() {
         this.id = id
         this.version = version
